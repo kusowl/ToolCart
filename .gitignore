@@ -1,0 +1,5 @@
+package-lock.json
+.vscode/launch.json
+node_modules
+client/style.css
+.vscode/settings.json

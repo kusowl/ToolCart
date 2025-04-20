@@ -1,0 +1,15 @@
+{
+  "name": "toocart",
+  "version": "0.0.1",
+  "description": "",
+  "author": "",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build:css" : "npx @tailwindcss/cli -i ./client/assets/css/app.css -o ./client/style.css --watch"
+  },
+  "dependencies": {
+    "@tailwindcss/cli": "^4.1.4",
+    "flowbite": "^3.1.2",
+    "tailwindcss": "^4.1.4"
+  }
+}
