@@ -1,5 +1,6 @@
 <?php 
-include "../config/site_config.php";
+$rootDir  = dirname(__DIR__).'/';
+require_once $rootDir."config/site_config.php";
 ?>
 <nav class="bg-white dark:bg-gray-800 antialiased">
     <div class="max-w-screen-xl px-4 mx-auto 2xl:px-0 py-4">
