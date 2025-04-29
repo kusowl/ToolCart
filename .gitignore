@@ -3,3 +3,4 @@ package-lock.json
 node_modules
 client/style.css
 .vscode/settings.json
+test.html
