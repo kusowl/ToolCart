@@ -94,8 +94,12 @@
                 <tbody>
                     <?php foreach($table_records as $record):?>
                     <tr class="border-b dark:border-gray-700">
-                        <?php foreach($record as $item):?>
-                        <td class="px-4 py-3"><?=$item?></td>
+                        <?php foreach($record as $key => $item):?>
+                            <?php if($key === 'product_image'):?>
+                                <td class="px-4 py-3"><img class="w-8" src=<?=$baseUrl.$item?>></td>
+                            <?php else:?>
+                                <td class="px-4 py-3"><?=$item?></td>
+                            <?php endif;?>
                         <?php endforeach;?>
                         <td class="px-4 py-3 flex items-center justify-end">
                             <button id="apple-imac-27-dropdown-button" data-dropdown-toggle="apple-imac-27-dropdown" class="inline-flex items-center p-0.5 text-sm font-medium text-center text-gray-500 hover:text-gray-800 rounded-lg focus:outline-none dark:text-gray-400 dark:hover:text-gray-100" type="button">

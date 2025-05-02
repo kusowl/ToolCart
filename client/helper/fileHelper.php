@@ -13,9 +13,9 @@ function upload_file($file, $path): mixed {
             return false;
         }
     }
-    $path = $path.$imageName;
-    if (move_uploaded_file($file['tmp_name'], $path)) {
-        return $path;
+    $server_path = $path.$imageName;
+    if (move_uploaded_file($tmp_path, $server_path)) {
+        return $imageName;
     }
     return false;
 
