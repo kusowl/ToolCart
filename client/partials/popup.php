@@ -1,18 +1,20 @@
 <div id="info-popup" tabindex="-1" class="fixed top-5 right-5 z-50 w-auto max-w-lg">
     <div class="relative p-4 w-full">
-        <div class="relative p-4 bg-white rounded-lg shadow dark:bg-gray-800 md:p-4">
+        <div class="relative p-4
+        <?php
+        if ($message_type == 'error')
+            echo 'bg-red-100';
+        else
+            echo 'bg-green-100' ?> rounded-lg shadow dark:bg-gray-800 md:p-4">
             <div class="text-sm font-light text-gray-500 dark:text-gray-400">
-                <h3 class="mb-3 text-2xl font-bold text-gray-900 dark:text-white">
-                    <?= ucfirst($message_type ?? 'Notification') ?>
-                </h3>
                 <?php foreach ($messages as $key => $value) : ?>
-                    <p class="text-gray-500 dark:text-white my-2">
-                    <?php
+                    <p class="text-gray-700 dark:text-white my-2">
+                        <?php
                         $key = str_replace('_', ' ', $key);
                         $key = ucwords($key);
                         echo "<strong>$key </strong> : ";
                         echo ucfirst($value);
-                    ?>
+                        ?>
                     </p>
                 <?php endforeach; ?>
                 <div class="justify-between items-center pt-0 space-y-4 sm:flex sm:space-y-0">

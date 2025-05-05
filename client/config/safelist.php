@@ -1,2 +1,2 @@
-<div class="bg-green-600"></div>
-<div class="bg-red-600"></div>
+<div class="bg-green-100"></div>
+<div class="bg-red-100"></div>
