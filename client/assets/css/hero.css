@@ -1,0 +1,6 @@
+@layer components {
+  .hero {
+    @apply bg-gray-200 py-8 antialiased dark:bg-gray-900 md:py-16;
+    /* background-color: #1d4ed8; */
+  }
+}
