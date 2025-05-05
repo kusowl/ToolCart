@@ -9,7 +9,7 @@ require_once $root."client/config/site_config.php";
 
             <div class="flex items-center space-x-8">
                 <div class="shrink-0">
-                    <a href="#" title="" class="font-bold text-2xl">
+                    <a href="<?=$baseUrl.'client/'?>" title="" class="font-bold text-2xl">
                         <!-- <img class="block w-auto h-8 dark:hidden" src="https://flowbite.s3.amazonaws.com/blocks/e-commerce/logo-full.svg" alt="">
                         <img class="hidden w-auto h-8 dark:block" src="https://flowbite.s3.amazonaws.com/blocks/e-commerce/logo-full-dark.svg" alt=""> -->
                         <?= $siteName?>
