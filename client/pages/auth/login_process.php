@@ -70,7 +70,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             exit;
         } else {
             $_SESSION["messages"]['login_failed'] = "Password does not matched.";
-            $_SESSION['message_type'] = $error;
+            $_SESSION['message_type'] = 'error';
             $_SESSION['form_data'] = [
                 'email' => $email
             ];
@@ -90,7 +90,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 // Redirect back to form if there were errors
 if (!empty($messages)) {
-    $_SESSION['message_type'] = $error;
+    $_SESSION['message_type'] = 'error';
     header("Location: login.php");
     exit();
 }
