@@ -1,6 +1,7 @@
 <?php 
-$rootDir  = dirname(__DIR__).'/';
-require_once $rootDir."config/site_config.php";
+session_start();
+require_once "../config/file_config.php";
+require_once $root."client/config/site_config.php";
 ?>
 <nav class="bg-white dark:bg-gray-800 antialiased">
     <div class="max-w-screen-xl px-4 mx-auto 2xl:px-0 py-4">
@@ -174,25 +175,35 @@ require_once $rootDir."config/site_config.php";
                     <svg class="w-5 h-5 me-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                         <path stroke="currentColor" stroke-width="2" d="M7 17v1a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1a3 3 0 0 0-3-3h-4a3 3 0 0 0-3 3Zm8-9a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
                     </svg>
-                    Account
+                    <?php if(isset($_SESSION["name"])){
+                        echo $_SESSION['name'];
+                        }
+                        else {
+                            echo 'Account';
+                        }?> 
                     <svg class="w-4 h-4 text-gray-900 dark:text-white ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 9-7 7-7-7" />
                     </svg>
                 </button>
 
                 <div id="userDropdown1" class="hidden z-10 w-56 divide-y divide-gray-100 overflow-hidden overflow-y-auto rounded-lg bg-white antialiased shadow dark:divide-gray-600 dark:bg-gray-700">
-                    <ul class="p-2 text-start text-sm font-medium text-gray-900 dark:text-white">
-                        <li><a href="#" title="" class="inline-flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-600"> My Account </a></li>
+                <?php if (isset($_SESSION["name"])): ?>     
+                <ul class="p-2 text-start text-sm font-medium text-gray-900 dark:text-white">
+                        <li><a href="#" title="" class="inline-flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-600">My Account </a></li>
                         <li><a href="#" title="" class="inline-flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-600"> My Orders </a></li>
                         <li><a href="#" title="" class="inline-flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-600"> Settings </a></li>
                         <li><a href="#" title="" class="inline-flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-600"> Favourites </a></li>
                         <li><a href="#" title="" class="inline-flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-600"> Delivery Addresses </a></li>
                         <li><a href="#" title="" class="inline-flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-600"> Billing Data </a></li>
                     </ul>
-
                     <div class="p-2 text-sm font-medium text-gray-900 dark:text-white">
-                        <a href="#" title="" class="inline-flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-600"> Sign Out </a>
+                        <a href="<?=$baseUrl.'client/pages/auth/logout.php'?>" title="Sign33 out" class="inline-flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-600"> Sign Out </a>
                     </div>
+                <?php else:?>
+                    <div class="p-2 text-sm font-medium text-gray-900 dark:text-white">
+                        <a href="<?=$baseUrl.'client/pages/auth/login.php'?>" title="Sign33 out" class="inline-flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-600"> Sign In </a>
+                    </div>
+                <?php endif;?>
                 </div>
 
                 <button type="button" data-collapse-toggle="ecommerce-navbar-menu-1" aria-controls="ecommerce-navbar-menu-1" aria-expanded="false" class="flex lg:hidden items-center justify-center hover:bg-gray-100 rounded-md dark:hover:bg-gray-700 p-2 text-gray-900 dark:text-white">
