@@ -1,6 +1,14 @@
+# node packages
 package-lock.json
-.vscode/launch.json
 node_modules
-client/style.css
+
+# vscode settings
+.vscode/launch.json
 .vscode/settings.json
-test.html
+.vscode/tasks.json
+
+# Tailwind Generated CSS
+client/style.css
+
+# Server images
+client/assets/images/*
