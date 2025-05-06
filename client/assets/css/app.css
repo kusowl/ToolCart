@@ -2,6 +2,7 @@
 @import "flowbite/src/themes/default";
 @plugin "flowbite/plugin";
 @import "./hero.css";
+@import "./navbar.css";
 @source "../../node_modules/flowbite";
 @custom-variant dark (&:where(.dark, .dark *));
 

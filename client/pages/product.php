@@ -4,7 +4,7 @@ include_once "../config/db_config.php";
 include_once '../config/file_config.php';
 include_once '../config/site_config.php';
 include_once '../partials/header.php';
-include_once '../partials/navbar.php';
+include_once '../partials/navbar.html.php';
 if ($_SERVER["REQUEST_METHOD"] == "GET") {
     $product_id = $_GET["id"];
 }
