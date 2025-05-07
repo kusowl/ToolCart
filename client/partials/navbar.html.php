@@ -4,7 +4,7 @@ require_once "../config/file_config.php";
 require_once $root . "client/config/site_config.php";
 ?>
 <nav class="bg-gray-200 dark:bg-gray-800 antialiased">
-    <div class="max-w-screen-xl px-4 mx-auto 2xl:px-0 py-4">
+    <div class="max-w-screen-xl px-4 mx-auto 2xl:px-0 py-6">
         <div class="navbar">
 
             <div class="flex items-center space-x-8">
@@ -46,7 +46,7 @@ require_once $root . "client/config/site_config.php";
 
                 <button id="myCartDropdownButton1" data-dropdown-toggle="myCartDropdown1" type="button" class="navbar-btn">
                     <div class="cart_icon flex justify-center relative">
-                        <span class="absolute bottom-4 text-[0.625rem] text-primary-800"><?=$cart_item_count ?? '0'?></span>
+                        <span class="absolute bottom-3.5 text-[0.625rem] text-primary-800"><?=$cart_item_count ?? '0'?></span>
                         <svg class="w-5 h-5 lg:me-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 4h1.5L9 16m0 0h8m-8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm-8.5-3h9.25L19 7H7.312" />
                         </svg>
