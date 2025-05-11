@@ -11,6 +11,12 @@ if (empty($user_id)) {
   // if user is not logged in the redirect to home page
   header('Location: '.$baseUrl.'client/pages/auth/login.php');
 }
+
+include_once $root."client/config/db_config.php";
+// get cart item count
+$select_query = "SELECT SUM(qty) AS cart_item_count FROM `cart` WHERE `user_id` = '$user_id'";
+$result = mysqli_query($conn, $select_query);
+$cart_item_count = mysqli_fetch_assoc($result)['cart_item_count'];
 include "../partials/navbar.html.php";
 
 ?>
