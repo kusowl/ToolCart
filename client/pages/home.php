@@ -6,6 +6,11 @@ include "../config/file_config.php";
 $pageTitle = 'Home : TooCart';
 
 include "../partials/header.php";
+$user_id = $_SESSION["id"] ?? ''; 
+if (empty($user_id)) {
+  // if user is not logged in the redirect to home page
+  header('Location: '.$baseUrl.'client/pages/auth/login.php');
+}
 include "../partials/navbar.html.php";
 
 ?>
