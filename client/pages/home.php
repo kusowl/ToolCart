@@ -17,6 +17,12 @@ include_once $root."client/config/db_config.php";
 $select_query = "SELECT SUM(qty) AS cart_item_count FROM `cart` WHERE `user_id` = '$user_id'";
 $result = mysqli_query($conn, $select_query);
 $cart_item_count = mysqli_fetch_assoc($result)['cart_item_count'];
+
+$select_query = "SELECT cart.id, cart.qty, product.product_title, product.product_price FROM `cart` JOIN product ON cart.product_id = product.id WHERE cart.user_id = '".$user_id."'";
+$result = mysqli_query($conn, $select_query);
+$cartrecords = [];
+while($row = mysqli_fetch_assoc($result))
+  $cartrecords[] = $row;
 include "../partials/navbar.html.php";
 
 ?>
