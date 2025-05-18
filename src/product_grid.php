@@ -1,5 +1,8 @@
-<?php 
-include_once "../config/site_config.php";
+<?php
+    include_once "config/db_config.php";
+    include_once 'class/Product.php';
+    $productObject = new Product($con);
+    $products = $productObject->getAllProduct();
 ?>
 <section class="bg-gray-50 py-8 antialiased dark:bg-gray-900 md:py-12">
   <div class="mx-auto max-w-screen-xl px-4 2xl:px-0">
@@ -9,8 +12,8 @@ include_once "../config/site_config.php";
       <div class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
         <!-- product image -->
         <div class="h-56 w-full">
-          <a href="<?=$baseUrl.'src/pages/productHandler.php?id='.$product['id']?>">
-            <img class="mx-auto h-full dark:hidden" src="<?=$baseUrl.$product['product_image']?>" alt="" />
+          <a href="<?=BASE_URL.'src/pages/ProductHandler.php?id='.$product['id']?>">
+            <img class="mx-auto h-full dark:hidden" src="<?=BASE_URL.$product['product_image']?>" alt="" />
             <!-- <img class="mx-auto hidden h-full dark:block" src="https://flowbite.s3.amazonaws.com/blocks/e-commerce/imac-front-dark.svg" alt="" /> -->
           </a>
         </div>

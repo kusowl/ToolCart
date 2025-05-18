@@ -1,3 +1,4 @@
+.gitignore
 # node packages
 package-lock.json
 node_modules
@@ -13,3 +14,7 @@ src/style.css
 # Server images
 src/assets/images/*
 todo.MD
+/.idea/ToolCart.iml
+/.idea/vcs.xml
+/.idea/dataSources.xml
+/test.php

@@ -1,31 +1,10 @@
 <?php
 session_start();
 include "config/site_config.php";
-
-$pageTitle = 'Home : TooCart';
-
-include "partials/header.php";
-//$user_id = $_SESSION["id"] ?? '';
-//if (empty($user_id)) {
-//  // if user is not logged in the redirect to home page
-//  header('Location: '.$baseUrl.'src/pages/auth/login.php');
-//}
-
-include_once "config/db_config.php";
-//// get cart item count
-//$select_query = "SELECT SUM(qty) AS cart_item_count FROM `cart` WHERE `user_id` = '$user_id'";
-//$result = mysqli_query($conn, $select_query);
-//$cart_item_count = mysqli_fetch_assoc($result)['cart_item_count'];
-//
-//$select_query = "SELECT cart.id, cart.qty, product.product_title, product.product_price FROM `cart` JOIN product ON cart.product_id = product.id WHERE cart.user_id = '".$user_id."'";
-//$result = mysqli_query($conn, $select_query);
-//$cartrecords = [];
-//while($row = mysqli_fetch_assoc($result))
-//  $cartrecords[] = $row;
-include "partials/navbar.html.php";
-
+$pageTitle = 'Home : '.SITE_NAME;
+include_once "partials/header.php";
+include_once "partials/navbar.html.php";
 ?>
-
     <section class="hero">
         <div class="mx-auto mt-12 grid max-w-screen-xl md:grid-cols-12 lg:gap-12 xl:gap-0">
             <div class="content-center justify-self-start md:col-span-7 md:text-start">
@@ -96,15 +75,7 @@ include "partials/navbar.html.php";
         </div>
         </div>
     </section>
-
 <?php
-//include_once "config/db_config.php";
-//$select_query = "SELECT `id`,`product_title`, `product_price`, `product_image` FROM `product`";
-//$results = mysqli_query($conn,$select_query);
-//$products = array();
-//while($row = mysqli_fetch_assoc($results)){
-//  $products[] = $row;
-//}
 include_once "product_grid.php";
 include "partials/footer.php";
 ?>

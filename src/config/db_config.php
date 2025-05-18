@@ -13,4 +13,7 @@
         echo "Database Connection Failed: ".$e->getMessage();
     }
 
+    // Defining constrains
+    define('QUERY_LIMIT', 10);
+
 ?>
