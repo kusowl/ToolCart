@@ -1,0 +1,12 @@
+RewriteEngine On
+RewriteBase /ToolCart/
+# Remove .php extension
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}\.php -f
+RewriteRule ^(.*)$ $1.php [L]
+# Redirect requests to the actual root to the src directory
+RewriteCond %{REQUEST_URI} !^/ToolCart/src/
+RewriteRule ^(.*)$ src/$1 [L]
+## Optionally, rewrite requests within src to remove the /src/ from the browser URL
+#RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\ /ToolCart/src/(.*) HTTP/
+#RewriteRule ^ToolCart/src/(.*)$ /ToolCart/$1 [R=301,L]

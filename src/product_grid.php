@@ -9,7 +9,7 @@ include_once "../config/site_config.php";
       <div class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
         <!-- product image -->
         <div class="h-56 w-full">
-          <a href="<?=$baseUrl.'client/pages/product.php?id='.$product['id']?>">
+          <a href="<?=$baseUrl.'src/pages/productHandler.php?id='.$product['id']?>">
             <img class="mx-auto h-full dark:hidden" src="<?=$baseUrl.$product['product_image']?>" alt="" />
             <!-- <img class="mx-auto hidden h-full dark:block" src="https://flowbite.s3.amazonaws.com/blocks/e-commerce/imac-front-dark.svg" alt="" /> -->
           </a>

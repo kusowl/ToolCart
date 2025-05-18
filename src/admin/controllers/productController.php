@@ -4,7 +4,7 @@ require_once "../../config/file_config.php";
 include_once "../../helper/sanitization.php";
 include_once "../../helper/validation.php";
 require_once "../../config/db_config.php";
-require_once $root . "client/helper/fileHelper.php";
+require_once $root . "src/helper/fileHelper.php";
 $messages = [];
 $message_type = "";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -17,7 +17,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $fileTypes = ['image/jpeg', 'image/jpg', 'image/png'];
     $allowedFileSize = 1024 * 1024 * 1;
     $validationResult = validateFile($image, $fileTypes, $allowedFileSize);
-    $rel_path = 'client/assets/images/';
+    $rel_path = 'src/assets/images/';
     $path = $root .$rel_path ;
     switch ($validationResult) {
         case 0:

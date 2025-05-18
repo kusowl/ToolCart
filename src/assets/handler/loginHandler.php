@@ -56,10 +56,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // Set redirect url based on user type
             switch ($result['user_type']) {
                 case 'customer':
-                    $location = $baseUrl . "client/pages/home.php";
+                    $location = $baseUrl . "src/pages/home.php";
                     break;
                 case 'admin':
-                    $location = $baseUrl . "client/admin/dashboard.php";
+                    $location = $baseUrl . "src/admin/dashboard.php";
                     break;
                 default:
                     # code...

@@ -8,8 +8,8 @@ node_modules
 .vscode/tasks.json
 
 # Tailwind Generated CSS
-client/style.css
+src/style.css
 
 # Server images
-client/assets/images/*
+src/assets/images/*
 todo.MD

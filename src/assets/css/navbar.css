@@ -1,6 +1,6 @@
 @layer components{
     .navbar{
-        @apply fixed bg-primary-600 text-white rounded-xl flex px-6 py-4 antialiased shadow-lg items-center justify-between space-x-[32rem];
+        @apply fixed bg-primary-600 text-white rounded-xl flex px-6 py-4 antialiased shadow-lg items-center justify-between space-x-1.5 md:space-x-86 lg:space-x-[32rem];
     }
     .navbar-link{
         @apply flex text-sm font-medium hover:text-primary-500  dark:hover:text-primary-700;
