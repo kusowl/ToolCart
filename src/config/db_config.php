@@ -2,18 +2,15 @@
 
     // Database credentials and connection var
     $host = "localhost";
-    $user = "root";
-    $pass = "";
-    $db  = "toolcart";
-
+    $dbName  = "toolcart";
+    $userName = "root";
+    $password = "";
+    $dsn = "mysql:host={$host};dbname={$dbName}";
     try {
-        $conn = mysqli_connect($host, $user, $pass, $db);
-            // Database credentials
-        if(!$conn){
-            echo "Cannot connect to Database | ".mysqli_error($conn);
-        }
-    } catch (\Throwable $e) {
-        echo $e;
+        $con = new PDO($dsn, $userName, $password);
+        $con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    } catch (PDOException $e) {
+        echo "Database Connection Failed: ".$e->getMessage();
     }
 
 ?>
