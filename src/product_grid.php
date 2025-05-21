@@ -1,7 +1,8 @@
 <?php
     include_once "config/db_config.php";
     include_once 'class/Product.php';
-    $productObject = new Product($con);
+    $productObject = new Product();
+    Product::setDb($con);
     $products = $productObject->getAllProduct();
 ?>
 <section class="bg-gray-50 py-8 antialiased dark:bg-gray-900 md:py-12">
@@ -12,8 +13,8 @@
       <div class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
         <!-- product image -->
         <div class="h-56 w-full">
-          <a href="<?=BASE_URL.'src/pages/ProductHandler.php?id='.$product['id']?>">
-            <img class="mx-auto h-full dark:hidden" src="<?=BASE_URL.$product['product_image']?>" alt="" />
+          <a href="<?=BASE_URL.'src/pages/ProductHandler.php?id='.$product->getId()?>">
+            <img class="mx-auto h-full dark:hidden" src="<?=BASE_URL.$product->getImage()?>" alt="" />
             <!-- <img class="mx-auto hidden h-full dark:block" src="https://flowbite.s3.amazonaws.com/blocks/e-commerce/imac-front-dark.svg" alt="" /> -->
           </a>
         </div>
@@ -49,7 +50,7 @@
             </div>
           </div>
           <!-- product title -->
-          <a href="#" class="text-lg font-semibold leading-tight text-gray-900 hover:underline dark:text-white"><?=$product['product_title']?></a>
+          <a href="#" class="text-lg font-semibold leading-tight text-gray-900 hover:underline dark:text-white"><?=$product->getTitle()?></a>
 
           <div class="mt-2 flex items-between gap-2">
             <div class="flex items-center">
@@ -80,7 +81,7 @@
 
           <div class="mt-4 flex items-center justify-between gap-4">
             <!-- Price -->
-            <p class="text-2xl font-extrabold leading-tight text-gray-900 dark:text-white"><?=$product['product_price']?>
+            <p class="text-2xl font-extrabold leading-tight text-gray-900 dark:text-white">₹<?=$product->getPrice()?>
             </p>
 
             <!-- Add to cart btn -->
@@ -88,7 +89,7 @@
               <svg class="-ms-2 me-2 h-5 w-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4h1.5L8 16m0 0h8m-8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm.75-3H7.5M11 7H6.312M17 4v6m-3-3h6" />
               </svg>
-              <a href="product/add_to_cart.php?product_id=<?=$product['id']?>"> Add to cart</a>
+              <a href="product/add_to_cart.php?product_id=<?=$product->getId()?>"> Add to cart</a>
             </button>
           </div>
         </div>
