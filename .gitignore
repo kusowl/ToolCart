@@ -18,3 +18,4 @@ todo.MD
 /.idea/vcs.xml
 /.idea/dataSources.xml
 /test.php
+/.idea/sqldialects.xml

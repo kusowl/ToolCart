@@ -18,9 +18,9 @@ include_once "partials/navbar.html.php";
             </div>
         </div>
         <div class="flex justify-center">
-        <div class="w-9/12 inline-flex flex-nowrap overflow-hidden [mask-image:_linear-gradient(to_right,transparent_0,_black_128px,_black_calc(100%-128px),transparent_100%)]"
+        <div class="brand"
         >
-            <ul class="flex items-center justify-center md:justify-start mt-20 [&_li]:mx-8 [&_img]:max-w-32 [&_img]:max-h-10 animate-infinite-scroll">
+            <ul class="logos">
                 <li>
                     <img src="<?= BASE_URL ?>assets/images/logo/bosch.svg" alt="">
                 </li>
@@ -46,7 +46,7 @@ include_once "partials/navbar.html.php";
                     <img src="<?= BASE_URL ?>assets/images/logo/StanlyBlack.svg" alt="">
                 </li>
             </ul>
-            <ul class="flex items-center justify-center md:justify-start mt-20 [&_li]:mx-8 [&_img]:max-w-32 [&_img]:max-h-10 animate-infinite-scroll">
+            <ul class="logos">
                 <li>
                     <img src="<?= BASE_URL ?>assets/images/logo/bosch.svg" alt="">
                 </li>

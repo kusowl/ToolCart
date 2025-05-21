@@ -31,15 +31,7 @@
     --font-mono: "ui-monospace", "SFMono-Regular", "Menlo", "Monaco", "Consolas",
     "Liberation Mono", "Courier New", "monospace";
 
-    --animate-infinite-scroll: scroll 30s linear infinite;
-    @keyframes scroll {
-        0% {
-            transform: translateX(0);
-        }
-        100% {
-            transform: translateX(-100%);
-        }
-    }
+
 }
 
 

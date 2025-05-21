@@ -1,0 +1,19 @@
+@layer components{
+    .brand{
+        @apply w-9/12 inline-flex flex-nowrap overflow-hidden [mask-image:_linear-gradient(to_right,transparent_0,_black_128px,_black_calc(100%-128px),transparent_100%)]
+    }
+
+    .brand .logos{
+        @apply flex items-center justify-center md:justify-start mt-20 [&_li]:mx-8 [&_img]:max-w-32 [&_img]:max-h-10 animate-infinite-scroll
+    }
+
+    --animate-infinite-scroll: scroll 30s linear infinite;
+    @keyframes scroll {
+        0% {
+            transform: translateX(0);
+        }
+        100% {
+            transform: translateX(-100%);
+        }
+    }
+}
