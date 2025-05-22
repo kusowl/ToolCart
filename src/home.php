@@ -25,10 +25,10 @@ include_once "partials/navbar.html.php";
                     <img src="<?= BASE_URL ?>assets/images/logo/bosch.svg" alt="">
                 </li>
                 <li>
-                    <img src="<?= BASE_URL ?>assets/images/logo/Dewalt.svg" alt="">
+                    <img src="<?= BASE_URL ?>assets/images/logo/dormakaba.svg" alt="">
                 </li>
                 <li>
-                    <img src="<?= BASE_URL ?>assets/images/logo/dormakaba.svg" alt="">
+                    <img src="<?= BASE_URL ?>assets/images/logo/Dewalt.svg" alt="">
                 </li>
                 <li>
                     <img src="<?= BASE_URL ?>assets/images/logo/Fein.svg" alt="">
@@ -40,10 +40,10 @@ include_once "partials/navbar.html.php";
                     <img src="<?= BASE_URL ?>assets/images/logo/KPT.svg" alt="">
                 </li>
                 <li>
-                    <img src="<?= BASE_URL ?>assets/images/logo/makita.svg" alt="">
+                    <img src="<?= BASE_URL ?>assets/images/logo/StanlyBlack.svg" alt="">
                 </li>
                 <li>
-                    <img src="<?= BASE_URL ?>assets/images/logo/StanlyBlack.svg" alt="">
+                    <img src="<?= BASE_URL ?>assets/images/logo/makita.svg" alt="">
                 </li>
             </ul>
             <ul class="logos">
@@ -51,10 +51,10 @@ include_once "partials/navbar.html.php";
                     <img src="<?= BASE_URL ?>assets/images/logo/bosch.svg" alt="">
                 </li>
                 <li>
-                    <img src="<?= BASE_URL ?>assets/images/logo/Dewalt.svg" alt="">
+                    <img src="<?= BASE_URL ?>assets/images/logo/dormakaba.svg" alt="">
                 </li>
                 <li>
-                    <img src="<?= BASE_URL ?>assets/images/logo/dormakaba.svg" alt="">
+                    <img src="<?= BASE_URL ?>assets/images/logo/Dewalt.svg" alt="">
                 </li>
                 <li>
                     <img src="<?= BASE_URL ?>assets/images/logo/Fein.svg" alt="">
@@ -66,10 +66,10 @@ include_once "partials/navbar.html.php";
                     <img src="<?= BASE_URL ?>assets/images/logo/KPT.svg" alt="">
                 </li>
                 <li>
-                    <img src="<?= BASE_URL ?>assets/images/logo/makita.svg" alt="">
+                    <img src="<?= BASE_URL ?>assets/images/logo/StanlyBlack.svg" alt="">
                 </li>
                 <li>
-                    <img src="<?= BASE_URL ?>assets/images/logo/StanlyBlack.svg" alt="">
+                    <img src="<?= BASE_URL ?>assets/images/logo/makita.svg" alt="">
                 </li>
             </ul>
         </div>
@@ -78,4 +78,5 @@ include_once "partials/navbar.html.php";
 <?php
 include_once "product_grid.php";
 include "partials/footer.php";
+//phpinfo();
 ?>
