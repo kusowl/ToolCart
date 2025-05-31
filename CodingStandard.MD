@@ -65,3 +65,13 @@ Singular Form
     Since an object represents a single instance, use the singular form.
 
     Example: $user for a User class, not $users.
+
+# Handling Dynamic actions
+
+Actions that include dynamicity such as ( e.g. increment item qty in cart)
+data should be handled by AJAX first. [ID, QTY, Action] (by onclick, onchange events)
+Then, data should be sent to handler by POST request, generated from AJAX.
+Then any db actions should be done in class only.
+
+### Why this ?
+No Reloading / Refresh of page, improves user experience.

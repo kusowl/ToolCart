@@ -56,4 +56,12 @@ class Cart
         return $stmt->fetch(PDO::FETCH_ASSOC) ?? [];
     }
 
+    public function setQuantity(int $productId, int $qty): bool
+    {
+        $sql = "UPDATE `cart` SET `qty`= :qty WHERE product_id = :product_id and user_id = :user_id";
+        $stmt = self::$dbCon->prepare($sql);
+        $res = $stmt->execute([':qty' => $qty, ':product_id' => $productId, ':user_id' => $this->getUserId()]);
+        return $res;
+    }
+
 }

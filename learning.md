@@ -1,0 +1,4 @@
+# Why we need to re-require/include config files in AJAX Request
+The fundamental nature of PHP's request-response cycle dictates that each HTTP request (including AJAX calls) is a fresh execution environment. Therefore, any resources or configurations needed for that request, including a database connection, must be established or initialized within the scope of that request.
+
+The most robust, secure, and widely accepted solution is to ensure your CartHandler.php (or a file it includes, like a central config.php) re-establishes the database connection and assigns it to Cart::$dbCon at the beginning of its execution for every incoming request

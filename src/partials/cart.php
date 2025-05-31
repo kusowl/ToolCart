@@ -42,14 +42,12 @@ if (isset($_SESSION['user_id'])) {
                     <div class="flex space-x-1 items-center">
                         <p class="text-sm font-normal leading-none text-gray-500 dark:text-gray-400">Qty</p>
 
-                        <button class="text-gray-900 hover:text-primary-800 bg-neutral-300 hover:bg-neutral-400 rounded-full p-0.5"
-                                type="button" onclick="decrementQty()">-
+                        <button class="decrementCartBtn text-gray-900 hover:text-primary-800 bg-neutral-300 hover:bg-neutral-400 rounded-full p-0.5"
+                                type="button" data-product-id="<?= $record['product_id'] ?>">-
                         </button>
-                        <p class="text-sm font-normal leading-none text-gray-500 dark:text-gray-400" name="quantity"
-                           id="qty"><?= $record['qty'] ?></p>
+                        <p class="cartQty text-sm font-normal leading-none text-gray-500 dark:text-gray-400" data-item-qty="<?= $record['qty'] ?>"><?= $record['qty'] ?></p>
 
-                        <button class=" text-gray-900 hover:text-primary-800 bg-neutral-300 hover:bg-neutral-400 rounded-full p-0.5"
-                                type="button" onclick="incrementQty()">+
+                        <button class="incrementCartBtn text-gray-900 hover:text-primary-800 bg-neutral-300 hover:bg-neutral-400 rounded-full p-0.5" type="button" data-product-id="<?= $record['product_id'] ?>">+
                         </button>
 
                     </div>
