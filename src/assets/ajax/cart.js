@@ -1,20 +1,41 @@
 $(document).ready(function (){
-    function updateQty(productId, cartQty, cartQtyElm, requestType){
+    function updateQty(productId, cartQty, cartQtyElm, request){
         $.ajax({
                 method: 'POST',
-                url: 'src/handler/CartHandler.php',
+                url: 'handler/CartHandler.php',
                 data : {
                     productId : productId,
-                    requestType : requestType,
+                    request : request,
                     cartQty : cartQty
                 },
                 success: function () {
                     console.log('Cart updated successfully');
                     cartQtyElm.text(cartQty)
                     cartQtyElm.data('item-qty', cartQty)
+                    updateCartTotalCount()
                 },
                 error : function (){
                     console.log('Error in cart update')
+                }
+            }
+        )
+    }
+
+    function updateCartTotalCount(){
+        $.ajax(
+            {
+                method:'GET',
+                url :'handler/CartHandler.php',
+                data : {
+                    q : 'totalCartQty'
+                },
+                success : function (response){
+                    if(response.success){
+                        $('#cartTotalItemCount').text(response.totalQty)
+                    }
+                    else{
+                        console.log('Error in getting totoal Cart Count')
+                    }
                 }
             }
         )

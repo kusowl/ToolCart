@@ -1,16 +1,11 @@
 <?php
 include_once ROOT . "class/Cart.php";
 include_once ROOT."config/db_config.php";
-if (isset($_SESSION['user_id'])) {
-    $cart = new Cart($_SESSION['user_id']);
-    Cart::setDb($con);
-    $cartRecords = $cart->getAllItem();
-    $cartItemCount = $cart->getCartItemTotal()['total_qty'];
-}
+include_once ROOT."handler/CartHandler.php";
 ?>
 <button id="myCartDropdownButton1" data-dropdown-toggle="myCartDropdown1" type="button" class="navbar-btn">
     <div class="cart_icon flex justify-center relative">
-        <span class="absolute bottom-3.5 text-[0.625rem] text-primary-800"><?= $cartItemCount ?? '0' ?></span>
+        <span id="cartTotalItemCount" class="absolute bottom-3.5 text-[0.625rem] text-primary-800"><?= $cartItemCount ?? '0' ?></span>
         <svg class="w-5 h-5 lg:me-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
              fill="none" viewBox="0 0 24 24">
             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
