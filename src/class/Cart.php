@@ -34,7 +34,7 @@ class Cart
             $stmt = self::$dbCon->prepare($sql);
             $res = $stmt->execute([':product_id' => $productId]);
         } else {
-            $sql = "INSERT INTO `cart` (`product_id`, `user_id`, `qty`) VALUES (':product_id',':user_id', ':qty')";
+            $sql = "INSERT INTO `cart` (`product_id`, `user_id`, `qty`) VALUES (:product_id,:user_id, :qty)";
             $stmt = self::$dbCon->prepare($sql);
             $res = $stmt->execute([':product_id' => $productId, ':user_id' => $this->getUserId(),':qty' => $qty]);
         }

@@ -5,15 +5,18 @@ require_once ROOT . "config/db_config.php";
 require_once ROOT . "class/Cart.php";
 $cartRecords = [];
 $cartItemCount = [];
+if (!isset($_SESSION['user_id'])) {
+    header(ROOT . 'login.php');
+}
 $userId = $_SESSION['user_id'];
 $cart = new Cart($userId);
 CART::setDb($con);
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-    $productId = $_POST['productId'];
-    $cartQty = (int)$_POST['cartQty'];
-    $request = $_POST['request'];
+    $productId = $_POST['productId'] ?? null;
+    $cartQty = (int)$_POST['cartQty'] ?? 0;
+    $request = $_POST['request'] ?? '';
 
     switch ($request) {
         case 'decrementQty':
@@ -30,8 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     'success' => true,
                     'totalQty' => $cartItemCount
                 ];
-            }
-            else{
+            } else {
                 $response = [
                     'error' => true
                 ];
@@ -43,21 +45,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         case 'removeCartItem':
         {
             if ($cart->removeItem($productId)) {
-            $cartItemCount = $cart->getCartItemTotal()['total_qty'];
-            $cartRecords = $cart->getAllItem();
-            $response = [
-                'success' => true,
-                'totalQty' => $cartItemCount
-            ];
-        }
-        else{
-            $response = [
-                'error' => true
-            ];
-        }
+                $cartItemCount = $cart->getCartItemTotal()['total_qty'];
+                $cartRecords = $cart->getAllItem();
+                $response = [
+                    'success' => true,
+                    'totalQty' => $cartItemCount
+                ];
+            } else {
+                $response = [
+                    'error' => true
+                ];
+            }
             header('Content-Type: application/json');
             echo json_encode($response);
             break;
+        }
+        // No Request specified so just see it as add to cart
+        default :
+        {
+            $cart->addItem($productId);
+            header('location:/ToolCart/home');
         }
     }
 } else {

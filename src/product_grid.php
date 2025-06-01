@@ -110,8 +110,8 @@ $products = $productObj->getAllProduct();
                             </p>
 
                             <!-- Add to cart btn -->
-                            <form action="" method="post">
-                                <input type="hidden" name="product_id" value="<?= $product->getId() ?>">
+                            <form action="src/handler/CartHandler.php" method="post">
+                                <input type="hidden" name="productId" value="<?= $product->getId() ?>">
                                 <input type="hidden" name="add_to_cart" id="" value="1">
                                 <button type="submit"
                                         class="inline-flex items-center rounded-lg bg-primary-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-primary-800 focus:outline-none focus:ring-4  focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
