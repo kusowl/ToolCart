@@ -1,7 +1,7 @@
 <?php
 session_start();
 ?>
-<nav class="bg-gray-200 dark:bg-gray-800 antialiased">
+<nav class="bg-gray-950/5 dark:bg-gray-800 antialiased">
     <div class="max-w-screen-xl px-4 mx-auto 2xl:px-0 py-6">
         <div class="navbar">
 
@@ -43,7 +43,7 @@ session_start();
             <div class="flex items-center lg:space-x-2">
 
                <?php include_once ROOT."partials/cart.php"; ?>
-
+                <div>
                 <button id="userDropdownButton1" data-dropdown-toggle="userDropdown1" type="button" class="navbar-btn">
                     <svg class="w-5 h-5 me-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                         <path stroke="currentColor" stroke-width="2" d="M7 17v1a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1a3 3 0 0 0-3-3h-4a3 3 0 0 0-3 3Zm8-9a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
@@ -57,7 +57,7 @@ session_start();
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 9-7 7-7-7" />
                     </svg>
                 </button>
-
+                </div>
                 <div id="userDropdown1" class="hidden z-10 w-56 divide-y divide-gray-100 overflow-hidden overflow-y-auto rounded-lg bg-white antialiased shadow dark:divide-gray-600 dark:bg-gray-700">
                     <?php if (isset($_SESSION["user_name"])): ?>
                         <ul class="p-2 text-start text-sm font-medium text-gray-900 dark:text-white">

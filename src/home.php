@@ -24,24 +24,24 @@ include_once "partials/navbar.html.php";
                 <li>
                     <img src="<?= BASE_URL ?>assets/images/logo/bosch.svg" alt="">
                 </li>
-                <li>
-                    <img src="<?= BASE_URL ?>assets/images/logo/dormakaba.svg" alt="">
-                </li>
+<!--                <li>-->
+<!--                    <img src="--><?php //= BASE_URL ?><!--assets/images/logo/dormakaba.svg" alt="">-->
+<!--                </li>-->
                 <li>
                     <img src="<?= BASE_URL ?>assets/images/logo/Dewalt.svg" alt="">
-                </li>
-                <li>
-                    <img src="<?= BASE_URL ?>assets/images/logo/Fein.svg" alt="">
                 </li>
                 <li>
                     <img src="<?= BASE_URL ?>assets/images/logo/Hikoki.svg" alt="">
                 </li>
                 <li>
-                    <img src="<?= BASE_URL ?>assets/images/logo/KPT.svg" alt="">
+                    <img src="<?= BASE_URL ?>assets/images/logo/Fein.svg" alt="">
                 </li>
                 <li>
-                    <img src="<?= BASE_URL ?>assets/images/logo/StanlyBlack.svg" alt="">
+                    <img src="<?= BASE_URL ?>assets/images/logo/KPT.svg" alt="">
                 </li>
+<!--                <li>-->
+<!--                    <img src="--><?php //= BASE_URL ?><!--assets/images/logo/StanlyBlack.svg" alt="">-->
+<!--                </li>-->
                 <li>
                     <img src="<?= BASE_URL ?>assets/images/logo/makita.svg" alt="">
                 </li>
@@ -50,24 +50,24 @@ include_once "partials/navbar.html.php";
                 <li>
                     <img src="<?= BASE_URL ?>assets/images/logo/bosch.svg" alt="">
                 </li>
-                <li>
-                    <img src="<?= BASE_URL ?>assets/images/logo/dormakaba.svg" alt="">
-                </li>
+<!--                <li>-->
+<!--                    <img src="--><?php //= BASE_URL ?><!--assets/images/logo/dormakaba.svg" alt="">-->
+<!--                </li>-->
                 <li>
                     <img src="<?= BASE_URL ?>assets/images/logo/Dewalt.svg" alt="">
-                </li>
-                <li>
-                    <img src="<?= BASE_URL ?>assets/images/logo/Fein.svg" alt="">
                 </li>
                 <li>
                     <img src="<?= BASE_URL ?>assets/images/logo/Hikoki.svg" alt="">
                 </li>
                 <li>
-                    <img src="<?= BASE_URL ?>assets/images/logo/KPT.svg" alt="">
+                    <img src="<?= BASE_URL ?>assets/images/logo/Fein.svg" alt="">
                 </li>
                 <li>
-                    <img src="<?= BASE_URL ?>assets/images/logo/StanlyBlack.svg" alt="">
+                    <img src="<?= BASE_URL ?>assets/images/logo/KPT.svg" alt="">
                 </li>
+<!--                <li>-->
+<!--                    <img src="--><?php //= BASE_URL ?><!--assets/images/logo/StanlyBlack.svg" alt="">-->
+<!--                </li>-->
                 <li>
                     <img src="<?= BASE_URL ?>assets/images/logo/makita.svg" alt="">
                 </li>

@@ -4,13 +4,13 @@
     }
 
     .brand .logos{
-        @apply flex items-center justify-center md:justify-start mt-20 [&_li]:mx-8 [&_img]:max-w-32 [&_img]:max-h-10 animate-infinite-scroll
+        @apply flex items-center justify-center md:justify-start mt-20 [&_li]:mx-12 [&_img]:max-w-32 [&_img]:max-h-10 animate-infinite-scroll
     }
 
     
 }
 @theme {
-    --animate-infinite-scroll: scroll 30s linear infinite;
+    --animate-infinite-scroll: scroll 15s linear infinite;
     @keyframes scroll {
         0% {
             transform: translateX(0);
