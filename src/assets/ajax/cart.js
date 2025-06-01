@@ -63,4 +63,12 @@ $(document).ready(function (){
             }
         }
     )
+
+    $('.removeCartItemBtn').on(
+        'click',
+        function () {
+            let productId = $(this).data('product-id')
+            removeCartItem(productId)
+        }
+    )
 })

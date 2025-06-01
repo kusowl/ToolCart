@@ -35,6 +35,25 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
             $cart->setQuantity($productId, $cartQty);
             break;
         }
+        case 'removeCartItem':
+        {
+            if ($cart->removeItem($productId)) {
+            $cartItemCount = $cart->getCartItemTotal()['total_qty'];
+            $cartRecords = $cart->getAllItem();
+            $response = [
+                'success' => true,
+                'totalQty' => $cartItemCount
+            ];
+        }
+        else{
+            $response = [
+                'error' => true
+            ];
+        }
+            header('Content-Type: application/json');
+            echo json_encode($response);
+            break;
+        }
     }
 }else{
     if (isset($_SESSION['user_id'])) {

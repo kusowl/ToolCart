@@ -41,6 +41,14 @@ class Cart
         return $res;
     }
 
+    public function removeItem(int $productId): bool
+    {
+       $sql = "DELETE FROM `cart` WHERE product_id = :product_id AND user_id = :user_id";
+       $stmt = self::$dbCon->prepare($sql);
+       $res = $stmt->execute([':product_id' => $productId, ':user_id' => $this->getUserId()]);
+       return $res;
+    }
+
     public function getAllItem(int $limit = QUERY_LIMIT, int $offset = 0): array
     {
         $sql = "SELECT c.`id`, c.`product_id`, c.`qty`, p.product_title, p.product_price FROM `cart` c JOIN product p ON c.product_id = p.id WHERE `user_id` = :user_id LIMIT {$limit} OFFSET {$offset}";

@@ -23,9 +23,10 @@ include_once ROOT."handler/CartHandler.php";
      class="hidden z-10 mx-auto max-w-sm space-y-4 overflow-hidden rounded-lg bg-white p-4 antialiased shadow-lg dark:bg-gray-800">
     <?php
     if (isset($cartRecords)): ?>
-        <div class="grid grid-cols-2 gap-y-2">
+        <div class="grid grid-cols-1 gap-y-2">
             <?php
             foreach ($cartRecords as $record): ?>
+            <div id="productId<?=$record['product_id']?>" class="grid grid-cols-2">
                 <div class="bg-neutral-100 px-2 py-1 rounded-l-lg">
                     <a href="#"
                        class=" text-sm font-semibold leading-none text-gray-900 dark:text-white hover:underline"><?= $record['product_title'] ?></a>
@@ -46,8 +47,8 @@ include_once ROOT."handler/CartHandler.php";
                         </button>
 
                     </div>
-                    <button data-tooltip-target="tooltipRemoveItem1a" type="button"
-                            class="text-red-600 hover:text-red-700 dark:text-red-500 dark:hover:text-red-600">
+                    <button data-tooltip-target="tooltipRemoveItem<?=$record['product_id']?>" type="button"
+                            class="removeCartItemBtn text-red-600 hover:text-red-700 dark:text-red-500 dark:hover:text-red-600" data-product-id="<?=$record['product_id']?>">
                         <span class="sr-only"> Remove </span>
                         <svg class="h-4 w-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
                              viewBox="0 0 24 24">
@@ -56,12 +57,13 @@ include_once ROOT."handler/CartHandler.php";
                                   clip-rule="evenodd"/>
                         </svg>
                     </button>
-                    <div id="tooltipRemoveItem1a" role="tooltip"
+                    <div id="tooltipRemoveItem<?=$record['product_id']?>" role="tooltip"
                          class="tooltip invisible absolute z-10 inline-block rounded-lg bg-gray-900 px-3 py-2 text-sm font-medium text-white opacity-0 shadow-sm transition-opacity duration-300 dark:bg-gray-700">
                         Remove item
                         <div class="tooltip-arrow" data-popper-arrow></div>
                     </div>
                 </div>
+            </div>
             <?php endforeach; ?>
         </div>
 

@@ -75,3 +75,21 @@ Then any db actions should be done in class only.
 
 ### Why this ?
 No Reloading / Refresh of page, improves user experience.
+
+# Handler Requests
+Every request made using AJAX, needs to have `request` key set,
+it will be used to perform action based on that.
+E.g. 
+```php 
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+
+    $productId = $_POST['productId'];
+    $cartQty = (int)$_POST['cartQty'];
+    $request = $_POST['request']; // Must have this
+
+    switch ($request) {
+        case 'decrementQty':
+        case 'incrementQty':
+        {
+            if ($cart->setQuantity($productId, $cartQty)) {
+```
