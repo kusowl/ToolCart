@@ -1,64 +1,69 @@
-$(document).ready(function (){
-    function updateQty(productId, cartQty, cartQtyElm, request){
+$(document).ready(function () {
+    function updateQty(productId, cartQty, cartQtyElm, request) {
         $.ajax({
                 method: 'POST',
                 url: 'handler/CartHandler.php',
-                data : {
-                    productId : productId,
-                    request : request,
-                    cartQty : cartQty
+                data: {
+                    productId: productId,
+                    request: request,
+                    cartQty: cartQty
                 },
-                success: function () {
-                    console.log('Cart updated successfully');
-                    cartQtyElm.text(cartQty)
-                    cartQtyElm.data('item-qty', cartQty)
-                    updateCartTotalCount()
+                success: function (response) {
+                    if (response.success) {
+                        $('#cartTotalItemCount').text(response.totalQty)
+                        console.log('Cart updated successfully');
+                        cartQtyElm.text(cartQty)
+                        cartQtyElm.data('item-qty', cartQty)
+                    }
                 },
-                error : function (){
+                error: function () {
                     console.log('Error in cart update')
                 }
             }
         )
     }
 
-    function updateCartTotalCount(){
+    function removeCartItem(productId) {
         $.ajax(
             {
-                method:'GET',
-                url :'handler/CartHandler.php',
-                data : {
-                    q : 'totalCartQty'
+                url: 'handler/CartHandler.php',
+                method: 'POST',
+                data: {
+                    productId: productId,
+                    request: 'removeCartItem'
                 },
-                success : function (response){
-                    if(response.success){
+                success: function (response) {
+                    if (response.success) {
                         $('#cartTotalItemCount').text(response.totalQty)
+                        $('#productId'.concat(productId)).hide('fast')
+                        console.log('Item removed from the cart')
                     }
-                    else{
-                        console.log('Error in getting totoal Cart Count')
-                    }
+                },
+                error: function () {
+                    console.log('Error in deleteing item')
                 }
             }
         )
     }
+
     $('.incrementCartBtn').on(
         'click',
-        function (){
+        function () {
             let productId = $(this).data('product-id');
             let cartQtyElm = $(this).siblings('.cartQty');
             let cartQty = parseInt(cartQtyElm.data('item-qty'))
-            updateQty(productId, cartQty + 1,  cartQtyElm, 'incrementQty')
+            updateQty(productId, cartQty + 1, cartQtyElm, 'incrementQty')
         }
     )
     $('.decrementCartBtn').on(
         'click',
-        function (){
+        function () {
             let productId = $(this).data('product-id');
             let cartQtyElm = $(this).siblings('.cartQty');
             let cartQty = parseInt(cartQtyElm.data('item-qty'))
-            if(cartQty > 1){
-            updateQty(productId, cartQty - 1,  cartQtyElm, 'decrementQty')
-            }
-            else{
+            if (cartQty > 1) {
+                updateQty(productId, cartQty - 1, cartQtyElm, 'decrementQty')
+            } else {
                 console.log('Cart item cannot be less than 1')
             }
         }
