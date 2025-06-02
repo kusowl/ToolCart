@@ -22,6 +22,15 @@ class User
     {
        self::$dbCon = $pdo;
     }
+
+    public static function getUser(string $email): User
+    {
+        $sql = "SELECT * FROM `user` WHERE `email` = :email";
+        $stmt = self::$dbCon->prepare($sql);
+        $stmt->execute(array(':email' => $email));
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+        return new User($user ?: []);
+    }
     /**
      * @return array{
      *     success: bool,
@@ -32,22 +41,18 @@ class User
     public function login($email, $password): array
     {
         // Check if the email exists in db
-        $sql = "SELECT * FROM `user` WHERE `email` = :email";
-        $stmt = self::$dbCon->prepare($sql);
-        $stmt->execute(array(':email' => $email));
-        $user = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        if(!$user){
+        $user = self::getUser($email);
+        if($user->getUserId() == null){
             return [
                 'success' => false,
                 'error' => 'User Not Found'
             ];
         }
 
-        if(password_verify($password, $user['password'])){
+        if(password_verify($password, $user->getPassword())){
             return [
                 'success' => true,
-                'user' => new User($user)
+                'user' => $user
             ];
         }else{
             return [
