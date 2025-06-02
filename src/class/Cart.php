@@ -51,7 +51,7 @@ class Cart
 
     public function getAllItem(int $limit = QUERY_LIMIT, int $offset = 0): array
     {
-        $sql = "SELECT c.`id`, c.`product_id`, c.`qty`, p.product_title, p.product_price FROM `cart` c JOIN product p ON c.product_id = p.id WHERE `user_id` = :user_id LIMIT {$limit} OFFSET {$offset}";
+        $sql = "SELECT c.`id`, c.`product_id`, c.`qty`, p.product_title, p.product_price, p.product_image FROM `cart` c JOIN product p ON c.product_id = p.id WHERE `user_id` = :user_id LIMIT {$limit} OFFSET {$offset}";
         $stmt = self::$dbCon->prepare($sql);
         $stmt->execute(array(':user_id' => $this->getUserId()));
         return $stmt->fetchAll(PDO::FETCH_ASSOC) ?? [];

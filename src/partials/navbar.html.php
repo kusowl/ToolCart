@@ -1,7 +1,7 @@
 <?php
 session_start();
 ?>
-<nav class="bg-gray-950/5 dark:bg-gray-800 antialiased">
+<nav class="antialiased">
     <div class="max-w-screen-xl px-4 mx-auto 2xl:px-0 py-6">
         <div class="navbar">
 
@@ -42,7 +42,7 @@ session_start();
 
             <div class="flex items-center lg:space-x-2">
 
-               <?php include_once ROOT."partials/cart.php"; ?>
+               <?php include_once ROOT . "partials/nav-cart.php"; ?>
                 <div>
                 <button id="userDropdownButton1" data-dropdown-toggle="userDropdown1" type="button" class="navbar-btn">
                     <svg class="w-5 h-5 me-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">

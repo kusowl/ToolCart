@@ -12,7 +12,7 @@ $(document).ready(function () {
                     if (response.success) {
                         $('#cartTotalItemCount').text(response.totalQty)
                         console.log('Cart updated successfully');
-                        cartQtyElm.text(cartQty)
+                        cartQtyElm.val(cartQty)
                         cartQtyElm.data('item-qty', cartQty)
                     }
                 },
@@ -35,7 +35,8 @@ $(document).ready(function () {
                 success: function (response) {
                     if (response.success) {
                         $('#cartTotalItemCount').text(response.totalQty)
-                        $('#productId'.concat(productId)).hide('fast')
+                        $('#productId'.concat(productId)).hide('slow')
+                        $('#cartProductId'.concat(productId)).hide('slow')
                         console.log('Item removed from the cart')
                     }
                 },
@@ -51,7 +52,7 @@ $(document).ready(function () {
         function () {
             let productId = $(this).data('product-id');
             let cartQtyElm = $(this).siblings('.cartQty');
-            let cartQty = parseInt(cartQtyElm.data('item-qty'))
+            let cartQty = parseInt(cartQtyElm.val())
             updateQty(productId, cartQty + 1, cartQtyElm, 'incrementQty')
         }
     )
@@ -60,7 +61,8 @@ $(document).ready(function () {
         function () {
             let productId = $(this).data('product-id');
             let cartQtyElm = $(this).siblings('.cartQty');
-            let cartQty = parseInt(cartQtyElm.data('item-qty'))
+            let cartQty = parseInt(cartQtyElm.val())
+            console.log(cartQty)
             if (cartQty > 1) {
                 updateQty(productId, cartQty - 1, cartQtyElm, 'decrementQty')
             } else {

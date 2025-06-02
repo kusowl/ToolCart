@@ -22,11 +22,11 @@ include_once ROOT."handler/CartHandler.php";
 <div id="myCartDropdown1"
      class="hidden z-10 mx-auto max-w-sm space-y-4 overflow-hidden rounded-lg bg-white p-4 antialiased shadow-lg dark:bg-gray-800">
     <?php
-    if (isset($cartRecords)): ?>
+    if (!empty($cartRecords)): ?>
         <div class="grid grid-cols-1 gap-y-2">
             <?php
             foreach ($cartRecords as $record): ?>
-            <div id="productId<?=$record['product_id']?>" class="grid grid-cols-2">
+            <div id="cartProductId<?=$record['product_id']?>" class="grid grid-cols-2">
                 <div class="bg-neutral-100 px-2 py-1 rounded-l-lg">
                     <a href="#"
                        class=" text-sm font-semibold leading-none text-gray-900 dark:text-white hover:underline"><?= $record['product_title'] ?></a>
@@ -35,13 +35,16 @@ include_once ROOT."handler/CartHandler.php";
                 </div>
 
                 <div class="flex items-center justify-end gap-6 bg-neutral-100 px-2 py-1 rounded-r-lg">
-                    <div class="flex space-x-1 items-center">
+                    <div class="flex space-x-1.5 items-center">
                         <p class="text-sm font-normal leading-none text-gray-500 dark:text-gray-400">Qty</p>
 
                         <button class="decrementCartBtn text-gray-900 hover:text-primary-800 bg-neutral-300 hover:bg-neutral-400 rounded-full p-0.5"
                                 type="button" data-product-id="<?= $record['product_id'] ?>">-
                         </button>
-                        <p class="cartQty text-sm font-normal leading-none text-gray-500 dark:text-gray-400" data-item-qty="<?= $record['qty'] ?>"><?= $record['qty'] ?></p>
+
+                        <input type="text"
+                               class="cartQty w-10 shrink-0 border-0 bg-transparent text-center text-sm font-normal text-gray-500 focus:outline-none focus:ring-0 dark:text-white"
+                               placeholder="" value="<?=$record['qty'] ?>" required/>
 
                         <button class="incrementCartBtn text-gray-900 hover:text-primary-800 bg-neutral-300 hover:bg-neutral-400 rounded-full p-0.5" type="button" data-product-id="<?= $record['product_id'] ?>">+
                         </button>
@@ -67,9 +70,9 @@ include_once ROOT."handler/CartHandler.php";
             <?php endforeach; ?>
         </div>
 
-        <a href="#" title=""
+        <a href="cart"
            class="mb-2 me-2 inline-flex w-full items-center justify-center rounded-lg bg-primary-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-primary-800 focus:outline-none focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-           role="button"> Proceed to Checkout </a>
+           role="button"> Go To Cart</a>
     <?php else: ?>
         <p class="text-sm text-gray-600">Wow, such empty !</p>
     <?php endif; ?>
