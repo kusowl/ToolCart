@@ -7,7 +7,7 @@
         else
             echo 'bg-green-100' ?> rounded-lg shadow dark:bg-gray-800 md:p-4">
             <div class="text-sm font-light text-gray-500 dark:text-gray-400">
-                <?php foreach ($messages as $key => $value) : ?>
+                <?php foreach ($errors as $key => $value) : ?>
                     <p class="text-gray-700 dark:text-white my-2">
                         <?php
                         $key = str_replace('_', ' ', $key);

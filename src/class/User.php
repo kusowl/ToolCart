@@ -9,28 +9,60 @@ class User
     private string $password;
     private string $type;
 
-    public function __construct(Array $data = [])
+    public function __construct(array $data = [])
     {
         $this->userId = $data['id'] ?? null;
         $this->name = $data['name'] ?? '';
-        $this->email=$data['email'] ?? '';
-        $this->password=$data['password'] ?? '';
-        $this->type=$data['user_type'] ?? '';
+        $this->email = $data['email'] ?? '';
+        $this->password = $data['password'] ?? '';
+        $this->type = $data['user_type'] ?? '';
     }
 
     public static function setDb(PDO $pdo)
     {
-       self::$dbCon = $pdo;
+        self::$dbCon = $pdo;
     }
 
     public static function getUser(string $email): User
     {
         $sql = "SELECT * FROM `user` WHERE `email` = :email";
-        $stmt = self::$dbCon->prepare($sql);
-        $stmt->execute(array(':email' => $email));
+        try{
+            $stmt = self::$dbCon->prepare($sql);
+            $stmt->execute([':email' => $email]);
+        }catch (PDOException $e){}
+
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
         return new User($user ?: []);
     }
+
+    public function createUser($admin = false): bool
+    {
+        if ($admin) {
+            $sql = "INSERT INTO `user`(`name`, `email`, `password`, `user_type`) VALUES (:name, :email, :password, :user_type)";
+            $stmt = self::$dbCon->prepare($sql);
+            $result = $stmt->execute([
+                ':name' => $this->name,
+                ':email' => $this->email,
+                ':password' => password_hash($this->password, PASSWORD_DEFAULT),
+                ':user_type' => 'admin'
+            ]);
+        } else {
+            $sql = "INSERT INTO `user`(`name`, `email`, `password`) VALUES (:name, :email, :password)";
+            try {
+                $stmt = self::$dbCon->prepare($sql);
+                $result = $stmt->execute([
+                    ':name' => $this->name,
+                    ':email' => $this->email,
+                    ':password' => password_hash($this->password, PASSWORD_DEFAULT),
+                ]);
+            } catch (PDOException $e) {
+                $e->getMessage();
+            }
+        }
+
+        return $result;
+    }
+
     /**
      * @return array{
      *     success: bool,
@@ -42,25 +74,26 @@ class User
     {
         // Check if the email exists in db
         $user = self::getUser($email);
-        if($user->getUserId() == null){
+        if ($user->getUserId() == null) {
             return [
                 'success' => false,
                 'error' => 'User Not Found'
             ];
         }
 
-        if(password_verify($password, $user->getPassword())){
+        if (password_verify($password, $user->getPassword())) {
             return [
                 'success' => true,
                 'user' => $user
             ];
-        }else{
+        } else {
             return [
                 'success' => false,
                 'error' => 'Password does not matched'
             ];
         }
     }
+
     /**
      * @return mixed
      */
