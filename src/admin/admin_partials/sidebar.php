@@ -22,10 +22,10 @@
               </button>
               <ul id="dropdown-category-pages" class="hidden py-2 space-y-2">
                   <li>
-                      <a href="add_category.php" class="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Add Categories</a>
+                      <a href="add_category" class="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Add Categories</a>
                   </li>
                   <li>
-                      <a href="category_table.php" class="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">View All Categories</a>
+                      <a href="category_list" class="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">View All Categories</a>
                   </li>
               </ul>
           </li>
@@ -37,10 +37,10 @@
               </button>
               <ul id="dropdown-product-pages" class="hidden py-2 space-y-2">
                   <li>
-                      <a href="add_product.php" class="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Add Products</a>
+                      <a href="add_product" class="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Add Products</a>
                   </li>
                   <li>
-                      <a href="product_table.php" class="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">View All Products</a>
+                      <a href="product_list" class="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">View All Products</a>
                   </li>
               </ul>
           </li>
