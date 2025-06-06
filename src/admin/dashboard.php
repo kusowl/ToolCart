@@ -1,7 +1,12 @@
 <?php 
 session_start();
-ob_start();
-include "admin_partials/table.php";
-$output = ob_get_clean();
-include "pages/dashboard.html.php"
+include "../config/site_config.php";
+$pageTitle = "Admin Dashboard | ".SITE_NAME;
+include ROOT."partials/header.php";
+require_once 'admin_partials/admin_header.php';
+?>
+<!--Put html contents here-->
+<?php
+include_once "admin_partials/admin_footer.php";
+?>
 ?>

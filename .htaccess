@@ -13,5 +13,6 @@ RewriteRule ^(.*)$ src/$1 [L]
 
 # ----- Error logging -----
 php_flag log_errors on
+php_value date.timezone "Asia/Kolkata"
 php_value error_reporting 32767
-php_value error_log "error_log.txt"
+php_value error_log "/opt/lampp/htdocs/ToolCart/error_log.txt"
