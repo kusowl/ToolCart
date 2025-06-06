@@ -46,7 +46,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } elseif ($password !== $confirm_password) {
         $errors['confirm_password'] = "Passwords do not match";
     }
-    User::setDb($con);
     $user = User::getUser($email);
     if($user->getUserId() != null){
         $errors['user'] = "User already exists with this email";

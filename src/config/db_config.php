@@ -1,5 +1,5 @@
 <?php 
-
+    require_once __DIR__.'/../class/Model.php';
     // Database credentials and connection var
     $host = "localhost";
     $dbName  = "toolcart";
@@ -9,10 +9,10 @@
     try {
         $con = new PDO($dsn, $userName, $password);
         $con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        Model::setDb($con);
     } catch (PDOException $e) {
         echo "Database Connection Failed: ".$e->getMessage();
     }
-
     // Defining constrains
     define('QUERY_LIMIT', 10);
 

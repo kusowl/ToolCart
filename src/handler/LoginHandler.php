@@ -21,7 +21,6 @@ if (isset($_POST['login'])) {
     // If no errors occured then go with login
     if (empty($errors)) {
         $userObj = new User();
-        User::setDb($con);
         $response = $userObj->login($email, $password);
 
         if ($response['success']) {

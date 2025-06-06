@@ -1,8 +1,7 @@
 <?php
-
-class Cart
+include_once 'Model.php';
+class Cart extends Model
 {
-    private static PDO $dbCon;
     private $userId;
     public function __construct($userId)
     {
@@ -16,10 +15,7 @@ class Cart
         return $this->userId;
     }
 
-    public static function setDb(PDO $pdo)
-    {
-       self::$dbCon = $pdo;
-    }
+
 
     public function addItem(int $productId, int $qty = 1): bool
     {

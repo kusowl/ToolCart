@@ -10,7 +10,6 @@ if (!isset($_SESSION['user_id'])) {
 }
 $userId = $_SESSION['user_id'];
 $cart = new Cart($userId);
-CART::setDb($con);
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 

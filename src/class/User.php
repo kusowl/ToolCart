@@ -1,8 +1,7 @@
 <?php
-
-class User
+include_once 'Model.php';
+class User extends Model
 {
-    private static PDO $dbCon;
     private $userId;
     private string $name;
     private string $email;
@@ -18,10 +17,6 @@ class User
         $this->type = $data['user_type'] ?? '';
     }
 
-    public static function setDb(PDO $pdo)
-    {
-        self::$dbCon = $pdo;
-    }
 
     public static function getUser(string $email): User
     {

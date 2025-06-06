@@ -1,8 +1,7 @@
 <?php
-use PDO;
-class Product
+include_once 'Model.php';
+class Product extends Model
 {
-    private static $dbCon;
     private int $error;
     private  $id;
     private string $title;
@@ -99,11 +98,6 @@ class Product
         $this->category_id = $data['category_id'] ?? null;
         $this->image = $data['product_image'] ?? '';
         $this->error = 0;
-    }
-
-    public static function setDb(PDO $pdo)
-    {
-        self::$dbCon = $pdo;
     }
 
     public function findById(int $id)
