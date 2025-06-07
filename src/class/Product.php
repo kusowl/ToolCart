@@ -103,7 +103,7 @@ class Product extends Model
     public function findById(int $id)
     {
         $sql = "SELECT product.id, product.product_image, product.product_title, product.category_id , product.product_desc, product.product_price, product.product_brand FROM product  WHERE product.id = :id";
-        $stmt = self::$dbCon->prepare($sql);
+        $stmt = self::getDb()->prepare($sql);
         $stmt->bindValue(':id',$id, PDO::PARAM_INT);
         $stmt->execute();
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -114,7 +114,7 @@ class Product extends Model
     {
         $sql = "SELECT product.id, product.product_image, product.product_title, product.category_id , product.product_desc, product.product_price, product.product_brand FROM product LIMIT {$limit} OFFSET {$offset}";
 
-        $stmt = self::$dbCon->prepare($sql);
+        $stmt = self::getDb()->prepare($sql);
         $stmt->execute();
         $products = [];
         while($row = $stmt->fetch(PDO::FETCH_ASSOC)){

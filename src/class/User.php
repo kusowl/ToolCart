@@ -22,7 +22,7 @@ class User extends Model
     {
         $sql = "SELECT * FROM `user` WHERE `email` = :email";
         try{
-            $stmt = self::$dbCon->prepare($sql);
+            $stmt = self::getDb()->prepare($sql);
             $stmt->execute([':email' => $email]);
         }catch (PDOException $e){}
 
@@ -34,7 +34,7 @@ class User extends Model
     {
         if ($admin) {
             $sql = "INSERT INTO `user`(`name`, `email`, `password`, `user_type`) VALUES (:name, :email, :password, :user_type)";
-            $stmt = self::$dbCon->prepare($sql);
+            $stmt = self::getDb()->prepare($sql);
             $result = $stmt->execute([
                 ':name' => $this->name,
                 ':email' => $this->email,
@@ -44,7 +44,7 @@ class User extends Model
         } else {
             $sql = "INSERT INTO `user`(`name`, `email`, `password`) VALUES (:name, :email, :password)";
             try {
-                $stmt = self::$dbCon->prepare($sql);
+                $stmt = self::getDb()->prepare($sql);
                 $result = $stmt->execute([
                     ':name' => $this->name,
                     ':email' => $this->email,

@@ -1,5 +1,6 @@
 <?php
 include_once 'Model.php';
+
 class Category extends Model
 {
     private $id;
@@ -14,20 +15,49 @@ class Category extends Model
         $this->description = $data['category_desc'] ?? '';
     }
 
-    /*
+    /**
+     * @param int $limit
+     * @param int $offset
      * @return Category|Array $categories
-     * */
-    public function getAllCategory(int $limit = QUERY_LIMIT, int $offset = 0): array
+     */
+    public function getAllCategory(int $limit = QUERY_LIMIT, int $offset = 0) :  Category|Array
     {
         $sql = "SELECT `id`, `category_title`, `category_desc` FROM `categories` LIMIT {$limit} OFFSET {$offset}";
-        $stmt = self::$dbCon->prepare($sql);
+        $stmt = self::getDb()->prepare($sql);
         $stmt->execute();
         $category = [];
-        while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             $category [] = new Category($row);
         }
         return $category;
     }
+
+    /**
+     * @param string $categoryName
+     * @param string $categoryDescription
+     * @return bool
+     */
+    public function addCategory(string $categoryName, string $categoryDescription): bool
+    {
+        $sql = "SELECT `category_title` from `categories` where category_title = :category_name";
+        try{
+            $stmt = self::getDb()->prepare($sql);
+            $stmt->execute([
+                'category_name' => $categoryName
+            ]);
+        }catch(Exception){};
+        $sql = "INSERT INTO `categories` (`category_title`, `category_desc`) VALUES (:category_name, :category_desc)";
+        $result = false;
+        try {
+            $stmt = self::getDb()->prepare($sql);
+            $result = $stmt->execute([
+                ':category_name' => $categoryName,
+                ':category_desc' => $categoryDescription
+            ]);
+        }catch (Exception){}
+        return $result;
+    }
+
     public function getId(): mixed
     {
         return $this->id;

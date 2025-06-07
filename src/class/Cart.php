@@ -21,17 +21,17 @@ class Cart extends Model
     {
         // Check if the product is already in the cart
         $sql = "SELECT count(*) as total FROM `cart` WHERE product_id = :product_id";
-        $stmt = self::$dbCon->prepare($sql);
+        $stmt = self::getDb()->prepare($sql);
         $stmt->execute([':product_id' => $productId]);
         $res = false;
         if ($stmt->fetch(PDO::FETCH_ASSOC)['total'] > 0) {
             // product exists then update quantity
             $sql = "UPDATE `cart` SET `qty`= `qty` + 1 WHERE `product_id` = :product_id";
-            $stmt = self::$dbCon->prepare($sql);
+            $stmt = self::getDb()->prepare($sql);
             $res = $stmt->execute([':product_id' => $productId]);
         } else {
             $sql = "INSERT INTO `cart` (`product_id`, `user_id`, `qty`) VALUES (:product_id,:user_id, :qty)";
-            $stmt = self::$dbCon->prepare($sql);
+            $stmt = self::getDb()->prepare($sql);
             $res = $stmt->execute([':product_id' => $productId, ':user_id' => $this->getUserId(),':qty' => $qty]);
         }
         return $res;
@@ -40,7 +40,7 @@ class Cart extends Model
     public function removeItem(int $productId): bool
     {
        $sql = "DELETE FROM `cart` WHERE product_id = :product_id AND user_id = :user_id";
-       $stmt = self::$dbCon->prepare($sql);
+       $stmt = self::getDb()->prepare($sql);
        $res = $stmt->execute([':product_id' => $productId, ':user_id' => $this->getUserId()]);
        return $res;
     }
@@ -48,7 +48,7 @@ class Cart extends Model
     public function getAllItem(int $limit = QUERY_LIMIT, int $offset = 0): array
     {
         $sql = "SELECT c.`id`, c.`product_id`, c.`qty`, p.product_title, p.product_price, p.product_image FROM `cart` c JOIN product p ON c.product_id = p.id WHERE `user_id` = :user_id LIMIT {$limit} OFFSET {$offset}";
-        $stmt = self::$dbCon->prepare($sql);
+        $stmt = self::getDb()->prepare($sql);
         $stmt->execute(array(':user_id' => $this->getUserId()));
         return $stmt->fetchAll(PDO::FETCH_ASSOC) ?? [];
     }
@@ -56,14 +56,14 @@ class Cart extends Model
     public function getCartItemTotal(): array
     {
         $sql = "select sum(qty) AS total_qty from `cart`";
-        $stmt = self::$dbCon->query($sql);
+        $stmt = self::getDb()->query($sql);
         return $stmt->fetch(PDO::FETCH_ASSOC) ?? [];
     }
 
     public function setQuantity(int $productId, int $qty): bool
     {
         $sql = "UPDATE `cart` SET `qty`= :qty WHERE product_id = :product_id and user_id = :user_id";
-        $stmt = self::$dbCon->prepare($sql);
+        $stmt = self::getDb()->prepare($sql);
         $res = $stmt->execute([':qty' => $qty, ':product_id' => $productId, ':user_id' => $this->getUserId()]);
         return $res;
     }
