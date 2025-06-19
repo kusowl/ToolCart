@@ -14,8 +14,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $messages['New Record'] = "category added sucessfully.";
         $message_type = "Success";
     } else {
-        $messages['Error'] = "failed  sql query | " .
-            $message_type = "Error";
+        $messages['Error'] = "failed  sql query " ;
+        $message_type = "Error";
     }
     $_SESSION["messages"] = $messages;
     $_SESSION["message_type"] = $message_type;

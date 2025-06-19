@@ -7,7 +7,7 @@ include_once "handler/CategoryHandler.php";
 $messages = $_SESSION["messages"] ?? '';
 $message_type = $_SESSION["message_type"] ?? '';
 
-if (isset($messages)) {
+if ($messages != '') {
     include "../partials/popup.php";
     unset($_SESSION["messages"]);
     unset($_SESSION["message_type"]);

@@ -12,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         case 'add_product':
         {
             $image = $_FILES['product_image'];
-            $fileTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+            $fileTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
             // Validate file
             $validationResult = Helper::validateFile($image, $fileTypes, MAX_FILE_SIZE);
             $rel_path = 'assets/images/';
@@ -33,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                 default:
                     $messages['Image Error'] = "Validation Failed";
             }
-            if (in_array('Image Error', $messages)) {
+            if (!empty($messages)) {
                 $message_type = 'error';
             } else {
                 $product = new Product();

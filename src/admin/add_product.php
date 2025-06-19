@@ -9,7 +9,7 @@ include_once "handler/ProductHandler.php";
 $messages = $_SESSION["messages"] ?? '';
 $message_type = $_SESSION["message_type"] ?? '';
 
-if (isset($messages)) {
+if ($messages != '') {
     include ROOT . "/partials/popup.php";
     unset($_SESSION["messages"]);
     unset($_SESSION["message_type"]);
@@ -94,7 +94,7 @@ $categories = $categoryObj->getAllCategory(99);
                                     <p class="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or GIF (MAX.
                                         2MB)</p>
                                 </div>
-                                <input id="dropzone-file" type="file" name="product_image" class="hidden"/>
+                                <input id="dropzone-file" type="file" accept="image/png, image/jpg, image/jpeg, image/gif, image/webp" name="product_image" class="hidden"/>
                             </label>
                         </div>
                         <button type="submit"

@@ -9,7 +9,13 @@
                     <!-- product image -->
                     <div class="h-56 w-full">
                         <a href="<?= BASE_URL . 'product_view?id=' . $product->getId() ?>">
-                            <img class="mx-auto h-full dark:hidden" src="<?= BASE_URL . $product->getImage() ?>"
+                            <img class="mx-auto h-full dark:hidden" src="<?php
+                            if($product->getImage() != 'assets/images/'){
+                                echo BASE_URL.$product->getImage();
+                            }else{
+                                echo BASE_URL.'assets/images/placeholder.webp';
+                            }
+                            ?>"
                                  alt=""/>
                             <!-- <img class="mx-auto hidden h-full dark:block" src="https://flowbite.s3.amazonaws.com/blocks/e-commerce/imac-front-dark.svg" alt="" /> -->
                         </a>
@@ -59,7 +65,7 @@
                             </div>
                         </div>
                         <!-- product title -->
-                        <a href="#"
+                        <a href="<?= BASE_URL . 'product_view?id=' . $product->getId() ?>"
                            class="text-lg font-semibold leading-tight text-gray-900 hover:underline dark:text-white"><?= $product->getTitle() ?></a>
 
                         <div class="mt-2 flex items-between gap-2">
