@@ -12,6 +12,13 @@ if($_SERVER['REQUEST_METHOD'] == "GET"){
         $key = $_GET['key'];
         $products = $productObj->search($key);
         $productItemCount = count($products);
+        $pageTitle = "Search Result";
+    }
+    elseif ($_GET['action'] == 'category'){
+        $key = $_GET['key'];
+        $products = $productObj->getProductByCategory($key);
+        $productItemCount = count($products);
+        $pageTitle = $_GET['name'];
     }
     elseif (isset($_GET['id'])){
         $productId = $_GET['id'];

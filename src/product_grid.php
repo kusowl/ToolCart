@@ -2,6 +2,7 @@
     <div class="mx-auto max-w-screen-xl px-4 2xl:px-0">
         <h2 class="text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl mb-8"><?= $pageTitle ?? 'Products' ?></h2>
         <!-- main product grid -->
+        <?php if (isset($products) && !empty($products)): ?>
         <div class="mb-4 grid gap-4 sm:grid-cols-2 md:mb-8 lg:grid-cols-3 xl:grid-cols-4">
             <?php foreach ($products as $product): ?>
                 <div class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
@@ -62,15 +63,15 @@
                            class="text-lg font-semibold leading-tight text-gray-900 hover:underline dark:text-white"><?= $product->getTitle() ?></a>
 
                         <div class="mt-2 flex items-between gap-2">
-                            <div class="flex items-center">
-                                <svg class="h-4 w-4 text-yellow-400" aria-hidden="true"
-                                     xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M13.8 4.2a2 2 0 0 0-3.6 0L8.4 8.4l-4.6.3a2 2 0 0 0-1.1 3.5l3.5 3-1 4.4c-.5 1.7 1.4 3 2.9 2.1l3.9-2.3 3.9 2.3c1.5 1 3.4-.4 3-2.1l-1-4.4 3.4-3a2 2 0 0 0-1.1-3.5l-4.6-.3-1.8-4.2Z"/>
-                                </svg>
-                            </div>
+<!--                            <div class="flex items-center">-->
+<!--                                <svg class="h-4 w-4 text-yellow-400" aria-hidden="true"-->
+<!--                                     xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">-->
+<!--                                    <path d="M13.8 4.2a2 2 0 0 0-3.6 0L8.4 8.4l-4.6.3a2 2 0 0 0-1.1 3.5l3.5 3-1 4.4c-.5 1.7 1.4 3 2.9 2.1l3.9-2.3 3.9 2.3c1.5 1 3.4-.4 3-2.1l-1-4.4 3.4-3a2 2 0 0 0-1.1-3.5l-4.6-.3-1.8-4.2Z"/>-->
+<!--                                </svg>-->
+<!--                            </div>-->
 
-                            <p class="text-sm font-medium text-gray-900 dark:text-white">5.0</p> <!-- Rating -->
-                            <p class="text-sm font-medium text-gray-500 dark:text-gray-400">(455)</p>
+                            <p class="text-sm font-medium text-gray-900 dark:text-white"><?= $product->getBrand(); ?></p> <!-- Rating -->
+<!--                            <p class="text-sm font-medium text-gray-500 dark:text-gray-400">(455)</p>-->
                             <!-- No of reviews -->
                         </div>
 
@@ -102,7 +103,7 @@
                             </p>
 
                             <!-- Add to cart btn -->
-                            <form action="src/handler/CartHandler.php" method="post">
+                            <form action=<?= BASE_URL ?>handler/CartHandler method="post">
                                 <input type="hidden" name="productId" value="<?= $product->getId() ?>">
                                 <input type="hidden" name="add_to_cart" id="" value="1">
                                 <button type="submit"
@@ -120,16 +121,20 @@
                         </div>
                     </div>
                 </div>
-            <?php endforeach; ?>
+            <?php endforeach;
+            ?>
         </div>
-        <!-- Show more  -->
-<!--        <div class="w-full text-center">-->
-<!--            <button type="button"-->
-<!--                    class="rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-sm font-medium text-gray-900 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:outline-none focus:ring-4 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white dark:focus:ring-gray-700">-->
-<!--                Show more-->
-<!--            </button>-->
-<!--        </div>-->
     </div>
+    <?php else: ?>
+        <!-- Show more  -->
+        <div class="w-full text-center">
+            <!--            <button type="button"-->
+            <!--                    class="rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-sm font-medium text-gray-900 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:outline-none focus:ring-4 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white dark:focus:ring-gray-700">-->
+            <!--                Show more-->
+            <!--            </button>-->
+            <p class="text-gray-900">No Products Found !</p>
+        </div>
+    <?php endif; ?>
     <!-- Filter modal -->
     <form action="#" method="get" id="filterModal" tabindex="-1" aria-hidden="true"
           class="fixed left-0 right-0 top-0 z-50 hidden h-modal w-full overflow-y-auto overflow-x-hidden p-4 md:inset-0 md:h-full">

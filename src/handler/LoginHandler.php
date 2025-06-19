@@ -49,13 +49,14 @@ if (isset($_POST['login'])) {
             $_SESSION['form_data'] = [
                 'email' => $email
             ];
+            $_SESSION['message_type'] = 'error';
+            $_SESSION['messages']['error'] = $response['error'];
             header("location:login");
             exit;
         }
 
     } else {
-        $_SESSION["messages"]['login_failed'] = "Password does not matched.";
-        $_SESSION['message_type'] = 'error';
+        $_SESSION["messages"] = $errors;
         $_SESSION['form_data'] = [
             'email' => $email
         ];

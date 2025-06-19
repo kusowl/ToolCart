@@ -1,7 +1,7 @@
 <?php
 session_start();
 ob_start();
-include "config/site_config.php";
+include_once "config/site_config.php";
 include_once "config/db_config.php";
 $pageTitle = 'Home : ' . SITE_NAME;
 include_once "partials/header.php";
@@ -99,10 +99,10 @@ include_once "partials/navbar.html.php";
                 $categories = $category->getAllCategory();
                 foreach ($categories as $categoryRec) :
                     ?>
-                    <a href="#"
-                       class="flex items-center rounded-lg border border-gray-200 bg-white px-4 py-2 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
+                    <a href="search_result?action=category&name=<?=$categoryRec->getTitle()?>&key=<?=$categoryRec->getId()?>"
+                       class="flex items-center rounded-lg border border-gray-200 hover:bg-primary-600 text-gray-900 hover:text-gray-100 bg-white px-4 py-2  dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
 
-                        <span class="text-sm font-medium text-gray-900 dark:text-white"><?php echo $categoryRec->getTitle() ?></span>
+                        <span class="text-sm font-medium  dark:text-white p-7 "><?php echo $categoryRec->getTitle() ?></span>
                     </a>
                 <?php endforeach; ?>
             </div>

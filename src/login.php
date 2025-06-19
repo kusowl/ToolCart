@@ -59,7 +59,7 @@ include_once ROOT."handler/LoginHandler.php";
         </div>
     </div>
 </section>
-<script src="<?= BASE_URL ?>client/assets/js/popup.js"></script>
+<script src="<?= BASE_URL ?>assets/js/popup.js"></script>
 <?php
 include ROOT."partials/footer.php";
 ?>

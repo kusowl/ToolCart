@@ -20,15 +20,21 @@ class Cart extends Model
     public function addItem(int $productId, int $qty = 1): bool
     {
         // Check if the product is already in the cart
-        $sql = "SELECT count(*) as total FROM `cart` WHERE product_id = :product_id";
+        $sql = "SELECT count(*) as total FROM `cart` WHERE product_id = :product_id AND user_id = :user_id";
         $stmt = self::getDb()->prepare($sql);
-        $stmt->execute([':product_id' => $productId]);
+        $stmt->execute([
+            ':product_id' => $productId,
+            ':user_id' => $this->getUserId()
+        ]);
         $res = false;
         if ($stmt->fetch(PDO::FETCH_ASSOC)['total'] > 0) {
             // product exists then update quantity
-            $sql = "UPDATE `cart` SET `qty`= `qty` + 1 WHERE `product_id` = :product_id";
+            $sql = "UPDATE `cart` SET `qty`= `qty` + 1 WHERE `product_id` = :product_id AND user_id = :user_id";
             $stmt = self::getDb()->prepare($sql);
-            $res = $stmt->execute([':product_id' => $productId]);
+            $res = $stmt->execute([
+                ':product_id' => $productId,
+                ':user_id' => $this->getUserId()
+            ]);
         } else {
             $sql = "INSERT INTO `cart` (`product_id`, `user_id`, `qty`) VALUES (:product_id,:user_id, :qty)";
             $stmt = self::getDb()->prepare($sql);

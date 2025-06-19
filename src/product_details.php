@@ -113,7 +113,7 @@
                         Add to favorites
                     </a>
 
-                    <form action="src/handler/CartHandler.php" method="post">
+                    <form action=<?= BASE_URL ?>handler/CartHandler method="post">
                         <input type="hidden" name="productId" value="<?= $product->getId() ?>">
                         <input type="hidden" name="add_to_cart" id="" value="1">
                         <button

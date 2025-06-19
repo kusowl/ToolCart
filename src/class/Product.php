@@ -114,7 +114,6 @@ class Product extends Model
     public function getAllProduct(int $limit = QUERY_LIMIT, int $offset = 0)
     {
         $sql = "SELECT product.id, product.product_image, product.product_title, product.category_id , product.product_desc, product.product_price, product.product_brand FROM product LIMIT {$limit} OFFSET {$offset}";
-
         $stmt = self::getDb()->prepare($sql);
         $stmt->execute();
         $products = [];
@@ -124,7 +123,24 @@ class Product extends Model
         return $products;
     }
 
-    public function search($key, int $limit = QUERY_LIMIT, int $offset = 0)
+    public function getProductByCategory(string $key, int $limit = QUERY_LIMIT, int $offset = 0)
+    {
+        $sql = "SELECT product.id, product.product_image, product.product_title, product.category_id , product.product_desc, product.product_price, product.product_brand FROM product WHERE product.category_id = :key LIMIT {$limit} OFFSET {$offset}";
+        try {
+            $stmt = self::getDb()->prepare($sql);
+            $stmt->execute([
+                ':key' => $key
+            ]);
+            $products = [];
+            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                $products [] = new Product($row);
+            }
+            return $products;
+        } catch (Exception) {
+        }
+    }
+
+    public function search(string $key, int $limit = QUERY_LIMIT, int $offset = 0)
     {
         $sql = 'SELECT p.id FROM product AS p  WHERE MATCH( product_title, product_desc, product_brand ) AGAINST ( :key IN NATURAL LANGUAGE MODE )';
         $stmt = self::getDb()->prepare($sql);
