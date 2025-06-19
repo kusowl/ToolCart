@@ -19,3 +19,4 @@ todo.MD
 /.idea/dataSources.xml
 /test.php
 /.idea/sqldialects.xml
+/src/error_log.txt

@@ -1,15 +1,24 @@
 <?php
 session_start();
 include_once ROOT."config/db_config.php";
-include_once ROOT."class/Cart.php";
-// Add product to cart
-if (isset($_POST['add_to_cart'])){
-    if (!isset($_SESSION['user_id'])){
-        header(ROOT.'login.php');
-    }
-    $product_id = $_POST['product_id'];
-    $cartObj = new Cart($_SESSION['user_id']);
-    Cart::setDb($con);
-    $cartObj->addItem($product_id);
+include_once ROOT.'class/Product.php';
+include_once ROOT."class/Category.php";
+$productObj = new Product();
 
+$productRecords = [];
+$productItemCount = 0;
+if($_SERVER['REQUEST_METHOD'] == "GET"){
+    if($_GET['action'] == 'search'){
+        $key = $_GET['key'];
+        $products = $productObj->search($key);
+        $productItemCount = count($products);
+    }
+    elseif (isset($_GET['id'])){
+        $productId = $_GET['id'];
+        $product = $productObj->findById($productId);
+    }
+    else{
+        $products = $productObj->getAllProduct();
+    }
 }
+

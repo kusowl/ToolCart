@@ -2,7 +2,7 @@
 
 class Helper
 {
-    public static function upload_file($file, string $path): mixed {
+    public static function uploadFile($file, string $path): mixed {
         $tmp_path = $file['tmp_name'];
         $imageName = $file['name'];
         $imageName = time() . $imageName;

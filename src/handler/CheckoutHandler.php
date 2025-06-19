@@ -7,6 +7,7 @@ if (!isset($_SESSION['user_id'])) {
     header(ROOT . 'login.php');
 }
 $userId = $_SESSION['user_id'];
+$address = new Address();
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (($_POST['action'] ?? '') === 'addAddress') {
         $address = new Address([

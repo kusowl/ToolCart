@@ -1,81 +1,118 @@
 <?php
 session_start();
+ob_start();
 include "config/site_config.php";
-$pageTitle = 'Home : '.SITE_NAME;
+include_once "config/db_config.php";
+$pageTitle = 'Home : ' . SITE_NAME;
 include_once "partials/header.php";
 include_once "partials/navbar.html.php";
 ?>
-    <section class="hero">
-        <div class="mx-auto mt-12 grid max-w-screen-xl md:grid-cols-12 lg:gap-12 xl:gap-0">
-            <div class="content-center justify-self-start md:col-span-7 md:text-start">
-                <h1 class="mb-4 text-4xl font-extrabold leading-none tracking-tight dark:text-white md:max-w-2xl md:text-5xl xl:text-6xl">
-                    Limited Time Offer!<br/>Up to 50% OFF!</h1>
-                <p class="mb-4 max-w-2xl text-gray-500 dark:text-gray-400 md:mb-12 md:text-lg mb-3 lg:mb-5 lg:text-xl">
-                    Don't Wait - Limited Stock at Unbeatable Prices!</p>
-                <a href="#"
-                   class="inline-block rounded-lg bg-primary-600 px-6 py-3.5 text-center font-medium text-white hover:bg-primary-800 focus:outline-none focus:ring-4 focus:ring-primary-300 dark:bg-primary-700 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Shop
-                    Now</a>
+    <section class="hero bg-grid">
+        <div class="mx-auto mt-12 flex justify-center content-center">
+            <div class="flex flex-col items-center justify-center md:col-span-7 md:text-start">
+                <h1 class="mb-4 text-4xl font-extrabold text-[#656C7B] leading-none tracking-tight dark:text-white md:max-w-2xl md:text-5xl xl:text-6xl">
+                    Great <span class="text-primary-600">Power</span> needs,</h1>
+
+                <h1 class="mb-4 text-4xl font-extrabold text-[#656C7B] leading-none tracking-tight dark:text-white md:max-w-2xl md:text-5xl xl:text-6xl">
+                    Great <span class="text-primary-600">Tools</span></h1>
             </div>
         </div>
         <div class="flex justify-center">
-        <div class="brand"
-        >
-            <ul class="logos">
-                <li>
-                    <img src="<?= BASE_URL ?>assets/images/logo/bosch.svg" alt="">
-                </li>
-<!--                <li>-->
-<!--                    <img src="--><?php //= BASE_URL ?><!--assets/images/logo/dormakaba.svg" alt="">-->
-<!--                </li>-->
-                <li>
-                    <img src="<?= BASE_URL ?>assets/images/logo/Dewalt.svg" alt="">
-                </li>
-                <li>
-                    <img src="<?= BASE_URL ?>assets/images/logo/Hikoki.svg" alt="">
-                </li>
-                <li>
-                    <img src="<?= BASE_URL ?>assets/images/logo/Fein.svg" alt="">
-                </li>
-                <li>
-                    <img src="<?= BASE_URL ?>assets/images/logo/KPT.svg" alt="">
-                </li>
-<!--                <li>-->
-<!--                    <img src="--><?php //= BASE_URL ?><!--assets/images/logo/StanlyBlack.svg" alt="">-->
-<!--                </li>-->
-                <li>
-                    <img src="<?= BASE_URL ?>assets/images/logo/makita.svg" alt="">
-                </li>
-            </ul>
-            <ul class="logos">
-                <li>
-                    <img src="<?= BASE_URL ?>assets/images/logo/bosch.svg" alt="">
-                </li>
-<!--                <li>-->
-<!--                    <img src="--><?php //= BASE_URL ?><!--assets/images/logo/dormakaba.svg" alt="">-->
-<!--                </li>-->
-                <li>
-                    <img src="<?= BASE_URL ?>assets/images/logo/Dewalt.svg" alt="">
-                </li>
-                <li>
-                    <img src="<?= BASE_URL ?>assets/images/logo/Hikoki.svg" alt="">
-                </li>
-                <li>
-                    <img src="<?= BASE_URL ?>assets/images/logo/Fein.svg" alt="">
-                </li>
-                <li>
-                    <img src="<?= BASE_URL ?>assets/images/logo/KPT.svg" alt="">
-                </li>
-<!--                <li>-->
-<!--                    <img src="--><?php //= BASE_URL ?><!--assets/images/logo/StanlyBlack.svg" alt="">-->
-<!--                </li>-->
-                <li>
-                    <img src="<?= BASE_URL ?>assets/images/logo/makita.svg" alt="">
-                </li>
-            </ul>
+            <div class="brand"
+            >
+                <ul class="logos">
+                    <li>
+                        <img src="<?= BASE_URL ?>assets/images/logo/bosch.svg" alt="">
+                    </li>
+                    <!--                <li>-->
+                    <!--                    <img src="-->
+                    <?php //= BASE_URL ?><!--assets/images/logo/dormakaba.svg" alt="">-->
+                    <!--                </li>-->
+                    <li>
+                        <img src="<?= BASE_URL ?>assets/images/logo/Dewalt.svg" alt="">
+                    </li>
+                    <li>
+                        <img src="<?= BASE_URL ?>assets/images/logo/Hikoki.svg" alt="">
+                    </li>
+                    <li>
+                        <img src="<?= BASE_URL ?>assets/images/logo/Fein.svg" alt="">
+                    </li>
+                    <li>
+                        <img src="<?= BASE_URL ?>assets/images/logo/KPT.svg" alt="">
+                    </li>
+                    <!--                <li>-->
+                    <!--                    <img src="-->
+                    <?php //= BASE_URL ?><!--assets/images/logo/StanlyBlack.svg" alt="">-->
+                    <!--                </li>-->
+                    <li>
+                        <img src="<?= BASE_URL ?>assets/images/logo/makita.svg" alt="">
+                    </li>
+                </ul>
+                <ul class="logos">
+                    <li>
+                        <img src="<?= BASE_URL ?>assets/images/logo/bosch.svg" alt="">
+                    </li>
+                    <!--                <li>-->
+                    <!--                    <img src="-->
+                    <?php //= BASE_URL ?><!--assets/images/logo/dormakaba.svg" alt="">-->
+                    <!--                </li>-->
+                    <li>
+                        <img src="<?= BASE_URL ?>assets/images/logo/Dewalt.svg" alt="">
+                    </li>
+                    <li>
+                        <img src="<?= BASE_URL ?>assets/images/logo/Hikoki.svg" alt="">
+                    </li>
+                    <li>
+                        <img src="<?= BASE_URL ?>assets/images/logo/Fein.svg" alt="">
+                    </li>
+                    <li>
+                        <img src="<?= BASE_URL ?>assets/images/logo/KPT.svg" alt="">
+                    </li>
+                    <!--                <li>-->
+                    <!--                    <img src="-->
+                    <?php //= BASE_URL ?><!--assets/images/logo/StanlyBlack.svg" alt="">-->
+                    <!--                </li>-->
+                    <li>
+                        <img src="<?= BASE_URL ?>assets/images/logo/makita.svg" alt="">
+                    </li>
+                </ul>
+            </div>
         </div>
+    </section>
+    <section class="bg-gray-50 py-8 antialiased dark:bg-gray-900 md:py-16">
+        <div class="mx-auto max-w-screen-xl px-4 2xl:px-0">
+            <div class="mb-4 flex items-center justify-between gap-4 md:mb-8">
+                <h2 class="text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl">Shop by category</h2>
+
+                <!--                <a href="#" title="" class="flex items-center text-base font-medium text-primary-700 hover:underline dark:text-primary-500">-->
+                <!--                    See more categories-->
+                <!--                    <svg class="ms-1 h-5 w-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">-->
+                <!--                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 12H5m14 0-4 4m4-4-4-4" />-->
+                <!--                    </svg>-->
+                <!--                </a>-->
+            </div>
+
+            <div class="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+                <?php
+                include_once ROOT . "class/Category.php";
+                $category = new Category();
+                $categories = $category->getAllCategory();
+                foreach ($categories as $categoryRec) :
+                    ?>
+                    <a href="#"
+                       class="flex items-center rounded-lg border border-gray-200 bg-white px-4 py-2 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
+
+                        <span class="text-sm font-medium text-gray-900 dark:text-white"><?php echo $categoryRec->getTitle() ?></span>
+                    </a>
+                <?php endforeach; ?>
+            </div>
         </div>
     </section>
 <?php
+include_once 'class/Product.php';
+$productObj = new Product();
+$products = $productObj->getAllProduct();
+$pageTitle = "Shop Products";
 include_once "product_grid.php";
 include "partials/footer.php";
 //phpinfo();

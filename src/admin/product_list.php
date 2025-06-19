@@ -1,19 +1,26 @@
 <?php
 session_start();
-require_once "../config/db_config.php";
-require_once "../config/site_config.php";
-
-$table_heads = ['Image','Category', 'Product', 'Description', 'Price', 'Brand'];
-$select_query = "SELECT product.product_image, product.product_title, categories.category_title, product.product_desc, product.product_price, product.product_price, product.product_brand FROM product JOIN categories ON product.category_id = categories.id";
-// get all the record
-$results = mysqli_query($conn, $select_query);
-while ($rows = mysqli_fetch_assoc($results)) {
-    $table_records[] = $rows;
+include_once "../config/site_config.php";
+include_once ROOT . "config/db_config.php";
+include_once ROOT . "class/Product.php";
+include_once ROOT . "class/Category.php";
+include ROOT . "partials/header.php";
+include_once "admin_partials/admin_header.php";
+$product = new Product();
+$category = new Category();
+$table_heads = ['Product ID', 'Product', 'Category', 'Price', 'Brand', 'Description'];
+$products = $product->getAllProduct();
+$table_records = [];
+$records = [];
+foreach ($products as $productRec) {
+    $records['id'] = $productRec->getId();
+    $records['title'] = $productRec->getTitle();
+    $records['category'] = $category->getCategoryById($productRec->getCategoryId())[0]->getTitle();
+    $records['price'] = $productRec->getPrice();
+    $records['Brand'] = $productRec->getBrand();
+    $records['desc'] = $productRec->getDescription();
+    $table_records[] = $records;
 }
-
-// get the table view
-ob_start();
 include "admin_partials/table.php";
-$output = ob_get_clean();
-
-include "pages/dashboard.html.php";
+include_once "admin_partials/admin_footer.php";
+?>

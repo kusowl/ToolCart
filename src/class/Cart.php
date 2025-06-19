@@ -55,7 +55,7 @@ class Cart extends Model
 
     public function getCartItemTotal(): array
     {
-        $sql = "select sum(qty) AS total_qty from `cart`";
+        $sql = "select sum(qty) AS total_qty from `cart` where user_id = ".$this->getUserId();
         $stmt = self::getDb()->query($sql);
         return $stmt->fetch(PDO::FETCH_ASSOC) ?? [];
     }

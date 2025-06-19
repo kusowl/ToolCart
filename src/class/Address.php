@@ -49,10 +49,6 @@ class Address extends Model
             }
             return $address;
         } catch (Exception) {
-        } finally {
-            return [
-                'error' => true
-            ];
         }
     }
 
@@ -78,6 +74,10 @@ class Address extends Model
         }catch (Exception){}
     }
 
+    public function getId()
+    {
+        return $this->id;
+    }
     public function getUserId(): mixed
     {
         return $this->userId;

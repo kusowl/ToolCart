@@ -63,7 +63,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         default :
         {
             $cart->addItem($productId);
-            header('location:/ToolCart/home');
+            if (!empty($_SERVER['HTTP_REFERER'])) {
+                header('Location: ' . $_SERVER['HTTP_REFERER']);
+                exit;
+            } else {
+                // Fallback: If HTTP_REFERER is not available, redirect to a default page
+                // This is important because HTTP_REFERER is not always guaranteed.
+                header('Location:/ToolCart/home'); // Or your home page, etc.
+                exit;
+            }
+//            header('location:/ToolCart/home');
         }
     }
 } else {

@@ -13,7 +13,7 @@ if (isset($messages)) {
 }
 // Get form data to repopulate form
 $form_data = $_SESSION['form_data'] ?? [];
-print_r($form_data);
+//print_r($form_data);
 // Clear session variables
 unset($_SESSION['errors']);
 unset($_SESSION['form_data']);

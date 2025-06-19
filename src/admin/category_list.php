@@ -7,7 +7,7 @@ include ROOT . "partials/header.php";
 include_once "admin_partials/admin_header.php";
 $category = new Category();
 $table_heads = ['Category ID', 'Category', 'Description'];
-$categories = $category->getAllCategory();
+$categories = $category->getAllCategory(99);
 $table_records = [];
 $records = [];
 foreach ($categories as $categoryRec) {

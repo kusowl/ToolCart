@@ -77,7 +77,7 @@ Then any db actions should be done in class only.
 No Reloading / Refresh of page, improves user experience.
 
 # Handler Requests
-Every request made using AJAX, needs to have `request` key set,
+Every request made using AJAX, needs to have `request` key set, as well as `action` KV.
 it will be used to perform action based on that.
 E.g. 
 ```php 

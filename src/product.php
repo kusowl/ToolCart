@@ -5,13 +5,10 @@ include_once 'handler/ProductHandler.php';
 include_once "partials/header.php";
 include_once "partials/navbar.html.php";
 ?>
-<!--<section class="bg-gray-50 py-8 antialiased dark:bg-gray-900 md:py-12">-->
-<section class="max-w-screen-xl px-4 mx-auto 2xl:px-0 py-4">
-<?php 
-include_once 'partials/breadcrumb.php';
-include_once 'product_details.php';
-?>
+<section class="bg-gray-50 py-8 antialiased dark:bg-gray-900 md:py-12">
+<?php include_once "product_grid.php";?>
 </section>
+
 <?php
 include ROOT . "partials/footer.php";
 ?>

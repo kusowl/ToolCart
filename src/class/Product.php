@@ -1,9 +1,10 @@
 <?php
 include_once 'Model.php';
+
 class Product extends Model
 {
     private int $error;
-    private  $id;
+    private $id;
     private string $title;
     private string $description;
     private int $price;
@@ -104,7 +105,7 @@ class Product extends Model
     {
         $sql = "SELECT product.id, product.product_image, product.product_title, product.category_id , product.product_desc, product.product_price, product.product_brand FROM product  WHERE product.id = :id";
         $stmt = self::getDb()->prepare($sql);
-        $stmt->bindValue(':id',$id, PDO::PARAM_INT);
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
         $stmt->execute();
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
         return $row ? new Product($row) : null;
@@ -117,9 +118,51 @@ class Product extends Model
         $stmt = self::getDb()->prepare($sql);
         $stmt->execute();
         $products = [];
-        while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             $products [] = new Product($row);
         }
         return $products;
+    }
+
+    public function search($key, int $limit = QUERY_LIMIT, int $offset = 0)
+    {
+        $sql = 'SELECT p.id FROM product AS p  WHERE MATCH( product_title, product_desc, product_brand ) AGAINST ( :key IN NATURAL LANGUAGE MODE )';
+        $stmt = self::getDb()->prepare($sql);
+        $stmt->execute([':key' => $key]);
+        $products = [];
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $products[] = $this->findById($row['id']);
+        }
+        return $products;
+    }
+
+    public function addProduct($title, $desc, $price, $brand, $image, $categoryId): bool
+    {
+        $sql = "SELECT `product_title` from `product` where product_title = :product_title";
+        try {
+            $stmt = self::getDb()->prepare($sql);
+            $stmt->execute([':product_title' => $title]);
+        } catch
+        (Exception) {
+        }
+        if ($stmt->rowCount() == 0) {
+            $sql = "INSERT INTO `product`(`category_id`, `product_title`, `product_desc`, `product_price`, `product_brand`, `product_image`) VALUES (:category_id, :title, :desc, :price, :brand, :image)";
+            $result = false;
+            try {
+                $stmt = self::getDb()->prepare($sql);
+                $result = $stmt->execute([
+                    ':category_id' => $categoryId,
+                    ':title' => $title,
+                    ':desc' => $desc,
+                    ':price' => $price,
+                    ':brand' => $brand,
+                    ':image' => $image
+                ]);
+            } catch (Exception) {
+            }
+            return $result;
+        } else {
+            return false;
+        }
     }
 }
