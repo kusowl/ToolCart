@@ -3,21 +3,24 @@ session_start();
 require_once __DIR__ . "../../config/site_config.php";
 require_once ROOT . "config/db_config.php";
 require_once ROOT . "class/Cart.php";
+require_once ROOT . "class/Coupon.php";
 $cartRecords = [];
 $cartItemCount = [];
-if (!isset($_SESSION['user_id'])) {
-    header(ROOT . 'login.php');
-}
-$userId = $_SESSION['user_id'];
-$cart = new Cart($userId);
+
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
+    if (!isset($_SESSION['user_id'])) {
+        header('Location: /ToolCart/login');
+        exit;
+    }
+    $userId = $_SESSION['user_id'];
+    $cart = new Cart($userId);
     $productId = $_POST['productId'] ?? null;
     $cartQty = (int)$_POST['cartQty'] ?? 0;
-    $request = $_POST['request'] ?? '';
+    $action = $_POST['action'] ?? '';
 
-    switch ($request) {
+    switch ($action) {
         case 'decrementQty':
         case 'incrementQty':
         {
@@ -59,6 +62,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             echo json_encode($response);
             break;
         }
+        case 'coupon':
+        {
+            $code = $_POST['code'];
+            $originalPrice = $cart->getCartValue();
+            $savings = calculateSavings($code, $originalPrice);
+            $cartRecords = $cart->getAllItem();
+            $cartItemCount = $cart->getCartItemTotal()['total_qty'];
+            $_SESSION['coupon_code'] = $code;
+            break;
+        }
         // No Request specified so just see it as add to cart
         default :
         {
@@ -72,12 +85,28 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 header('Location:/ToolCart/home'); // Or your home page, etc.
                 exit;
             }
-//            header('location:/ToolCart/home');
         }
     }
 } else {
     if (isset($_SESSION['user_id'])) {
+        $cart = new Cart($_SESSION['user_id']);
         $cartRecords = $cart->getAllItem();
         $cartItemCount = $cart->getCartItemTotal()['total_qty'];
+        if(isset($_SESSION['coupon_code'])){
+            $code = $_SESSION['coupon_code'];
+            $originalPrice = $cart->getCartValue();
+            $savings = calculateSavings($code, $originalPrice);
+        }
     }
+}
+
+function calculateSavings($code, $originalPrice): float|int
+{
+    $coupon = (new Coupon())->getByCode($code);
+    if ($coupon->getType() == 'amount'){
+        $savings = $coupon->getValue();
+    }else{
+        $savings = $originalPrice * ($coupon->getValue() / 100);
+    }
+    return $savings;
 }

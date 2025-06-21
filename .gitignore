@@ -20,3 +20,5 @@ todo.MD
 /test.php
 /.idea/sqldialects.xml
 /src/error_log.txt
+/error_log.txt
+/package.xml

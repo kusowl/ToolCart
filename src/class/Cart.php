@@ -74,4 +74,14 @@ class Cart extends Model
         return $res;
     }
 
+    public function getCartValue()
+    {
+        $sql = 'SELECT SUM(c.qty * p.product_price) AS total FROM cart c JOIN product p ON p.id = c.product_id WHERE c.user_id = :user_id';
+        $stmt = self::getDb()->prepare($sql);
+        $stmt->execute([
+            ':user_id' => $this->getUserId()
+        ]);
+        return $stmt->fetch(PDO::FETCH_ASSOC)['total'];
+    }
+
 }
