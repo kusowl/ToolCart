@@ -1,22 +1,34 @@
 @layer components{
     .brand{
-        @apply max-w-screen-xl inline-flex flex-nowrap overflow-hidden [mask-image:_linear-gradient(to_right,transparent_0,_black_128px,_black_calc(100%-128px),transparent_100%)]
+        @apply max-w-screen-xl inline-flex flex-nowrap overflow-hidden;
+        mask-image: linear-gradient(to right, transparent 0, black 128px, black calc(100% - 128px), transparent 100%);
+        -webkit-mask-image: linear-gradient(to right, transparent 0, black 128px, black calc(100% - 128px), transparent 100%);
     }
 
     .brand .logos{
-        @apply flex items-center justify-center md:justify-start mt-20 [&_li]:mx-12 [&_img]:max-w-32 [&_img]:max-h-10 animate-infinite-scroll
+        @apply flex items-center justify-center md:justify-start mt-20;
+        animation: scroll 20s linear infinite;
+        animation-fill-mode: both;
+        will-change: transform;
+        backface-visibility: hidden;
     }
 
-    
+    .brand .logos li{
+        @apply mx-12 flex-shrink-0;
+    }
+
+    .brand .logos img{
+        @apply max-w-32 max-h-10 object-contain;
+        width: 128px;
+        height: 40px;
+    }
 }
-@theme {
-    --animate-infinite-scroll: scroll 15s linear infinite;
-    @keyframes scroll {
-        0% {
-            transform: translateX(0);
-        }
-        100% {
-            transform: translateX(-100%);
-        }
+
+@keyframes scroll {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-100%);
     }
 }

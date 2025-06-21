@@ -18,7 +18,7 @@ include_once "partials/navbar.html.php";
             </div>
         </div>
         <div class="flex justify-center">
-            <div class="brand"
+            <div class="brand brand-smooth loaded"
             >
                 <ul class="logos">
                     <li>
