@@ -5,6 +5,7 @@ $pageTitle = "Checkout : " . SITE_NAME;
 include_once ROOT . "partials/header.php";
 include_once "handler/CheckoutHandler.php";
 include_once "partials/navbar.html.php";
+include_once "partials/popup.php";
 ?>
 <section class="bg-white py-8 antialiased dark:bg-gray-900 md:py-16 mt-12">
     <div class="mx-auto max-w-screen-xl px-4 2xl:px-0">
@@ -46,148 +47,183 @@ include_once "partials/navbar.html.php";
             <div class="min-w-0 flex-1 space-y-8">
                 <div class="space-y-4">
                     <h2 class="text-xl font-semibold text-gray-900 dark:text-white">Delivery Details</h2>
-                    <?php
-                    $res = $address->getAddress($userId);
-                    ?>
                     <!--                     Add new address form-->
-                    <form action="" method="post" id="address-form" class="<?php if (!empty($res)) echo 'hidden' ?>">
-                        <input type="hidden" name="action" value="addAddress">
-                        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                            <div>
-                                <label for="your_name"
-                                       class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">
-                                    Your name* </label>
-                                <input type="text" id="your_name" name="name"
-                                       class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"
-                                       placeholder="Kushal Saha" required/>
-                            </div>
-
-                            <div>
-                                <label for="your_email"
-                                       class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"> Your
-                                    email* </label>
-                                <input type="email" id="your_email" name="email"
-                                       class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"
-                                       placeholder="kushal@toolcart.in" required/>
-                            </div>
-
-                            <div>
-                                <label for="country"
-                                       class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"> Country
-                                    * </label>
-                                <input type="text" id="country" name="country"
-                                       class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"
-                                       placeholder="india" required/>
-                            </div>
-
-                            <div>
-                                <label for="city"
-                                       class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">
-                                    City* </label>
-                                <input type="text" id="city" name="city"
-                                       class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"
-                                       placeholder="Kolkata" required/>
-                            </div>
-
-                            <div>
-                                <label for="phone-input"
-                                       class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"> Phone
-                                    Number* </label>
-                                <div class="flex items-center">
-                                    <input id="dropdown-phone" name="country_code"
-                                           class="z-10 w-20 inline-flex shrink-0 items-center rounded-s-lg border border-gray-300 bg-gray-100 px-4 py-2.5 text-center text-sm font-medium text-gray-900 hover:bg-gray-200 focus:outline-none focus:ring-4 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-700"
-                                           type="number" placeholder="91">
-                                    </input>
-                                    <div class="relative w-full">
-                                        <input type="text" id="phone-input" name="phone_no"
-                                               class="z-20 block w-full rounded-e-lg border border-s-0 border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:border-s-gray-700  dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500"
-                                               placeholder="12345-67890" required/>
-                                    </div>
+                    <div id="address-modal"
+                         class="hidden  fixed top-0 right-0 left-0 z-100 justify-center items-center md:inset-0 "
+                         tabindex="-1" aria-hidden="true">
+                        <div class="relative">
+                            <div class="relative bg-white rounded-lg p-7 shadow-sm dark:bg-gray-700">
+                                <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 border-gray-200">
+                                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+                                        Add New Address
+                                    </h3>
+                                    <button type="button"
+                                            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                                            data-modal-toggle="address-modal">
+                                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                             fill="none" viewBox="0 0 14 14">
+                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                                  stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                                        </svg>
+                                        <span class="sr-only">Close modal</span>
+                                    </button>
                                 </div>
-                            </div>
+                                <form action="" method="post" id="address-form" class="mt-6">
+                                    <input type="hidden" name="action" value="addAddress">
+                                    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                                        <div>
+                                            <label for="your_name"
+                                                   class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">
+                                                Your name * </label>
+                                            <input type="text" id="your_name" name="name"
+                                                   value="<?= $formData['name'] ?? '' ?>"
+                                                   class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"
+                                                   placeholder="Kushal Saha" required/>
+                                        </div>
 
-                            <div>
-                                <label for="pin"
-                                       class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">
-                                    Pin </label>
-                                <input type="number" id="pin" name="pin"
-                                       class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"
-                                       placeholder="123456" required/>
-                            </div>
+                                        <div>
+                                            <label for="your_email"
+                                                   class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">
+                                                Your
+                                                email * </label>
+                                            <input type="email" id="your_email" name="email"
+                                                   value="<?= $formData['email'] ?? '' ?>"
+                                                   class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"
+                                                   placeholder="kushal@toolcart.in" required/>
+                                        </div>
 
-                            <div class="sm:col-span-2">
-                                <label for="address-line-1"
-                                       class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"> Address
-                                    Line 1 </label>
-                                <input type="text" id="address-line-1" name="line_1"
-                                       class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"
-                                       required/>
-                            </div>
+                                        <div>
+                                            <label for="country"
+                                                   class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">
+                                                Country
+                                                * </label>
+                                            <input type="text" id="country" name="country"
+                                                   value="<?= $formData['country'] ?? '' ?>"
+                                                   class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"
+                                                   placeholder="india" required/>
+                                        </div>
 
-                            <div class="sm:col-span-2">
-                                <label for="address-line-2"
-                                       class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"> Address
-                                    Line 2</label>
-                                <input type="text" id="address-line-2" name="line_2"
-                                       class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"
-                                       required/>
-                            </div>
-                            <div class="sm:col-span-2">
-                                <label for="instructions"
-                                       class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Instructions,
-                                    Notes</label>
-                                <input type="text" id="instructions" name="instructions"
-                                       class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"
-                                       required/>
-                            </div>
+                                        <div>
+                                            <label for="city"
+                                                   class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">
+                                                City * </label>
+                                            <input type="text" id="city" name="city"
+                                                   value="<?= $formData['city'] ?? '' ?>"
+                                                   class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"
+                                                   placeholder="Kolkata" required/>
+                                        </div>
 
+                                        <div>
+                                            <label for="phone-input"
+                                                   class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">
+                                                Phone
+                                                Number * </label>
+                                            <div class="flex items-center">
+                                                <input id="dropdown-phone" name="country_code"
+                                                       value="<?= $formData['country_code'] ?? '' ?>"
+                                                       class="z-10 w-20 inline-flex shrink-0 items-center rounded-s-lg border border-gray-300 bg-gray-100 px-4 py-2.5 text-center text-sm font-medium text-gray-900 hover:bg-gray-200 focus:outline-none focus:ring-4 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-700"
+                                                       type="number" placeholder="91" required>
+                                                <div class="relative w-full">
+                                                    <input type="text" id="phone-input" name="phone_no"
+                                                           value="<?= $formData['phone_no'] ?? '' ?>"
+                                                           class="z-20 block w-full rounded-e-lg border border-s-0 border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:border-s-gray-700  dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500"
+                                                           placeholder="12345-67890" required/>
+                                                </div>
+                                            </div>
+                                        </div>
 
+                                        <div>
+                                            <label for="pin"
+                                                   class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">
+                                                Pin </label>
+                                            <input type="number" id="pin" name="pin"
+                                                   value="<?= $formData['pin'] ?? '' ?>"
+                                                   class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"
+                                                   placeholder="123456" required/>
+                                        </div>
+
+                                        <div class="sm:col-span-2">
+                                            <label for="address-line-1"
+                                                   class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">
+                                                Address
+                                                Line 1 *</label>
+                                            <input type="text" id="address-line-1" name="line_1"
+                                                   value="<?= $formData['line_1'] ?? '' ?>"
+                                                   class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"
+                                                   required/>
+                                        </div>
+
+                                        <div class="sm:col-span-2">
+                                            <label for="address-line-2"
+                                                   class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">
+                                                Address
+                                                Line 2 *</label>
+                                            <input type="text" id="address-line-2" name="line_2"
+                                                   value="<?= $formData['line_2'] ?? '' ?>"
+                                                   class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"
+                                                   />
+                                        </div>
+                                        <div class="sm:col-span-2">
+                                            <label for="instructions"
+                                                   class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Instructions,
+                                                Notes</label>
+                                            <input type="text" id="instructions" name="instructions"
+                                                   value="<?= $formData['instructions'] ?? '' ?>"
+                                                   class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"
+                                            />
+                                        </div>
+                                        <button type="submit" class="text-white inline-flex justify-center items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:col-span-2">
+                                            <svg class="me-1 -ms-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"></path></svg>
+                                            Add new address
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
-                    </form>
-                    <form method="post" class="grid grid-cols-1 gap-4 md:grid-cols-3 <?php if (empty($res)) echo 'hidden' ?>"
-                         id="address-grid">
+                    </div>
+                    <form method="post"
+                          class="grid grid-cols-1 gap-4 md:grid-cols-3 <?php if (empty($res)) echo 'hidden' ?>"
+                          id="address-grid">
 
-                            <!--                            Select address form-->
-                            <?php foreach ($res as $addRes): ?>
-                                <div class="rounded-lg border border-gray-200 bg-gray-50 p-4 ps-4 dark:border-gray-700 dark:bg-gray-800">
-                                    <div class="flex items-start">
-                                        <div class="flex h-5 items-center">
-                                            <input aria-describedby="address-text" type="radio"
-                                                   name="address" value="<?= $addRes->getId(); ?>"
-                                                   class="h-4 w-4 border-gray-300 bg-white text-primary-600 focus:ring-2 focus:ring-primary-600 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-primary-600"
-                                                   checked/>
-                                        </div>
-
-                                        <div class="ms-4 text-sm">
-                                            <label for="address"
-                                                   class="font-medium leading-none text-gray-900 dark:text-white"> <?= $addRes->getName() . "&nbsp +" . $addRes->getCountryCode() . $addRes->getPhNo(); ?> </label>
-                                            <p id="credit-card-text"
-                                               class="mt-1 text-xs font-normal text-gray-500 dark:text-gray-400">
-                                                <?php
-                                                echo "{$addRes->getLine1()}<br>{$addRes->getLine2()}<br>{$addRes->getCity()}&nbsp{$addRes->getPin()}";
-                                                ?>
-                                            </p>
-                                        </div>
+                        <!-- Select address form -->
+                        <?php foreach ($res as $addRes): ?>
+                            <div class="rounded-lg border border-gray-200 bg-gray-50 p-4 ps-4 dark:border-gray-700 dark:bg-gray-800">
+                                <div class="flex items-start">
+                                    <div class="flex h-5 items-center">
+                                        <input aria-describedby="address-text" type="radio"
+                                               name="address_id" value="<?= $addRes->getId(); ?>"
+                                               class="h-4 w-4 border-gray-300 bg-white text-primary-600 focus:ring-2 focus:ring-primary-600 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-primary-600"
+                                               checked/>
                                     </div>
 
-                                    <div class="mt-4 flex items-center gap-2">
-                                        <button type="button"
-                                                class="text-sm font-medium text-gray-500 hover:text-red-600 dark:text-gray-400 dark:hover:text-white">
-                                            Delete
-                                        </button>
-
-                                        <div class="h-3 w-px shrink-0 bg-gray-200 dark:bg-gray-700"></div>
-
-                                        <button type="button"
-                                                class="text-sm font-medium text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white">
-                                            Edit
-                                        </button>
+                                    <div class="ms-4 text-sm">
+                                        <label for="address"
+                                               class="font-medium leading-none text-gray-900 dark:text-white"> <?= $addRes->getName() . "&nbsp +" . $addRes->getCountryCode() . $addRes->getPhNo(); ?> </label>
+                                        <p id="credit-card-text"
+                                           class="mt-1 text-xs font-normal text-gray-500 dark:text-gray-400">
+                                            <?php
+                                            echo "{$addRes->getLine1()}<br>{$addRes->getLine2()}<br>{$addRes->getCity()}&nbsp{$addRes->getPin()}";
+                                            ?>
+                                        </p>
                                     </div>
                                 </div>
-                            <?php endforeach; ?>
+                                <input type="hidden" name="action" value="deleteAddress">
+                                <div class="mt-4 flex items-center gap-2">
+                                    <input type="submit" value="Delete"
+                                            class="text-sm font-medium text-gray-500 hover:text-red-600 dark:text-gray-400 dark:hover:text-white">
+
+                                    <div class="h-3 w-px shrink-0 bg-gray-200 dark:bg-gray-700"></div>
+
+                                    <button type="button"
+                                            class="text-sm font-medium text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white">
+                                        Edit
+                                    </button>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
                     </form>
                     <div class="sm:col-span-2">
-                        <button onclick="show_address_form()" id="add-address-btn"
+                        <button data-modal-target="address-modal" data-modal-toggle="address-modal" id="add-address-btn"
                                 class="flex w-full items-center justify-center gap-2 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-sm font-medium text-gray-900 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:outline-none focus:ring-4 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white dark:focus:ring-gray-700">
                             <svg class="h-5 w-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                                  width="24"
@@ -195,7 +231,7 @@ include_once "partials/navbar.html.php";
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
                                       stroke-width="2" d="M5 12h14m-7 7V5"/>
                             </svg>
-                            Add new address
+                            Add Address
                         </button>
                     </div>
                 </div>
@@ -381,7 +417,7 @@ include_once "partials/navbar.html.php";
                 </div>
                 <div class="sm:col-span-2">
                     <a href="order"
-                            class="flex w-full items-center justify-center gap-2 rounded-lg border border-gray-200 bg-primary-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-primary-800 focus:z-10 focus:outline-none focus:ring-4 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white dark:focus:ring-gray-700">
+                       class="flex w-full items-center justify-center gap-2 rounded-lg border border-gray-200 bg-primary-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-primary-800 focus:z-10 focus:outline-none focus:ring-4 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white dark:focus:ring-gray-700">
                         <svg class="h-5 w-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                              width="24"
                              height="24" fill="none" viewBox="0 0 24 24">
@@ -396,5 +432,5 @@ include_once "partials/navbar.html.php";
         </div>
 </section>
 <?php
-include ROOT . "partials/footer.php";
+include_once ROOT . "partials/footer.php";
 ?>

@@ -73,7 +73,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             break;
         }
         // No Request specified so just see it as add to cart
-        default :
+        case 'post' :
         {
             $cart->addItem($productId);
             if (!empty($_SERVER['HTTP_REFERER'])) {

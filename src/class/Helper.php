@@ -37,4 +37,48 @@ class Helper
 
         return 0;
     }
+
+    public static function validateAndSanitizeAddress($postData, $userId): array
+    {
+        $errors = [];
+        $data = [];
+
+        // Required fields validation
+        $requiredFields = ['name', 'email', 'city', 'country', 'country_code', 'phone_no', 'pin', 'line_1'];
+        foreach ($requiredFields as $field) {
+            if (empty($postData[$field])) {
+                $errors[$field] = ucfirst(str_replace('_', ' ', $field)) . ' is required';
+            }
+        }
+
+        // Email validation
+        if (!empty($postData['email']) && !filter_var($postData['email'], FILTER_VALIDATE_EMAIL)) {
+            $errors['email'] = 'Invalid email format';
+        }
+
+        // Phone number validation
+        if (!empty($postData['ph_no']) && !preg_match('/^[\+]?[\d\-\(\)\s]{7,20}$/', $postData['ph_no'])) {
+            $errors['ph_no'] = 'Invalid phone number format';
+        }
+
+
+        // Sanitize all fields if no errors
+        if (empty($errors)) {
+            $data = [
+                'user_id' => (int)$userId,
+                'name' => htmlspecialchars(trim($postData['name']), ENT_QUOTES, 'UTF-8'),
+                'email' => filter_var(trim($postData['email']), FILTER_SANITIZE_EMAIL),
+                'city' => htmlspecialchars(trim($postData['city']), ENT_QUOTES, 'UTF-8'),
+                'country' => htmlspecialchars(trim($postData['country']), ENT_QUOTES, 'UTF-8'),
+                'country_code' => strtoupper(trim($postData['country_code'])),
+                'ph_no' => preg_replace('/[^\d\+\-\(\)\s]/', '', trim($postData['ph_no'])),
+                'pin' => htmlspecialchars(trim($postData['pin']), ENT_QUOTES, 'UTF-8'),
+                'line_1' => htmlspecialchars(trim($postData['line_1']), ENT_QUOTES, 'UTF-8'),
+                'line_2' => htmlspecialchars(trim($postData['line_2'] ?? ''), ENT_QUOTES, 'UTF-8'),
+                'instructions' => htmlspecialchars(trim($postData['instructions'] ?? ''), ENT_QUOTES, 'UTF-8')
+            ];
+        }
+
+        return ['valid' => empty($errors), 'errors' => $errors, 'data' => $data];
+    }
 }

@@ -3,26 +3,42 @@ session_start();
 require_once __DIR__ . "../../config/site_config.php";
 require_once ROOT . "config/db_config.php";
 require_once ROOT . "class/Address.php";
+require_once ROOT . "class/Helper.php";
 if (!isset($_SESSION['user_id'])) {
     header(ROOT . 'login.php');
 }
+$messages = [];
+$message_type = '';
+$formData = [];
 $userId = $_SESSION['user_id'];
 $address = new Address();
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (($_POST['action'] ?? '') === 'addAddress') {
-        $address = new Address([
-            'user_id' => $userId,
-            "name" => $_POST['name'],
-            "email" => $_POST['email'],
-            "city" => $_POST['city'],
-            "country" => $_POST['country'],
-            "country_code" => $_POST['country_code'],
-            "ph_no" => $_POST['ph_no'],
-            "pin" => $_POST['pin'],
-            "line_1" => $_POST['line_1'],
-            "line_2" => $_POST['line_2'],
-            "instructions" => $_POST['instructions']
-        ]);
-        $address->addAddress();
+    switch ($_POST['acton']) {
+        case 'AddAddress':{
+
+            $result = Helper:: validateAndSanitizeAddress($_POST, $userId);
+            if ($result['valid']) {
+                $address = new Address($result['data']);
+                $address->addAddress();
+                $_SESSION['messages'] = ['Success' => 'Address Added'];
+                $_SESSION['message_type'] = 'success';
+            } else {
+                $_SESSION['messages'] = $result['errors'];
+                $_SESSION['message_type'] = 'error';
+                $formData = $_POST;
+            }
+        }
+        case 'deleteAddress':
     }
 }
+
+if ($_SERVER['REQUEST_METHOD'] == 'GET'){
+    $action = $_GET['action'];
+    switch ($action){
+        case 'something':
+            break;
+        default:
+            $res = $address->getAddress($userId);
+    }
+}
+$res = $address->getAddress($userId);

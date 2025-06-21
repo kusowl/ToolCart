@@ -3,8 +3,7 @@ session_start();
 include "config/site_config.php";
 $pageTitle = "Register : ".SITE_NAME;
 include "partials/header.php";
-$messages = $_SESSION["messages"];
-$message_type = $_SESSION["message_type"];
+
 
 if (isset($messages)) {
     include_once ROOT."partials/popup.php";

@@ -1,3 +1,8 @@
+<?php
+$messages = $_SESSION["messages"];
+$message_type = $_SESSION["message_type"];
+if(!empty($messages)):
+?>
 <div id="info-popup" tabindex="-1" class="fixed top-5 right-5 z-50 w-auto max-w-lg">
     <div class="relative p-4 w-full">
         <div class="relative p-4
@@ -26,3 +31,8 @@
         </div>
     </div>
 </div>
+<?php
+endif;
+unset($_SESSION["messages"]);
+unset($_SESSION["message_type"]);
+?>
