@@ -47,7 +47,7 @@ include_once "partials/popup.php";
             <div class="min-w-0 flex-1 space-y-8">
                 <div class="space-y-4">
                     <h2 class="text-xl font-semibold text-gray-900 dark:text-white">Delivery Details</h2>
-                    <!--                     Add new address form-->
+                    <!--                     Add new address form modal-->
                     <div id="address-modal"
                          class="hidden  fixed top-0 right-0 left-0 z-100 justify-center items-center md:inset-0 "
                          tabindex="-1" aria-hidden="true">
@@ -69,13 +69,14 @@ include_once "partials/popup.php";
                                     </button>
                                 </div>
                                 <form action="" method="post" id="address-form" class="mt-6">
-                                    <input type="hidden" name="action" value="addAddress">
+                                    <input type="hidden" name="action" value="addAddress" id="action">
+                                    <input type="hidden" name="id" id="address_id" value="">
                                     <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
                                         <div>
-                                            <label for="your_name"
+                                            <label for="name"
                                                    class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">
                                                 Your name * </label>
-                                            <input type="text" id="your_name" name="name"
+                                            <input type="text" id="name" name="name"
                                                    value="<?= $formData['name'] ?? '' ?>"
                                                    class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"
                                                    placeholder="Kushal Saha" required/>
@@ -86,7 +87,7 @@ include_once "partials/popup.php";
                                                    class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">
                                                 Your
                                                 email * </label>
-                                            <input type="email" id="your_email" name="email"
+                                            <input type="email" id="email" name="email"
                                                    value="<?= $formData['email'] ?? '' ?>"
                                                    class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"
                                                    placeholder="kushal@toolcart.in" required/>
@@ -119,12 +120,12 @@ include_once "partials/popup.php";
                                                 Phone
                                                 Number * </label>
                                             <div class="flex items-center">
-                                                <input id="dropdown-phone" name="country_code"
+                                                <input name="country_code" id="country_code"
                                                        value="<?= $formData['country_code'] ?? '' ?>"
                                                        class="z-10 w-20 inline-flex shrink-0 items-center rounded-s-lg border border-gray-300 bg-gray-100 px-4 py-2.5 text-center text-sm font-medium text-gray-900 hover:bg-gray-200 focus:outline-none focus:ring-4 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-700"
                                                        type="number" placeholder="91" required>
                                                 <div class="relative w-full">
-                                                    <input type="text" id="phone-input" name="phone_no"
+                                                    <input type="text" id="phone_no" name="phone_no"
                                                            value="<?= $formData['phone_no'] ?? '' ?>"
                                                            class="z-20 block w-full rounded-e-lg border border-s-0 border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:border-s-gray-700  dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500"
                                                            placeholder="12345-67890" required/>
@@ -147,7 +148,7 @@ include_once "partials/popup.php";
                                                    class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">
                                                 Address
                                                 Line 1 *</label>
-                                            <input type="text" id="address-line-1" name="line_1"
+                                            <input type="text" id="line-1" name="line_1"
                                                    value="<?= $formData['line_1'] ?? '' ?>"
                                                    class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"
                                                    required/>
@@ -158,10 +159,10 @@ include_once "partials/popup.php";
                                                    class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">
                                                 Address
                                                 Line 2 *</label>
-                                            <input type="text" id="address-line-2" name="line_2"
+                                            <input type="text" id="line-2" name="line_2"
                                                    value="<?= $formData['line_2'] ?? '' ?>"
                                                    class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"
-                                                   />
+                                            />
                                         </div>
                                         <div class="sm:col-span-2">
                                             <label for="instructions"
@@ -172,8 +173,14 @@ include_once "partials/popup.php";
                                                    class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"
                                             />
                                         </div>
-                                        <button type="submit" class="text-white inline-flex justify-center items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:col-span-2">
-                                            <svg class="me-1 -ms-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"></path></svg>
+                                        <button type="submit" id="submitBtn"
+                                                class="text-white inline-flex justify-center items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:col-span-2">
+                                            <svg class="me-1 -ms-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
+                                                 xmlns="http://www.w3.org/2000/svg">
+                                                <path fill-rule="evenodd"
+                                                      d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+                                                      clip-rule="evenodd"></path>
+                                            </svg>
                                             Add new address
                                         </button>
                                     </div>
@@ -181,255 +188,211 @@ include_once "partials/popup.php";
                             </div>
                         </div>
                     </div>
-                    <form method="post"
-                          class="grid grid-cols-1 gap-4 md:grid-cols-3 <?php if (empty($res)) echo 'hidden' ?>"
-                          id="address-grid">
+                    <!--                    modal ends-->
+                    <!--                    Checkout from starts here-->
+                    <form action="" class="space-y-8">
+                        <div class="grid grid-cols-1 gap-4 md:grid-cols-3" id="address-grid">
 
-                        <!-- Select address form -->
-                        <?php foreach ($res as $addRes): ?>
-                            <div class="rounded-lg border border-gray-200 bg-gray-50 p-4 ps-4 dark:border-gray-700 dark:bg-gray-800">
-                                <div class="flex items-start">
-                                    <div class="flex h-5 items-center">
-                                        <input aria-describedby="address-text" type="radio"
-                                               name="address_id" value="<?= $addRes->getId(); ?>"
-                                               class="h-4 w-4 border-gray-300 bg-white text-primary-600 focus:ring-2 focus:ring-primary-600 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-primary-600"
-                                               checked/>
+                            <!-- Select address form -->
+                            <?php foreach ($res as $addRes): ?>
+                                <div class="rounded-lg border border-gray-200 bg-gray-50 p-4 ps-4 dark:border-gray-700 dark:bg-gray-800">
+                                    <div class="flex items-start">
+                                        <div class="flex h-5 items-center">
+                                            <input aria-describedby="address-text" type="radio"
+                                                   name="address_id" value="<?= $addRes->getId(); ?>"
+                                                   class="h-4 w-4 border-gray-300 bg-white text-primary-600 focus:ring-2 focus:ring-primary-600 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-primary-600"
+                                            />
+                                        </div>
+
+                                        <div class="ms-4 text-sm">
+                                            <label for="address"
+                                                   class="font-medium leading-none text-gray-900 dark:text-white"> <?= $addRes->getName() . "&nbsp +" . $addRes->getCountryCode() . $addRes->getPhNo(); ?> </label>
+                                            <p id="credit-card-text"
+                                               class="mt-1 text-xs font-normal text-gray-500 dark:text-gray-400">
+                                                <?php
+                                                echo "{$addRes->getLine1()}<br>{$addRes->getLine2()}<br>{$addRes->getCity()}&nbsp{$addRes->getPin()}";
+                                                ?>
+                                            </p>
+                                        </div>
                                     </div>
+                                    <div class="mt-4 flex items-center gap-2">
+                                        <button onclick="deleteAddress()" id="cartDeleteBtn"
+                                                class="text-sm font-medium text-gray-500 hover:text-red-600 dark:text-gray-400 dark:hover:text-white">
+                                            Delete
+                                        </button>
 
-                                    <div class="ms-4 text-sm">
-                                        <label for="address"
-                                               class="font-medium leading-none text-gray-900 dark:text-white"> <?= $addRes->getName() . "&nbsp +" . $addRes->getCountryCode() . $addRes->getPhNo(); ?> </label>
-                                        <p id="credit-card-text"
-                                           class="mt-1 text-xs font-normal text-gray-500 dark:text-gray-400">
-                                            <?php
-                                            echo "{$addRes->getLine1()}<br>{$addRes->getLine2()}<br>{$addRes->getCity()}&nbsp{$addRes->getPin()}";
-                                            ?>
-                                        </p>
+                                        <div class="h-3 w-px shrink-0 bg-gray-200 dark:bg-gray-700"></div>
+
+                                        <button type="button" onclick="load_address_form(<?= $addRes->getId(); ?>)"
+                                                data-modal-target="address-modal" data-modal-toggle="address-modal"
+                                                class="text-sm font-medium text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white">
+                                            Edit
+                                        </button>
                                     </div>
                                 </div>
-                                <input type="hidden" name="action" value="deleteAddress">
-                                <div class="mt-4 flex items-center gap-2">
-                                    <input type="submit" value="Delete"
-                                            class="text-sm font-medium text-gray-500 hover:text-red-600 dark:text-gray-400 dark:hover:text-white">
+                            <?php endforeach; ?>
+                            <div class="sm:col-span-3">
+                                <button data-modal-target="address-modal" data-modal-toggle="address-modal"
+                                        id="add-address-btn"
+                                        class="flex w-full items-center justify-center gap-2 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-sm font-medium text-gray-900 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:outline-none focus:ring-4 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white dark:focus:ring-gray-700">
+                                    <svg class="h-5 w-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                         width="24"
+                                         height="24" fill="none" viewBox="0 0 24 24">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                              stroke-width="2" d="M5 12h14m-7 7V5"/>
+                                    </svg>
+                                    Add Address
+                                </button>
+                            </div>
+                        </div>
 
-                                    <div class="h-3 w-px shrink-0 bg-gray-200 dark:bg-gray-700"></div>
+                        <div class="space-y-4">
+                            <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Payment</h3>
 
-                                    <button type="button"
-                                            class="text-sm font-medium text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white">
-                                        Edit
-                                    </button>
+                            <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
+                                <div class="rounded-lg border border-gray-200 bg-gray-50 p-4 ps-4 dark:border-gray-700 dark:bg-gray-800">
+                                    <div class="flex items-start">
+                                        <div class="flex h-5 items-center">
+                                            <input id="pay-on-delivery" aria-describedby="pay-on-delivery-text"
+                                                   type="radio"
+                                                   name="payment-method" value=""
+                                                   class="h-4 w-4 border-gray-300 bg-white text-primary-600 focus:ring-2 focus:ring-primary-600 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-primary-600"/>
+                                        </div>
+
+                                        <div class="ms-4 text-sm">
+                                            <label for="pay-on-delivery"
+                                                   class="font-medium leading-none text-gray-900 dark:text-white">
+                                                Payment
+                                                on
+                                                delivery </label>
+                                            <p id="pay-on-delivery-text"
+                                               class="mt-1 text-xs font-normal text-gray-500 dark:text-gray-400">+ 10
+                                                payment
+                                                processing fee</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="rounded-lg border border-gray-200 bg-gray-50 p-4 ps-4 dark:border-gray-700 dark:bg-gray-800">
+                                    <div class="flex items-start">
+                                        <div class="flex h-5 items-center">
+                                            <input id="paypal-2" aria-describedby="paypal-text" type="radio"
+                                                   name="payment-method" value=""
+                                                   class="h-4 w-4 border-gray-300 bg-white text-primary-600 focus:ring-2 focus:ring-primary-600 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-primary-600"/>
+                                        </div>
+
+                                        <div class="ms-4 text-sm">
+                                            <label for="paypal-2"
+                                                   class="font-medium leading-none text-gray-900 dark:text-white">
+                                                Pay via RazorPay</label>
+                                            <p id="paypal-text"
+                                               class="mt-1 text-xs font-normal text-gray-500 dark:text-gray-400">Pay in next step</p>
+                                        </div>
+                                    </div>
+                                    </div>
                                 </div>
                             </div>
-                        <?php endforeach; ?>
+                        </div>
+
+                        <!--                        <div class="space-y-4">-->
+                        <!--                            <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Delivery Methods</h3>-->
+                        <!---->
+                        <!--                            <div class="grid grid-cols-1 gap-4 md:grid-cols-3">-->
+                        <!--                                <div class="rounded-lg border border-gray-200 bg-gray-50 p-4 ps-4 dark:border-gray-700 dark:bg-gray-800">-->
+                        <!--                                    <div class="flex items-start">-->
+                        <!--                                        <div class="flex h-5 items-center">-->
+                        <!--                                            <input id="dhl" aria-describedby="dhl-text" type="radio"-->
+                        <!--                                                   name="delivery-method"-->
+                        <!--                                                   value=""-->
+                        <!--                                                   class="h-4 w-4 border-gray-300 bg-white text-primary-600 focus:ring-2 focus:ring-primary-600 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-primary-600"-->
+                        <!--                                                   checked/>-->
+                        <!--                                        </div>-->
+                        <!---->
+                        <!--                                        <div class="ms-4 text-sm">-->
+                        <!--                                            <label for="dhl"-->
+                        <!--                                                   class="font-medium leading-none text-gray-900 dark:text-white">-->
+                        <!--                                                $15-->
+                        <!--                                                - DHL Fast Delivery </label>-->
+                        <!--                                            <p id="dhl-text"-->
+                        <!--                                               class="mt-1 text-xs font-normal text-gray-500 dark:text-gray-400">-->
+                        <!--                                                Get it by Tommorow</p>-->
+                        <!--                                        </div>-->
+                        <!--                                    </div>-->
+                        <!--                                </div>-->
+                        <!---->
+                        <!--                                <div class="rounded-lg border border-gray-200 bg-gray-50 p-4 ps-4 dark:border-gray-700 dark:bg-gray-800">-->
+                        <!--                                    <div class="flex items-start">-->
+                        <!--                                        <div class="flex h-5 items-center">-->
+                        <!--                                            <input id="fedex" aria-describedby="fedex-text" type="radio"-->
+                        <!--                                                   name="delivery-method"-->
+                        <!--                                                   value=""-->
+                        <!--                                                   class="h-4 w-4 border-gray-300 bg-white text-primary-600 focus:ring-2 focus:ring-primary-600 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-primary-600"/>-->
+                        <!--                                        </div>-->
+                        <!---->
+                        <!--                                        <div class="ms-4 text-sm">-->
+                        <!--                                            <label for="fedex"-->
+                        <!--                                                   class="font-medium leading-none text-gray-900 dark:text-white">-->
+                        <!--                                                Free Delivery - FedEx </label>-->
+                        <!--                                            <p id="fedex-text"-->
+                        <!--                                               class="mt-1 text-xs font-normal text-gray-500 dark:text-gray-400">Get it-->
+                        <!--                                                by-->
+                        <!--                                                Friday, 13 Dec 2023</p>-->
+                        <!--                                        </div>-->
+                        <!--                                    </div>-->
+                        <!--                                </div>-->
+                        <!---->
+                        <!--                                <div class="rounded-lg border border-gray-200 bg-gray-50 p-4 ps-4 dark:border-gray-700 dark:bg-gray-800">-->
+                        <!--                                    <div class="flex items-start">-->
+                        <!--                                        <div class="flex h-5 items-center">-->
+                        <!--                                            <input id="express" aria-describedby="express-text" type="radio"-->
+                        <!--                                                   name="delivery-method" value=""-->
+                        <!--                                                   class="h-4 w-4 border-gray-300 bg-white text-primary-600 focus:ring-2 focus:ring-primary-600 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-primary-600"/>-->
+                        <!--                                        </div>-->
+                        <!---->
+                        <!--                                        <div class="ms-4 text-sm">-->
+                        <!--                                            <label for="express"-->
+                        <!--                                                   class="font-medium leading-none text-gray-900 dark:text-white">-->
+                        <!--                                                $49 - Express Delivery </label>-->
+                        <!--                                            <p id="express-text"-->
+                        <!--                                               class="mt-1 text-xs font-normal text-gray-500 dark:text-gray-400">Get it-->
+                        <!--                                                today</p>-->
+                        <!--                                        </div>-->
+                        <!--                                    </div>-->
+                        <!--                                </div>-->
+                        <!--                            </div>-->
+                        <!--                        </div>-->
+
+                        <!--                        <div>-->
+                        <!--                            <label for="voucher" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">-->
+                        <!--                                Enter-->
+                        <!--                                a-->
+                        <!--                                gift card, voucher or promotional code </label>-->
+                        <!--                            <div class="flex max-w-md items-center gap-4">-->
+                        <!--                                <input type="text" id="voucher"-->
+                        <!--                                       class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"-->
+                        <!--                                       placeholder="" required/>-->
+                        <!--                                <button type="button"-->
+                        <!--                                        class="flex items-center justify-center rounded-lg bg-primary-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-primary-800 focus:outline-none focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">-->
+                        <!--                                    Apply-->
+                        <!--                                </button>-->
+                        <!--                            </div>-->
+                        <!--                        </div>-->
+                        <div class="sm:col-span-2">
+                            <a href="order"
+                               class="flex w-full items-center justify-center gap-2 rounded-lg border border-gray-200 bg-primary-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-primary-800 focus:z-10 focus:outline-none focus:ring-4 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white dark:focus:ring-gray-700">
+                                <svg class="h-5 w-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                     width="24"
+                                     height="24" fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                          stroke-width="2" d="M5 12h14m-7 7V5"/>
+                                </svg>
+                                Place Order
+                            </a>
                     </form>
-                    <div class="sm:col-span-2">
-                        <button data-modal-target="address-modal" data-modal-toggle="address-modal" id="add-address-btn"
-                                class="flex w-full items-center justify-center gap-2 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-sm font-medium text-gray-900 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:outline-none focus:ring-4 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white dark:focus:ring-gray-700">
-                            <svg class="h-5 w-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                                 width="24"
-                                 height="24" fill="none" viewBox="0 0 24 24">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                      stroke-width="2" d="M5 12h14m-7 7V5"/>
-                            </svg>
-                            Add Address
-                        </button>
-                    </div>
-                </div>
-
-                <div class="space-y-4">
-                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Payment</h3>
-
-                    <form method="post" class="grid grid-cols-1 gap-4 md:grid-cols-3">
-                        <div class="rounded-lg border border-gray-200 bg-gray-50 p-4 ps-4 dark:border-gray-700 dark:bg-gray-800">
-                            <div class="flex items-start">
-                                <div class="flex h-5 items-center">
-                                    <input id="credit-card" aria-describedby="credit-card-text" type="radio"
-                                           name="payment-method" value=""
-                                           class="h-4 w-4 border-gray-300 bg-white text-primary-600 focus:ring-2 focus:ring-primary-600 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-primary-600"
-                                           checked/>
-                                </div>
-
-                                <div class="ms-4 text-sm">
-                                    <label for="credit-card"
-                                           class="font-medium leading-none text-gray-900 dark:text-white"> Credit
-                                        Card </label>
-                                    <p id="credit-card-text"
-                                       class="mt-1 text-xs font-normal text-gray-500 dark:text-gray-400">Pay with your
-                                        credit card</p>
-                                </div>
-                            </div>
-
-                            <div class="mt-4 flex items-center gap-2">
-                                <button type="button"
-                                        class="text-sm font-medium text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white">
-                                    Delete
-                                </button>
-
-                                <div class="h-3 w-px shrink-0 bg-gray-200 dark:bg-gray-700"></div>
-
-                                <button type="button"
-                                        class="text-sm font-medium text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white">
-                                    Edit
-                                </button>
-                            </div>
-                        </div>
-
-                        <div class="rounded-lg border border-gray-200 bg-gray-50 p-4 ps-4 dark:border-gray-700 dark:bg-gray-800">
-                            <div class="flex items-start">
-                                <div class="flex h-5 items-center">
-                                    <input id="pay-on-delivery" aria-describedby="pay-on-delivery-text" type="radio"
-                                           name="payment-method" value=""
-                                           class="h-4 w-4 border-gray-300 bg-white text-primary-600 focus:ring-2 focus:ring-primary-600 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-primary-600"/>
-                                </div>
-
-                                <div class="ms-4 text-sm">
-                                    <label for="pay-on-delivery"
-                                           class="font-medium leading-none text-gray-900 dark:text-white"> Payment on
-                                        delivery </label>
-                                    <p id="pay-on-delivery-text"
-                                       class="mt-1 text-xs font-normal text-gray-500 dark:text-gray-400">+$15 payment
-                                        processing fee</p>
-                                </div>
-                            </div>
-
-                            <div class="mt-4 flex items-center gap-2">
-                                <button type="button"
-                                        class="text-sm font-medium text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white">
-                                    Delete
-                                </button>
-
-                                <div class="h-3 w-px shrink-0 bg-gray-200 dark:bg-gray-700"></div>
-
-                                <button type="button"
-                                        class="text-sm font-medium text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white">
-                                    Edit
-                                </button>
-                            </div>
-                        </div>
-
-                        <div class="rounded-lg border border-gray-200 bg-gray-50 p-4 ps-4 dark:border-gray-700 dark:bg-gray-800">
-                            <div class="flex items-start">
-                                <div class="flex h-5 items-center">
-                                    <input id="paypal-2" aria-describedby="paypal-text" type="radio"
-                                           name="payment-method" value=""
-                                           class="h-4 w-4 border-gray-300 bg-white text-primary-600 focus:ring-2 focus:ring-primary-600 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-primary-600"/>
-                                </div>
-
-                                <div class="ms-4 text-sm">
-                                    <label for="paypal-2"
-                                           class="font-medium leading-none text-gray-900 dark:text-white"> Paypal
-                                        account </label>
-                                    <p id="paypal-text"
-                                       class="mt-1 text-xs font-normal text-gray-500 dark:text-gray-400">Connect to your
-                                        account</p>
-                                </div>
-                            </div>
-
-                            <div class="mt-4 flex items-center gap-2">
-                                <button type="button"
-                                        class="text-sm font-medium text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white">
-                                    Delete
-                                </button>
-
-                                <div class="h-3 w-px shrink-0 bg-gray-200 dark:bg-gray-700"></div>
-
-                                <button type="button"
-                                        class="text-sm font-medium text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white">
-                                    Edit
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-
-                <div class="space-y-4">
-                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Delivery Methods</h3>
-
-                    <form method="post" class="grid grid-cols-1 gap-4 md:grid-cols-3">
-                        <div class="rounded-lg border border-gray-200 bg-gray-50 p-4 ps-4 dark:border-gray-700 dark:bg-gray-800">
-                            <div class="flex items-start">
-                                <div class="flex h-5 items-center">
-                                    <input id="dhl" aria-describedby="dhl-text" type="radio" name="delivery-method"
-                                           value=""
-                                           class="h-4 w-4 border-gray-300 bg-white text-primary-600 focus:ring-2 focus:ring-primary-600 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-primary-600"
-                                           checked/>
-                                </div>
-
-                                <div class="ms-4 text-sm">
-                                    <label for="dhl" class="font-medium leading-none text-gray-900 dark:text-white"> $15
-                                        - DHL Fast Delivery </label>
-                                    <p id="dhl-text" class="mt-1 text-xs font-normal text-gray-500 dark:text-gray-400">
-                                        Get it by Tommorow</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="rounded-lg border border-gray-200 bg-gray-50 p-4 ps-4 dark:border-gray-700 dark:bg-gray-800">
-                            <div class="flex items-start">
-                                <div class="flex h-5 items-center">
-                                    <input id="fedex" aria-describedby="fedex-text" type="radio" name="delivery-method"
-                                           value=""
-                                           class="h-4 w-4 border-gray-300 bg-white text-primary-600 focus:ring-2 focus:ring-primary-600 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-primary-600"/>
-                                </div>
-
-                                <div class="ms-4 text-sm">
-                                    <label for="fedex" class="font-medium leading-none text-gray-900 dark:text-white">
-                                        Free Delivery - FedEx </label>
-                                    <p id="fedex-text"
-                                       class="mt-1 text-xs font-normal text-gray-500 dark:text-gray-400">Get it by
-                                        Friday, 13 Dec 2023</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="rounded-lg border border-gray-200 bg-gray-50 p-4 ps-4 dark:border-gray-700 dark:bg-gray-800">
-                            <div class="flex items-start">
-                                <div class="flex h-5 items-center">
-                                    <input id="express" aria-describedby="express-text" type="radio"
-                                           name="delivery-method" value=""
-                                           class="h-4 w-4 border-gray-300 bg-white text-primary-600 focus:ring-2 focus:ring-primary-600 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-primary-600"/>
-                                </div>
-
-                                <div class="ms-4 text-sm">
-                                    <label for="express" class="font-medium leading-none text-gray-900 dark:text-white">
-                                        $49 - Express Delivery </label>
-                                    <p id="express-text"
-                                       class="mt-1 text-xs font-normal text-gray-500 dark:text-gray-400">Get it
-                                        today</p>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-
-                <div>
-                    <label for="voucher" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"> Enter a
-                        gift card, voucher or promotional code </label>
-                    <div class="flex max-w-md items-center gap-4">
-                        <input type="text" id="voucher"
-                               class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"
-                               placeholder="" required/>
-                        <button type="button"
-                                class="flex items-center justify-center rounded-lg bg-primary-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-primary-800 focus:outline-none focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
-                            Apply
-                        </button>
-                    </div>
-                </div>
-                <div class="sm:col-span-2">
-                    <a href="order"
-                       class="flex w-full items-center justify-center gap-2 rounded-lg border border-gray-200 bg-primary-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-primary-800 focus:z-10 focus:outline-none focus:ring-4 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white dark:focus:ring-gray-700">
-                        <svg class="h-5 w-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                             width="24"
-                             height="24" fill="none" viewBox="0 0 24 24">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                  stroke-width="2" d="M5 12h14m-7 7V5"/>
-                        </svg>
-                        Place Order
-                    </a>
                 </div>
             </div>
-
         </div>
+    </div>
 </section>
 <?php
 include_once ROOT . "partials/footer.php";

@@ -65,13 +65,14 @@ class Helper
         // Sanitize all fields if no errors
         if (empty($errors)) {
             $data = [
+                'id' => (int) $postData['id'],
                 'user_id' => (int)$userId,
                 'name' => htmlspecialchars(trim($postData['name']), ENT_QUOTES, 'UTF-8'),
                 'email' => filter_var(trim($postData['email']), FILTER_SANITIZE_EMAIL),
                 'city' => htmlspecialchars(trim($postData['city']), ENT_QUOTES, 'UTF-8'),
                 'country' => htmlspecialchars(trim($postData['country']), ENT_QUOTES, 'UTF-8'),
                 'country_code' => strtoupper(trim($postData['country_code'])),
-                'ph_no' => preg_replace('/[^\d\+\-\(\)\s]/', '', trim($postData['ph_no'])),
+                'ph_no' => htmlspecialchars(trim($postData['phone_no']), ENT_QUOTES, 'UTF-8'),
                 'pin' => htmlspecialchars(trim($postData['pin']), ENT_QUOTES, 'UTF-8'),
                 'line_1' => htmlspecialchars(trim($postData['line_1']), ENT_QUOTES, 'UTF-8'),
                 'line_2' => htmlspecialchars(trim($postData['line_2'] ?? ''), ENT_QUOTES, 'UTF-8'),
