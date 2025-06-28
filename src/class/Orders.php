@@ -8,6 +8,7 @@ class Orders extends Model
     private  $addressId;
     private  $couponId;
     private int $couponAmount;
+    private string $paymentType;
     private string $date;
     private $orderDetails;
 
@@ -18,6 +19,7 @@ class Orders extends Model
         $this->addressId = $data['address_id'] ?? null;
         $this->couponId = $data['coupon_id'] ?? null;
         $this->couponAmount = $data['coupon_amount'] ?? 0;
+        $this->paymentType = $data['payment_type'] ?? '';
         $this->date = $data['date'] ?? '';
         $this->orderDetails = new OrderDetails();
     }
@@ -56,5 +58,94 @@ class Orders extends Model
         
         return self::getDb()->errorInfo()[0];
     }
+
+    public function setStaus($orderId, $status)
+    {
+        $sql = "UPDATE `orders` SET `payment_status`='{$status}' WHERE `id` = {$orderId}";
+        $stmt = self::getDb()->exec($sql);
+        return self::getDb()->errorInfo()[0];
+    }
+
+    public function getId(): mixed
+    {
+        return $this->id;
+    }
+
+    public function setId(mixed $id): void
+    {
+        $this->id = $id;
+    }
+
+    public function getUserId(): mixed
+    {
+        return $this->userId;
+    }
+
+    public function setUserId(mixed $userId): void
+    {
+        $this->userId = $userId;
+    }
+
+    public function getAddressId(): mixed
+    {
+        return $this->addressId;
+    }
+
+    public function setAddressId(mixed $addressId): void
+    {
+        $this->addressId = $addressId;
+    }
+
+    public function getCouponId(): mixed
+    {
+        return $this->couponId;
+    }
+
+    public function setCouponId(mixed $couponId): void
+    {
+        $this->couponId = $couponId;
+    }
+
+    public function getCouponAmount(): int
+    {
+        return $this->couponAmount;
+    }
+
+    public function setCouponAmount(int $couponAmount): void
+    {
+        $this->couponAmount = $couponAmount;
+    }
+
+    public function getPaymentType(): string
+    {
+        return $this->paymentType;
+    }
+
+    public function setPaymentType(string $paymentType): void
+    {
+        $this->paymentType = $paymentType;
+    }
+
+    public function getDate(): string
+    {
+        return $this->date;
+    }
+
+    public function setDate(string $date): void
+    {
+        $this->date = $date;
+    }
+
+    public function getOrderDetails(): OrderDetails
+    {
+        return $this->orderDetails;
+    }
+
+    public function setOrderDetails(OrderDetails $orderDetails): void
+    {
+        $this->orderDetails = $orderDetails;
+    }
+
+
 
 }

@@ -8,5 +8,7 @@
     <title><?= $pageTitle ?? SITE_NAME ?></title>
     <link rel="stylesheet" href="<?=BASE_URL?>style.css">
     <script src="<?=BASE_URL.'src/assets/js/jquery-3.7.1.min.js'?>"></script>
+    <script src="<?=BASE_URL.'src/assets/ajax/payment.js'?>"></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 </head>
 <body>

@@ -190,8 +190,8 @@ include_once "partials/popup.php";
                     </div>
                     <!--                    modal ends-->
                     <!--                    Checkout from starts here-->
-                    <form action="" method="post" class="space-y-8">
-                        <input type="hidden" name="action" value="placeOrder">
+                    <form action="" method="post" class="space-y-8" id="orderForm">
+                        <input type="hidden" id="action" name="action" value="placeOrder">
                         <div class="grid grid-cols-1 gap-4 md:grid-cols-3" id="address-grid">
 
                             <!-- Select address form -->
@@ -200,8 +200,9 @@ include_once "partials/popup.php";
                                     <div class="flex items-start">
                                         <div class="flex h-5 items-center">
                                             <input aria-describedby="address-text" type="radio"
-                                                   name="address_id" value="<?= $addRes->getId(); ?>"
-                                                   class="h-4 w-4 border-gray-300 bg-white text-primary-600 focus:ring-2 focus:ring-primary-600 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-primary-600" required
+                                                   name="address_id" id="address_id" value="<?= $addRes->getId(); ?>"
+                                                   class="h-4 w-4 border-gray-300 bg-white text-primary-600 focus:ring-2 focus:ring-primary-600 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-primary-600"
+                                                   required
                                             />
                                         </div>
 
@@ -257,7 +258,8 @@ include_once "partials/popup.php";
                                             <input id="pay-on-delivery" aria-describedby="pay-on-delivery-text"
                                                    type="radio"
                                                    name="payment_method" value="cod"
-                                                   class="h-4 w-4 border-gray-300 bg-white text-primary-600 focus:ring-2 focus:ring-primary-600 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-primary-600" required />
+                                                   class="h-4 w-4 border-gray-300 bg-white text-primary-600 focus:ring-2 focus:ring-primary-600 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-primary-600"
+                                                   required/>
                                         </div>
 
                                         <div class="ms-4 text-sm">
@@ -277,9 +279,10 @@ include_once "partials/popup.php";
                                 <div class="rounded-lg border border-gray-200 bg-gray-50 p-4 ps-4 dark:border-gray-700 dark:bg-gray-800">
                                     <div class="flex items-start">
                                         <div class="flex h-5 items-center">
-                                            <input id="paypal-2" aria-describedby="paypal-text" type="radio"
-                                               name="payment_method" value="razorpay"
-                                                   class="h-4 w-4 border-gray-300 bg-white text-primary-600 focus:ring-2 focus:ring-primary-600 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-primary-600" required/>
+                                            <input id="razorpay" aria-describedby="paypal-text" type="radio"
+                                                   name="payment_method" value="razorpay"
+                                                   class="h-4 w-4 border-gray-300 bg-white text-primary-600 focus:ring-2 focus:ring-primary-600 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-primary-600"
+                                                   required/>
                                         </div>
 
                                         <div class="ms-4 text-sm">
@@ -287,7 +290,8 @@ include_once "partials/popup.php";
                                                    class="font-medium leading-none text-gray-900 dark:text-white">
                                                 Pay via RazorPay</label>
                                             <p id="paypal-text"
-                                               class="mt-1 text-xs font-normal text-gray-500 dark:text-gray-400">UPI, Card, Wallet</p>
+                                               class="mt-1 text-xs font-normal text-gray-500 dark:text-gray-400">UPI,
+                                                Card, Wallet</p>
                                         </div>
                                     </div>
                                 </div>
@@ -295,7 +299,7 @@ include_once "partials/popup.php";
                         </div>
                 </div>
                 <div class="sm:col-span-2">
-                    <button type="submit"
+                    <button type="submit" id="submitBtn"
                             class="flex w-full items-center justify-center gap-2 rounded-lg border border-gray-200 bg-primary-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-primary-800 focus:z-10 focus:outline-none focus:ring-4 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white dark:focus:ring-gray-700">
                         <svg class="h-5 w-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                              width="24"

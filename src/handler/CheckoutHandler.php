@@ -2,11 +2,19 @@
 
 session_start();
 require_once __DIR__ . "../../config/site_config.php";
+
+require_once __DIR__."../../config/razorpay_config.php";
+require __DIR__.'../../razorpay/Razorpay.php' ;
+use Razorpay\Api\Api;
+
 require_once ROOT . "config/db_config.php";
+require_once ROOT . "config/razorpay_config.php";
 require_once ROOT . "class/Address.php";
 require_once ROOT . "class/Helper.php";
 require_once ROOT . "class/Orders.php";
 require_once ROOT . "class/Cart.php";
+//require_once ROOT . "pay.php";
+
 if (!isset($_SESSION['user_id'])) {
     header(ROOT . 'login.php');
 }
@@ -26,26 +34,80 @@ if (str_contains($_SERVER['CONTENT_TYPE'] ?? '', 'application/json')) {
     }
     $data = json_decode($jsonData, true);
 
-    if ($data['action'] == 'deleteAddress') {
-        $result = $address->deleteAddress($data['address_id']);
-        if ($result) {
-            http_response_code(200);
-            $messages = ['Success' => 'Address deleted'];
-            $message_type = 'success';
-            echo json_encode($messages);
-        } else {
-            http_response_code(400);
-            $messages = ['failed' => 'Address cannot be deleted'];
-            $message_type = 'error';
-            echo json_encode($messages);
+    switch ($data['action']) {
+        case 'deleteAddress' :
+        {
+            $result = $address->deleteAddress($data['address_id']);
+            if ($result) {
+                http_response_code(200);
+                $messages = ['Success' => 'Address deleted'];
+                $message_type = 'success';
+                echo json_encode($messages);
+            } else {
+                http_response_code(400);
+                $messages = ['failed' => 'Address cannot be deleted'];
+                $message_type = 'error';
+                echo json_encode($messages);
+            }
+            break;
         }
-    } elseif ($data['action'] == 'getAddressData') {
+        case 'getAddressData':
+        {
 
-        $res = $address->getAddress($userId, $data['id'], 1);
-        echo json_encode($res[0]->getAsArray());
-    } else {
-        http_response_code(400);
-        echo json_encode(['Error' => 'key does not exist']);
+            $res = $address->getAddress($userId, $data['id'], 1);
+            echo json_encode($res[0]->getAsArray());
+        }
+        case 'placeOrder':
+        {
+            $payMethod = $data['payment_method'][0];
+            $addressId = $data['address_id'][0];
+            $amount = $_SESSION['original_price'] - ($_SESSION['savings'] ?? 0);
+            $amount = 100;
+            $coupon = $_SESSION['coupon_code'] ?? null;
+            // get products from cart
+            $cart = new Cart($userId);
+            $products = $cart->getAllItem();
+
+            $orderData = [
+                'user_id' => $userId,
+                'address_id' => (int) $addressId,
+                'coupon_id' => $coupon,
+                'coupon_amount' => $amount,
+                'payment_type' => $payMethod,
+                'date' => date('Y-m-d H:i:s'),
+                'products' => $products
+            ];
+
+            $response = [];
+
+            $order = [];
+            if ($payMethod == 'razorpay') {
+                $api = new Api(KEYID, KEYSECRATE);
+                $razor = $api->order->create(['receipt' => $orders->getId(), 'amount' => $amount, 'currency' => CURRENCY]);
+                $order['id'] = $razor['id'];
+                $order['amount'] = $amount;
+                $order['currency'] = CURRENCY;
+                $order['razorpay_key'] = KEYID;
+            }
+            $response['order']  = $order;
+
+            $orders = new Orders();
+            if ($orders->addOrder($orderData)) {
+                unset($_SESSION['cart']);
+                unset($_SESSION['cart_total']);
+                unset($_SESSION['coupon_id']);
+                $response['success'] = true;
+            }
+
+            echo json_encode($response);
+            http_response_code(200);
+            break;
+        }
+        default:
+        {
+            http_response_code(400);
+            echo json_encode(['Error' => 'key does not exist']);
+        }
     }
     $_SESSION['messages'] = $messages;
     $_SESSION['message_type'] = $message_type;
@@ -84,36 +146,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' and isset($_POST)) {
             }
             break;
         }
-        case 'placeOrder':
-        {
-            $payMethod = $_POST['payment_method'];
-            $addressId = $_POST['address_id'];
-            $amount = $_SESSION['original_price'] - ($_SESSION['savings'] ?? 0);
-            $coupon = $_SESSION['coupon_code'] ?? null;
-            // get products from cart
-            $cart = new Cart($userId);
-            $products = $cart->getAllItem();
 
-            $orderData = [
-                'user_id' => $userId,
-                'address_id' => (int) $addressId,
-                'coupon_id' => $coupon,
-                'coupon_amount' => $amount,
-                'date' => date('Y-m-d H:i:s'),
-                'products' => $products
-            ];
-
-            if ($payMethod == 'razorpay') {
-                header('Location:pay.php');
-            }
-
-            $orders = new Orders();
-            if ($orders->addOrder($orderData)) {
-                unset($_SESSION['cart']);
-                unset($_SESSION['cart_total']);
-                unset($_SESSION['coupon_id']);
-            }
-        }
 
     }
 }
@@ -127,4 +160,35 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             $res = $address->getAddress($userId);
     }
 }
+function createRazorpayOrder($amount, $receipt) {
+    $url = 'https://api.razorpay.com/v1/orders';
+
+    $data = [
+        'amount' => $amount,
+        'currency' => 'INR',
+        'receipt' => $receipt,
+        'payment_capture' => 1
+    ];
+
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        'Content-Type: application/json',
+        'Authorization: Basic ' . base64_encode(RAZORPAY_KEY_ID . ':' . RAZORPAY_KEY_SECRET)
+    ]);
+
+    $response = curl_exec($ch);
+    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+
+    if ($httpCode !== 200) {
+        throw new Exception('Failed to create Razorpay order');
+    }
+
+    return json_decode($response, true);
+}
+
 $res = $address->getAddress($userId);
