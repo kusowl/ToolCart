@@ -23,7 +23,7 @@ class Product extends Model
         $this->image = $image;
     }
 
-    public function getId(): int
+    public function getId()
     {
         return $this->id;
     }

@@ -72,6 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $_SESSION['coupon_code'] = $code;
             break;
         }
+
         // No Request specified so just see it as add to cart
         case 'post' :
         {
@@ -94,8 +95,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $cartItemCount = $cart->getCartItemTotal()['total_qty'];
         if(isset($_SESSION['coupon_code'])){
             $code = $_SESSION['coupon_code'];
-            $originalPrice = $cart->getCartValue();
-            $savings = calculateSavings($code, $originalPrice);
+            $_SESSION['original_price'] = $originalPrice = $cart->getCartValue();
+            $_SESSION['savings'] = $savings = calculateSavings($code, $originalPrice);
         }
     }
 }

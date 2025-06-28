@@ -1,9 +1,12 @@
 <?php
+
 session_start();
 require_once __DIR__ . "../../config/site_config.php";
 require_once ROOT . "config/db_config.php";
 require_once ROOT . "class/Address.php";
 require_once ROOT . "class/Helper.php";
+require_once ROOT . "class/Orders.php";
+require_once ROOT . "class/Cart.php";
 if (!isset($_SESSION['user_id'])) {
     header(ROOT . 'login.php');
 }
@@ -80,6 +83,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' and isset($_POST)) {
                 $formData = $_POST;
             }
             break;
+        }
+        case 'placeOrder':
+        {
+            $payMethod = $_POST['payment_method'];
+            $addressId = $_POST['address_id'];
+            $amount = $_SESSION['original_price'] - ($_SESSION['savings'] ?? 0);
+            $coupon = $_SESSION['coupon_code'] ?? null;
+            // get products from cart
+            $cart = new Cart($userId);
+            $products = $cart->getAllItem();
+
+            $orderData = [
+                'user_id' => $userId,
+                'address_id' => (int) $addressId,
+                'coupon_id' => $coupon,
+                'coupon_amount' => $amount,
+                'date' => date('Y-m-d H:i:s'),
+                'products' => $products
+            ];
+
+            if ($payMethod == 'razorpay') {
+                header('Location:pay.php');
+            }
+
+            $orders = new Orders();
+            if ($orders->addOrder($orderData)) {
+                unset($_SESSION['cart']);
+                unset($_SESSION['cart_total']);
+                unset($_SESSION['coupon_id']);
+            }
         }
 
     }
