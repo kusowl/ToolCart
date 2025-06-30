@@ -67,6 +67,7 @@ class Category extends Model
                 'category_name' => $categoryName
             ]);
         } catch (Exception) {
+            error_log($e->getMessage());
         };
         if ($stmt->rowCount() == 0) {
             $sql = "INSERT INTO `categories` (`category_title`, `category_desc`) VALUES (:category_name, :category_desc)";
@@ -77,10 +78,43 @@ class Category extends Model
                     ':category_name' => $categoryName,
                     ':category_desc' => $categoryDescription
                 ]);
-            } catch (Exception) {
+            } catch (Exception $e) {
+                error_log($e->getMessage());
             }
             return $result;
         }else{
+            return false;
+        }
+    }
+
+    public function update(): bool
+    {
+        $sql = "UPDATE `categories` SET `category_title`= :title,`category_desc`= :desc WHERE `id` = :id";
+        try {
+            $stmt = self::getDb()->prepare($sql);
+            $stmt->execute([
+                ':title' => $this->title,
+                ':desc' => $this->description,
+                ':id' => $this->id
+            ]);
+            return true;
+        }catch (Exception $e){
+            error_log($e->getMessage());
+            return false;
+        }
+    }
+
+    public function delete(): bool
+    {
+        $sql = "DELETE FROM `categories` WHERE `id` = :id";
+        try {
+            $stmt = self::getDb()->prepare($sql);
+            $stmt->execute([
+                ':id' => $this->id
+            ]);
+            return true;
+        }catch (Exception $e){
+            error_log($e->getMessage());
             return false;
         }
     }
