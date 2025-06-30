@@ -27,7 +27,6 @@ $(document).ready(function() {
             dataType: 'json',
             success: function(response) {
                 $('#loading').hide();
-
                 if (response.success) {
                     console.log(response.order)
                     initializeRazorpay(response.order);
@@ -54,8 +53,8 @@ $(document).ready(function() {
             description: "Order Payment",
             // image: "https://your-website.com/logo.png",
             handler: function(response) {
-                // Payment successful
-                // verifyPayment(response, orderData);
+                console.log(response)
+                verifyPayment(response, orderData);
             },
             theme: {
                 color: "#0074EA"
@@ -78,13 +77,15 @@ $(document).ready(function() {
         $('#loading').show();
 
         $.ajax({
-            url: 'verify.php',
+            url: 'src/handler/CheckoutHandler.php',
             method: 'POST',
+            contentType : 'application/json',
             data: {
                 razorpay_order_id: paymentResponse.razorpay_order_id,
                 razorpay_payment_id: paymentResponse.razorpay_payment_id,
                 razorpay_signature: paymentResponse.razorpay_signature,
-                order_id: orderData.id
+                order_id: orderData.id,
+                'action' : 'verifyOrder'
             },
             dataType: 'json',
             success: function(response) {

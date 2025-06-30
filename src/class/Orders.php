@@ -10,7 +10,8 @@ class Orders extends Model
     private int $couponAmount;
     private string $paymentType;
     private string $date;
-    private $orderDetails;
+    private OrderDetails $orderDetails;
+    private string $razorpayRecipt;
 
     public function __construct(array $data = [])
     {
@@ -21,6 +22,7 @@ class Orders extends Model
         $this->couponAmount = $data['coupon_amount'] ?? 0;
         $this->paymentType = $data['payment_type'] ?? '';
         $this->date = $data['date'] ?? '';
+        $this->razorpayRecipt = $data['razorpay_recipt'] ?? '';
         $this->orderDetails = new OrderDetails();
     }
 

@@ -30,7 +30,7 @@ class Coupon extends Model
         ]);
     }
 
-    public function getByCode(string $code): Coupon
+    public static function getByCode(string $code): Coupon
     {
         $sql = 'SELECT `id`, `code`, `type`, `value`, `desc` FROM `coupon` WHERE code = :code LIMIT 1';
         $stmt = self::getDb()->prepare($sql);

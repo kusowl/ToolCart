@@ -2,17 +2,18 @@
 
 session_start();
 require_once __DIR__ . "../../config/site_config.php";
+require_once __DIR__ . "../../config/razorpay_config.php";
+require __DIR__ . '../../razorpay/Razorpay.php';
 
-require_once __DIR__."../../config/razorpay_config.php";
-require __DIR__.'../../razorpay/Razorpay.php' ;
 use Razorpay\Api\Api;
+use Razorpay\Api\Errors\SignatureVerificationError;
 
 require_once ROOT . "config/db_config.php";
-require_once ROOT . "config/razorpay_config.php";
 require_once ROOT . "class/Address.php";
 require_once ROOT . "class/Helper.php";
 require_once ROOT . "class/Orders.php";
 require_once ROOT . "class/Cart.php";
+require_once ROOT . "class/Coupon.php";
 //require_once ROOT . "pay.php";
 
 if (!isset($_SESSION['user_id'])) {
@@ -59,49 +60,80 @@ if (str_contains($_SERVER['CONTENT_TYPE'] ?? '', 'application/json')) {
         }
         case 'placeOrder':
         {
-            $payMethod = $data['payment_method'][0];
-            $addressId = $data['address_id'][0];
-            $amount = $_SESSION['original_price'] - ($_SESSION['savings'] ?? 0);
-            $amount = 100;
-            $coupon = $_SESSION['coupon_code'] ?? null;
-            // get products from cart
-            $cart = new Cart($userId);
-            $products = $cart->getAllItem();
-
-            $orderData = [
-                'user_id' => $userId,
-                'address_id' => (int) $addressId,
-                'coupon_id' => $coupon,
-                'coupon_amount' => $amount,
-                'payment_type' => $payMethod,
-                'date' => date('Y-m-d H:i:s'),
-                'products' => $products
-            ];
-
+            $_SESSION['pay_method'] = $payMethod = $data['payment_method'][0];
+            $_SESSION['address_id'] = $data['address_id'][0];
+            $amount = (int)($_SESSION['original_price'] - ($_SESSION['savings'] ?? 0)) ?? 1;
             $response = [];
-
             $order = [];
+
             if ($payMethod == 'razorpay') {
                 $api = new Api(KEYID, KEYSECRATE);
-                $razor = $api->order->create(['receipt' => $orders->getId(), 'amount' => $amount, 'currency' => CURRENCY]);
+                $razor = $api->order->create(['receipt' => rand(1000, 9999999), 'amount' => $amount, 'currency' => CURRENCY]);
                 $order['id'] = $razor['id'];
                 $order['amount'] = $amount;
                 $order['currency'] = CURRENCY;
                 $order['razorpay_key'] = KEYID;
             }
-            $response['order']  = $order;
+            $response['order'] = $order;
 
+            echo json_encode($response);
+            http_response_code(200);
+            break;
+        }
+        case 'verifyOrder':
+        {
+            $success = 'success';
+
+            $error = "Payment Failed";
+
+            if (empty($_POST['razorpay_payment_id']) === false) {
+                $api = new Api(KEYID, KEYSECRATE);
+
+                try {
+                    // Please note that the razorpay order ID must
+                    // come from a trusted source (session here, but
+                    // could be database or something else)
+                    $attributes = array(
+                        'razorpay_order_id' => $data['razorpay_order_id'],
+                        'razorpay_payment_id' => $data['razorpay_payment_id'],
+                        'razorpay_signature' => $data['razorpay_signature']
+                    );
+
+                    $api->utility->verifyPaymentSignature($attributes);
+                } catch (SignatureVerificationError $e) {
+                    $success = 'failed';
+                    $error = 'Razorpay Error : ' . $e->getMessage();
+                }
+            }
+
+            $amount = (int)($_SESSION['original_price'] - ($_SESSION['savings'] ?? 0)) ?? 1;
+            $addressId = $_SESSION['address_id'];
+            $coupon = $_SESSION['coupon_code'] ?? '';
+            // get products from cart
+            $cart = new Cart($userId);
+            $products = $cart->getAllItem();
+            $orderData = [
+                'user_id' => $userId,
+                'address_id' => (int)$addressId,
+                'coupon_id' => (int)Coupon::getByCode($coupon)->getId(),
+                'coupon_amount' => $amount * 1000,
+                'payment_type' => 'razorpay',
+                'payment_status' => $success,
+                'payment_recipt' => $data['razorpay_order_id'],
+                'date' => date('Y-m-d H:i:s'),
+                'products' => $products
+            ];
+            // create order
             $orders = new Orders();
             if ($orders->addOrder($orderData)) {
                 unset($_SESSION['cart']);
                 unset($_SESSION['cart_total']);
                 unset($_SESSION['coupon_id']);
+                unset($_SESSION['payment_method']);
+                unset($_SESSION['address_id']);
                 $response['success'] = true;
             }
 
-            echo json_encode($response);
-            http_response_code(200);
-            break;
         }
         default:
         {
@@ -160,35 +192,38 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             $res = $address->getAddress($userId);
     }
 }
-function createRazorpayOrder($amount, $receipt) {
-    $url = 'https://api.razorpay.com/v1/orders';
 
-    $data = [
-        'amount' => $amount,
-        'currency' => 'INR',
-        'receipt' => $receipt,
-        'payment_capture' => 1
-    ];
 
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, $url);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_POST, true);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
-    curl_setopt($ch, CURLOPT_HTTPHEADER, [
-        'Content-Type: application/json',
-        'Authorization: Basic ' . base64_encode(RAZORPAY_KEY_ID . ':' . RAZORPAY_KEY_SECRET)
-    ]);
-
-    $response = curl_exec($ch);
-    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-    curl_close($ch);
-
-    if ($httpCode !== 200) {
-        throw new Exception('Failed to create Razorpay order');
-    }
-
-    return json_decode($response, true);
-}
+//function createRazorpayOrder($amount, $receipt)
+//{
+//    $url = 'https://api.razorpay.com/v1/orders';
+//
+//    $data = [
+//        'amount' => $amount,
+//        'currency' => 'INR',
+//        'receipt' => $receipt,
+//        'payment_capture' => 1
+//    ];
+//
+//    $ch = curl_init();
+//    curl_setopt($ch, CURLOPT_URL, $url);
+//    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+//    curl_setopt($ch, CURLOPT_POST, true);
+//    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+//    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+//        'Content-Type: application/json',
+//        'Authorization: Basic ' . base64_encode(RAZORPAY_KEY_ID . ':' . RAZORPAY_KEY_SECRET)
+//    ]);
+//
+//    $response = curl_exec($ch);
+//    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+//    curl_close($ch);
+//
+//    if ($httpCode !== 200) {
+//        throw new Exception('Failed to create Razorpay order');
+//    }
+//
+//    return json_decode($response, true);
+//}
 
 $res = $address->getAddress($userId);
