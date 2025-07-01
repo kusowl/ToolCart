@@ -12,11 +12,30 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
     $value = $_POST['value'];
     $desc = $_POST['desc'];
    switch ($_POST['action']){
-       case 'post':
+       case 'Add':
            $coupon->addCoupon($code, $type, $value, $desc);
            break;
-       case 'put':
+       case 'Update':{
+           $data['id']  = $_GET['id'];
+           $data['code'] = $code;
+           $data['type'] = $type;
+           $data['value'] = $value;
+           $data['desc'] = $desc;
+           $coupon->update($data);
+       }
            break;
        default:
    }
+}
+if ($_SERVER['REQUEST_METHOD'] == 'GET'){
+    $id = $_GET['id'] ??  '';
+    if ($id != ''){
+        $coupon = new Coupon();
+        $couponData = $coupon->getById($id);
+        $formData['id'] = $couponData->getId();
+        $formData['code'] = $couponData->getCode();
+        $formData['type'] = $couponData->getType();
+        $formData['value'] = $couponData->getValue();
+        $formData['desc'] = $couponData->getDescription();
+    }
 }

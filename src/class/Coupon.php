@@ -18,6 +18,13 @@ class Coupon extends Model
         $this->description = $data['desc'] ?? '';
     }
 
+    /**
+     * @param string $code
+     * @param string $type
+     * @param int $value
+     * @param string $desc
+     * @return void
+     */
     public function addCoupon(string $code, string $type, int $value, string $desc)
     {
         $sql = 'INSERT INTO `coupon`(`code`, `type`, `value`, `desc`) VALUES (:code, :type, :value, :desc)';
@@ -30,6 +37,10 @@ class Coupon extends Model
         ]);
     }
 
+    /**
+     * @param string $code
+     * @return Coupon
+     */
     public static function getByCode(string $code): Coupon
     {
         $sql = 'SELECT `id`, `code`, `type`, `value`, `desc` FROM `coupon` WHERE code = :code LIMIT 1';
@@ -41,6 +52,25 @@ class Coupon extends Model
 
     }
 
+    /**
+     * @param $id
+     * @return Coupon
+     */
+    public function getById($id): Coupon
+    {
+        $sql = 'SELECT `id`, `code`, `type`, `value`, `desc` FROM `coupon` WHERE id = :id LIMIT 1';
+        $stmt = self::getDb()->prepare($sql);
+        $stmt->execute([
+            ':id' => $id
+        ]);
+        return new Coupon($stmt->fetch(PDO::FETCH_ASSOC));
+    }
+
+    /**
+     * @param int $limit
+     * @param int $offset
+     * @return array|Coupon
+     */
     public function getAllCoupons(int $limit = QUERY_LIMIT, int $offset = 0): array|Coupon
     {
         $sql = "SELECT `id`, `code`, `type`, `value`, `desc` FROM `coupon` LIMIT {$limit} OFFSET {$offset}";
@@ -52,6 +82,25 @@ class Coupon extends Model
         return $coupons;
     }
 
+    public function update($data = [])
+    {
+        $params = [];
+        $placeholders = [];
+        foreach ($data as $key => $value) {
+            $placeholders[] = "`{$key}`" . ' = :' . $key;
+            $params[":{$key}"] = $value;
+        }
+        $placeholders = implode(', ', $placeholders);
+        $sql = "UPDATE `coupon` SET {$placeholders} WHERE id = :id";
+        try {
+            $stmt = self::getDb()->prepare($sql);
+            return $stmt->execute($params);
+        } catch (Exception $e) {
+            error_log($e->getMessage());
+            return false;
+        }
+
+    }
     public function getDescription(): string
     {
         return $this->description;
