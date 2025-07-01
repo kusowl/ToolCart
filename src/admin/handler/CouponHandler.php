@@ -22,8 +22,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
            $data['value'] = $value;
            $data['desc'] = $desc;
            $coupon->update($data);
-       }
            break;
+       }
+       case 'Delete':{
+           $id  = $_POST['id'];
+           $coupon = new Coupon(['id' => $id]);
+
+           if ($coupon->delete()) {
+               $messages['Success'] = "Product Deleted.";
+           } else {
+               $messages['Error'] = "failed  sql query ";
+           }
+           $message_type = "Error";
+           $_SESSION["messages"] = $messages;
+           $_SESSION["message_type"] = $message_type;
+           header("Location: /ToolCart/admin/coupon_list");
+       }
        default:
    }
 }
