@@ -10,7 +10,7 @@ class Product extends Model
     private int $price;
     private string $brand;
     private int $stock;
-    private $category_id;
+    private $categoryId;
     private string $image;
 
     public function getImage(): string
@@ -80,12 +80,12 @@ class Product extends Model
 
     public function getCategoryId(): int
     {
-        return $this->category_id;
+        return $this->categoryId;
     }
 
-    public function setCategoryId(int $category_id): void
+    public function setCategoryId(int $categoryId): void
     {
-        $this->category_id = $category_id;
+        $this->categoryId = $categoryId;
     }
 
     public function __construct(array $data = [])
@@ -96,7 +96,7 @@ class Product extends Model
         $this->price = $data['product_price'] ?? 0;
         $this->brand = $data['product_brand'] ?? '';
         $this->stock = $data['product_stock'] ?? 1;
-        $this->category_id = $data['category_id'] ?? null;
+        $this->categoryId = $data['category_id'] ?? null;
         $this->image = $data['product_image'] ?? '';
         $this->error = 0;
     }
@@ -178,6 +178,27 @@ class Product extends Model
             }
             return $result;
         } else {
+            return false;
+        }
+    }
+
+    public function update($data = [])
+    {
+        $params = [];
+        $placeholders = [];
+        foreach ($data as $key => $value ) {
+            if($key == 'product_image' and $value == '') continue;
+            $placeholders[] = "`{$key}`".' = :' . $key;
+            $params[":{$key}"] = $value;
+        }
+        $placeholders = implode(', ', $placeholders);
+        $sql = "UPDATE `product` SET {$placeholders} WHERE id = :id";
+        $result = false;
+        try {
+            $stmt = self::getDb()->prepare($sql);
+            return $stmt->execute($params);
+        } catch (Exception $e) {
+            error_log($e->getMessage());
             return false;
         }
     }

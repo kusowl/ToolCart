@@ -21,6 +21,18 @@ foreach ($products as $productRec) {
     $records['desc'] = $productRec->getDescription();
     $table_records[] = $records;
 }
+
+$primaryAction = 'Product';
+$primaryActionLink = BASE_URL . "admin/add_product.php";
+$deleteLink = 'handler/ProductHandler.php';
+
+$messages = $_SESSION["messages"] ?? '';
+$message_type = $_SESSION["message_type"] ?? '';
+if ($messages != '') {
+    include_once "../partials/popup.php";
+    unset($_SESSION["messages"]);
+    unset($_SESSION["message_type"]);
+}
 include "admin_partials/table.php";
 include_once "admin_partials/admin_footer.php";
 ?>

@@ -20,7 +20,7 @@ foreach ($categories as $categoryRec) {
     $records['desc'] = trim($categoryRec->getDescription());
     $table_records[] = $records;
 }
-$primaryAction = 'Product';
+$primaryAction = 'Category';
 $primaryActionLink = BASE_URL . "admin/add_category.php";
 $deleteLink = 'handler/CategoryHandler.php';
 if ($messages != '') {

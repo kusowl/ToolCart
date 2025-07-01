@@ -139,7 +139,7 @@
                                            class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Show</a>
                                     </li>
                                     <li>
-                                        <a href="<?= BASE_URL . 'admin/add_category?id=' . $record['id'] ?>"
+                                        <a href="<?= $primaryActionLink.'?id=' . $record['id'] ?>"
                                            class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Edit</a>
                                     </li>
                                 </ul>

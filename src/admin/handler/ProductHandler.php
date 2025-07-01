@@ -9,7 +9,7 @@ $message_type = "";
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
     $action = $_POST['action'];
     switch ($action) {
-        case 'add_product':
+        case 'Add':
         {
             $image = $_FILES['product_image'];
             $fileTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
@@ -51,5 +51,60 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
             $_SESSION["message_type"] = $message_type;
             header("Location: ../add_product.php");
         }
+        case "Update":{
+            $image = $_FILES['product_image'];
+            $fileTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+            // Validate file
+            $validationResult = $image['name'] != '' ? Helper::validateFile($image, $fileTypes, MAX_FILE_SIZE) : 99;
+            $rel_path = 'assets/images/';
+            $path = ROOT . $rel_path;
+            switch ($validationResult) {
+                case 99: break;
+                case 0:
+                    $img_name = Helper::uploadFile($image, $path);
+                    break;
+                case 1:
+                    $messages['Image Error'] = "Upload error";
+                    break;
+                case 2:
+                    $messages['Image Error'] = "File type not allowed";
+                    break;
+                case 3:
+                    $messages['Image Error'] = "File is is not allowed";
+                    break;
+                default:
+                    $messages['Image Error'] = "Validation Failed";
+            }
+            if (!empty($messages)) {
+                $message_type = 'error';
+            } else {
+                $data=[
+                    'id' => $_GET['id'],
+                    'category_id' => $_POST['category_id'],
+                    'product_title' => $_POST['title'],
+                    'product_desc' => $_POST['desc'],
+                    'product_price' => $_POST['price'],
+                    'product_brand' => $_POST['brand'],
+                    'product_image' => isset($img_name) ? $rel_path.$img_name : ''
+                ];
+                $product = new Product();
+                $product->update($data);
+            }
+        }
     }
+}
+if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+    $id = $_GET['id'] ?? '';
+    if ($id != '') {
+        $product = new Product();
+        $productData = $product->findById($id);
+        $formData['id'] = $id;
+        $formData['title'] = $productData->getTitle();
+        $formData['desc'] = $productData->getDescription();
+        $formData['price'] = $productData->getPrice();
+        $formData['brand'] = $productData->getBrand();
+        $formData['category_id'] = $productData->getCategoryId();
+        $formData['product_image'] = $productData->getImage();
+    }
+
 }
