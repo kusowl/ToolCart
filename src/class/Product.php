@@ -182,13 +182,13 @@ class Product extends Model
         }
     }
 
-    public function update($data = [])
+    public function update($data = []): bool
     {
         $params = [];
         $placeholders = [];
-        foreach ($data as $key => $value ) {
-            if($key == 'product_image' and $value == '') continue;
-            $placeholders[] = "`{$key}`".' = :' . $key;
+        foreach ($data as $key => $value) {
+            if ($key == 'product_image' and $value == '') continue;
+            $placeholders[] = "`{$key}`" . ' = :' . $key;
             $params[":{$key}"] = $value;
         }
         $placeholders = implode(', ', $placeholders);
@@ -197,6 +197,22 @@ class Product extends Model
         try {
             $stmt = self::getDb()->prepare($sql);
             return $stmt->execute($params);
+        } catch (Exception $e) {
+            error_log($e->getMessage());
+            return false;
+        }
+    }
+
+    public function delete()
+    {
+
+        $sql = "DELETE FROM `product` WHERE `id` = :id";
+        try {
+            $stmt = self::getDb()->prepare($sql);
+            $stmt->execute([
+                ':id' => $this->id
+            ]);
+            return true;
         } catch (Exception $e) {
             error_log($e->getMessage());
             return false;

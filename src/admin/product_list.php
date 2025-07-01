@@ -1,4 +1,5 @@
 <?php
+ob_start();
 session_start();
 include_once "../config/site_config.php";
 include_once ROOT . "config/db_config.php";

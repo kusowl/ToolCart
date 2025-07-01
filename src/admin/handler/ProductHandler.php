@@ -90,6 +90,22 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                 $product = new Product();
                 $product->update($data);
             }
+            break;
+        }
+        case "Delete":{
+            $id = $_POST['id'];
+            $product = new Product(['id' => $id]);
+            $result  = $product->delete();
+            if ($result) {
+                $messages['Success'] = "Product Deleted.";
+                $message_type = "Error";
+            } else {
+                $messages['Error'] = "failed  sql query ";
+                $message_type = "Error";
+            }
+            $_SESSION["messages"] = $messages;
+            $_SESSION["message_type"] = $message_type;
+            header("Location: /ToolCart/admin/product_list");
         }
     }
 }
