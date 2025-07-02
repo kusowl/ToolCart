@@ -101,6 +101,23 @@ class Coupon extends Model
         }
 
     }
+
+
+    public function delete()
+    {
+
+        $sql = "DELETE FROM `coupon` WHERE `id` = :id";
+        try {
+            $stmt = self::getDb()->prepare($sql);
+            $stmt->execute([
+                ':id' => $this->id
+            ]);
+            return true;
+        } catch (Exception $e) {
+            error_log($e->getMessage());
+            return false;
+        }
+    }
     public function getDescription(): string
     {
         return $this->description;
