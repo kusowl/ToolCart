@@ -27,6 +27,7 @@ if (isset($_POST['login'])) {
             // If login successful then redirect based on user type.
             $user = $response['user'];
             $_SESSION['user_name'] = $user->getName();
+            $_SESSION['user_email'] = $user->getEmail();
             $_SESSION['user_id'] = $user->getUserId();
 
             switch ($user->getType()) {
