@@ -9,6 +9,7 @@
                             <div class="">
                                 <div class="w-lg p-6 space-y-4 md:space-y-6 sm:p-8">
                                     <div>
+                                        <input type="hidden" name="id" value="<?= $formData['id'] ?? '' ?>">
                                         <label for="title"
                                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Name</label>
                                         <input type="text" name="name" id="name" value="<?= $formData['name'] ?? '' ?>"
@@ -27,7 +28,6 @@
                                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Old
                                             Password</label>
                                         <input type="password" name="password" id="password"
-                                               value="<?= $formData['price'] ?>"
                                                class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                                placeholder="••••••••" required>
                                     </div>
@@ -35,7 +35,7 @@
                                         <label for="title"
                                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">New
                                             Password</label>
-                                        <input type="text" name="brand" id="brand" value="<?= $formData['brand'] ?>"
+                                        <input type="text" name="confirm-password" id="confirm_password"
                                                class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                                placeholder="••••••••" required>
                                     </div>
@@ -46,7 +46,7 @@
                             <div class="flex flex-col items-center justify-start space-y-10 sm:p-8">
                                 <div>
                                 <img class="h-40 rounded-lg" src="<?php
-                                $img = $formData['image'] ?? 'assets/images/user.webp';
+                                $img = $formData['image'] != '' ?: 'assets/images/user.webp' ;
                                 echo BASE_URL .$img ?>"
                                      alt="image description">
                                 </div>
@@ -74,7 +74,7 @@
                                         </div>
                                         <input id="dropzone-file" type="file"
                                                accept="image/png, image/jpg, image/jpeg, image/gif, image/webp"
-                                               name="product_image" class="hidden"/>
+                                               name="user_image" class="hidden"/>
                                     </label>
                                 </div>
                             </div>
