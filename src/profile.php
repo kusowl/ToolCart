@@ -13,6 +13,9 @@ if ($messages != '') {
     unset($_SESSION["messages"]);
     unset($_SESSION["message_type"]);
 }
+if(!empty($_SESSION['form_data'])){
+    $formData = $_SESSION['form_data'];
+}
 ?>
     <section class="mt-20">
 <?php include_once "partials/user-profile.php"; ?>

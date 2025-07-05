@@ -114,6 +114,7 @@ class User extends Model
         $placeholders = [];
         foreach ($data as $key => $value) {
             if ($key == 'image' and $value == '') continue;
+            if ($key == 'password') $value =   password_hash($value, PASSWORD_DEFAULT);
             $placeholders[] = "`{$key}`" . ' = :' . $key;
             $params[":{$key}"] = $value;
         }

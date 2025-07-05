@@ -61,7 +61,7 @@ session_start();
                      class="hidden z-10 w-56 divide-y divide-gray-100 overflow-hidden overflow-y-auto rounded-lg bg-white antialiased shadow dark:divide-gray-600 dark:bg-gray-700">
                     <?php if (isset($_SESSION["user_name"])): ?>
                         <ul class="p-2 text-start text-sm font-medium text-gray-900 dark:text-white">
-                            <li><a href="#" title=""
+                            <li><a href="profile" title="user profile"
                                    class="inline-flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-600">My
                                     Account </a></li>
                             <li><a href="#" title=""
