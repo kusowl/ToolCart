@@ -9,13 +9,12 @@ use Razorpay\Api\Api;
 use Razorpay\Api\Errors\SignatureVerificationError;
 
 require_once ROOT . "config/db_config.php";
+require_once ROOT . 'class/Checkout.php';
 require_once ROOT . "class/Address.php";
 require_once ROOT . "class/Helper.php";
-require_once ROOT . "class/Orders.php";
-require_once ROOT . "class/Cart.php";
 require_once ROOT . "class/Coupon.php";
 //require_once ROOT . "pay.php";
-
+$checkout = new Checkout();
 if (!isset($_SESSION['user_id'])) {
     header(ROOT . 'login.php');
 }
@@ -57,6 +56,7 @@ if (str_contains($_SERVER['CONTENT_TYPE'] ?? '', 'application/json')) {
 
             $res = $address->getAddress($userId, $data['id'], 1);
             echo json_encode($res[0]->getAsArray());
+            break;
         }
         case 'placeOrder':
         {
@@ -65,14 +65,17 @@ if (str_contains($_SERVER['CONTENT_TYPE'] ?? '', 'application/json')) {
             $amount = (int)($_SESSION['original_price'] - ($_SESSION['savings'] ?? 0)) ?? 1;
             $response = [];
             $order = [];
-
+            $order['amount'] = $amount;
+            $order['pay_method'] = $payMethod;
             if ($payMethod == 'razorpay') {
                 $api = new Api(KEYID, KEYSECRATE);
-                $razor = $api->order->create(['receipt' => rand(1000, 9999999), 'amount' => $amount, 'currency' => CURRENCY]);
+                $razor = $api->order->create(['receipt' => rand(1000, 9999999), 'amount' => $amount * 100, 'currency' => CURRENCY]);
                 $order['id'] = $razor['id'];
-                $order['amount'] = $amount;
                 $order['currency'] = CURRENCY;
                 $order['razorpay_key'] = KEYID;
+                $response['success'] = true;
+            } elseif ($payMethod == 'pod') { // Pay on Delivery
+                $response['success'] = $checkout->createOrder($userId, $payMethod);
             }
             $response['order'] = $order;
 
@@ -86,13 +89,12 @@ if (str_contains($_SERVER['CONTENT_TYPE'] ?? '', 'application/json')) {
 
             $error = "Payment Failed";
 
-            if (empty($_POST['razorpay_payment_id']) === false) {
+            if (empty($data['razorpay_payment_id']) === false) {
                 $api = new Api(KEYID, KEYSECRATE);
 
                 try {
                     // Please note that the razorpay order ID must
-                    // come from a trusted source (session here, but
-                    // could be database or something else)
+                    // come from a trusted source
                     $attributes = array(
                         'razorpay_order_id' => $data['razorpay_order_id'],
                         'razorpay_payment_id' => $data['razorpay_payment_id'],
@@ -103,37 +105,17 @@ if (str_contains($_SERVER['CONTENT_TYPE'] ?? '', 'application/json')) {
                 } catch (SignatureVerificationError $e) {
                     $success = 'failed';
                     $error = 'Razorpay Error : ' . $e->getMessage();
+                } finally {
+                    $checkout = new Checkout();
+                    $success = $checkout->createOrder($userId, $data['payment_method'], $data['razorpay_payment_id'], $success);
+                    http_response_code(200);
+                    echo json_encode([
+                        'success' => $success,
+                        'order_id' => $data['razorpay_order_id']
+                    ]);
                 }
             }
-
-            $amount = (int)($_SESSION['original_price'] - ($_SESSION['savings'] ?? 0)) ?? 1;
-            $addressId = $_SESSION['address_id'];
-            $coupon = $_SESSION['coupon_code'] ?? '';
-            // get products from cart
-            $cart = new Cart($userId);
-            $products = $cart->getAllItem();
-            $orderData = [
-                'user_id' => $userId,
-                'address_id' => (int)$addressId,
-                'coupon_id' => (int)Coupon::getByCode($coupon)->getId(),
-                'coupon_amount' => $amount * 1000,
-                'payment_type' => 'razorpay',
-                'payment_status' => $success,
-                'payment_recipt' => $data['razorpay_order_id'],
-                'date' => date('Y-m-d H:i:s'),
-                'products' => $products
-            ];
-            // create order
-            $orders = new Orders();
-            if ($orders->addOrder($orderData)) {
-                unset($_SESSION['cart']);
-                unset($_SESSION['cart_total']);
-                unset($_SESSION['coupon_id']);
-                unset($_SESSION['payment_method']);
-                unset($_SESSION['address_id']);
-                $response['success'] = true;
-            }
-
+            break;
         }
         default:
         {
@@ -178,8 +160,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' and isset($_POST)) {
             }
             break;
         }
-
-
     }
 }
 
@@ -192,38 +172,5 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             $res = $address->getAddress($userId);
     }
 }
-
-
-//function createRazorpayOrder($amount, $receipt)
-//{
-//    $url = 'https://api.razorpay.com/v1/orders';
-//
-//    $data = [
-//        'amount' => $amount,
-//        'currency' => 'INR',
-//        'receipt' => $receipt,
-//        'payment_capture' => 1
-//    ];
-//
-//    $ch = curl_init();
-//    curl_setopt($ch, CURLOPT_URL, $url);
-//    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-//    curl_setopt($ch, CURLOPT_POST, true);
-//    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
-//    curl_setopt($ch, CURLOPT_HTTPHEADER, [
-//        'Content-Type: application/json',
-//        'Authorization: Basic ' . base64_encode(RAZORPAY_KEY_ID . ':' . RAZORPAY_KEY_SECRET)
-//    ]);
-//
-//    $response = curl_exec($ch);
-//    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-//    curl_close($ch);
-//
-//    if ($httpCode !== 200) {
-//        throw new Exception('Failed to create Razorpay order');
-//    }
-//
-//    return json_decode($response, true);
-//}
 
 $res = $address->getAddress($userId);

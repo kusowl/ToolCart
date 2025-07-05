@@ -1,7 +1,3 @@
-<?php
-session_start();
-
-?>
 <nav class="antialiased <?php if (str_contains($_SERVER['REQUEST_URI'],'/ToolCart/home')) echo 'bg-grid' ?>">
     <div class="max-w-screen-xl px-4 mx-auto 2xl:px-0 py-6">
         <div class="navbar">

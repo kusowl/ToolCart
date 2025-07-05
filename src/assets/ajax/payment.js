@@ -17,7 +17,6 @@ $(document).ready(function() {
             }).get(),
             action: 'placeOrder'
         };
-
         // Create order via AJAX
         $.ajax({
             url: 'src/handler/CheckoutHandler.php',
@@ -29,8 +28,12 @@ $(document).ready(function() {
                 $('#loading').hide();
                 if (response.success) {
                     console.log(response.order)
-                    initializeRazorpay(response.order);
+                    if(response.order.pay_method === 'razorpay')
+                        initializeRazorpay(response.order);
+                    else
+                       alert('POD Order Success')
                 } else {
+                    console.log(response)
                     alert('Error creating order: ' + response.message);
                     $('#submitBtn').prop('disabled', false);
                 }
@@ -75,24 +78,25 @@ $(document).ready(function() {
     function verifyPayment(paymentResponse, orderData) {
         // Show loading
         $('#loading').show();
-
-        $.ajax({
-            url: 'src/handler/CheckoutHandler.php',
-            method: 'POST',
-            contentType : 'application/json',
-            data: {
+        const data = {
                 razorpay_order_id: paymentResponse.razorpay_order_id,
                 razorpay_payment_id: paymentResponse.razorpay_payment_id,
                 razorpay_signature: paymentResponse.razorpay_signature,
                 order_id: orderData.id,
-                'action' : 'verifyOrder'
-            },
+                payment_method : orderData.pay_method,
+                action : 'verifyOrder'
+            }
+        $.ajax({
+            url: 'src/handler/CheckoutHandler.php',
+            method: 'POST',
+            contentType : 'application/json',
+            data: JSON.stringify(data),
             dataType: 'json',
             success: function(response) {
                 $('#loading').hide();
 
                 if (response.success) {
-                    // Payment verified successfully
+                    // Payment verified successfully redirect to the receipt page
                     alert('Payment successful! Order ID: ' + response.order_id);
                     window.location.href = 'success.php?order_id=' + response.order_id;
                 } else {

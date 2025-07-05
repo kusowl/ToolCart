@@ -1,5 +1,4 @@
 <?php
-session_start();
 require_once __DIR__ . "../../config/site_config.php";
 require_once ROOT . "config/db_config.php";
 require_once ROOT . "class/Cart.php";
@@ -93,9 +92,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $cart = new Cart($_SESSION['user_id']);
         $cartRecords = $cart->getAllItem();
         $cartItemCount = $cart->getCartItemTotal()['total_qty'];
+        $_SESSION['original_price'] = $originalPrice = $cart->getCartValue();
         if(isset($_SESSION['coupon_code'])){
             $code = $_SESSION['coupon_code'];
-            $_SESSION['original_price'] = $originalPrice = $cart->getCartValue();
             $_SESSION['savings'] = $savings = calculateSavings($code, $originalPrice);
         }
     }

@@ -257,13 +257,13 @@ include_once "partials/popup.php";
                                         <div class="flex h-5 items-center">
                                             <input id="pay-on-delivery" aria-describedby="pay-on-delivery-text"
                                                    type="radio"
-                                                   name="payment_method" value="cod"
+                                                   name="payment_method" value="pod"
                                                    class="h-4 w-4 border-gray-300 bg-white text-primary-600 focus:ring-2 focus:ring-primary-600 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-primary-600"
                                                    required/>
                                         </div>
 
                                         <div class="ms-4 text-sm">
-                                            <label for="pay-on-delivery"
+                                            <label for="pod"
                                                    class="font-medium leading-none text-gray-900 dark:text-white">
                                                 Payment
                                                 on
