@@ -2,6 +2,7 @@
 ob_start();
 session_start();
 require_once '../config/site_config.php';
+include_once "admin_partials/check_permission.php";
 include ROOT . "partials/header.php";
 require_once 'admin_partials/admin_header.php';
 include_once "handler/CategoryHandler.php";

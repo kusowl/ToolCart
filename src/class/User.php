@@ -1,5 +1,6 @@
 <?php
 include_once 'Model.php';
+
 class User extends Model
 {
     private $userId;
@@ -7,6 +8,7 @@ class User extends Model
     private string $email;
     private string $password;
     private string $type;
+    private string $image;
 
     public function __construct(array $data = [])
     {
@@ -15,16 +17,32 @@ class User extends Model
         $this->email = $data['email'] ?? '';
         $this->password = $data['password'] ?? '';
         $this->type = $data['user_type'] ?? '';
+        $this->image = $data['image'] ?? '';
     }
 
 
     public static function getUser(string $email): User
     {
         $sql = "SELECT * FROM `user` WHERE `email` = :email";
-        try{
+        try {
             $stmt = self::getDb()->prepare($sql);
             $stmt->execute([':email' => $email]);
-        }catch (PDOException $e){}
+        } catch (PDOException $e) {
+        }
+
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+        return new User($user ?: []);
+    }
+
+    public static function getById(int $id)
+    {
+        $sql = "SELECT * FROM `user` WHERE `id` = :id";
+        try {
+            $stmt = self::getDb()->prepare($sql);
+            $stmt->execute([':id' => $id]);
+        } catch (PDOException $e) {
+            error_log($e->getMessage());
+        }
 
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
         return new User($user ?: []);
@@ -89,6 +107,29 @@ class User extends Model
         }
     }
 
+    public function update($data = []): bool
+    {
+
+        $params = [];
+        $placeholders = [];
+        foreach ($data as $key => $value) {
+            if ($key == 'image' and $value == '') continue;
+            if ($key == 'password') $value =   password_hash($value, PASSWORD_DEFAULT);
+            $placeholders[] = "`{$key}`" . ' = :' . $key;
+            $params[":{$key}"] = $value;
+        }
+        $placeholders = implode(', ', $placeholders);
+        $sql = "UPDATE `user` SET {$placeholders} WHERE id = :id";
+        $result = false;
+        try {
+            $stmt = self::getDb()->prepare($sql);
+            return $stmt->execute($params);
+        } catch (Exception $e) {
+            error_log($e->getMessage());
+            return false;
+        }
+    }
+
     /**
      * @return mixed
      */
@@ -144,4 +185,15 @@ class User extends Model
     {
         $this->type = $type;
     }
+
+    public function getImage(): string
+    {
+        return $this->image;
+    }
+
+    public function setImage(string $image): void
+    {
+        $this->image = $image;
+    }
+
 }

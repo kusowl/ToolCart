@@ -123,7 +123,7 @@ class Product extends Model
         return $products;
     }
 
-    public function getProductByCategory(string $key, int $limit = QUERY_LIMIT, int $offset = 0)
+   public function getProductByCategory(string $key, int $limit = QUERY_LIMIT, int $offset = 0)
     {
         $sql = "SELECT product.id, product.product_image, product.product_title, product.category_id , product.product_desc, product.product_price, product.product_brand FROM product WHERE product.category_id = :key LIMIT {$limit} OFFSET {$offset}";
         try {
