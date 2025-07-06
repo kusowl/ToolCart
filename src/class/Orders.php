@@ -1,4 +1,7 @@
 <?php
+
+use Razorpay\Api\Order;
+
 include_once "Model.php";
 include_once "OrderDetails.php";
 include_once "Cart.php";
@@ -12,8 +15,8 @@ class Orders extends Model
     private string $paymentType;
     private string $date;
     private string $razorpayRecipt;
-    private OrderDetails $orderDetails;
-    private Cart $cart;
+    /** @var OrderDetails[] */
+    private array $orderDetails;
 
     public function __construct(array $data = [])
     {
@@ -25,7 +28,7 @@ class Orders extends Model
         $this->paymentType = $data['payment_type'] ?? '';
         $this->date = $data['date'] ?? '';
         $this->razorpayRecipt = $data['razorpay_recipt'] ?? '';
-        $this->orderDetails = new OrderDetails();
+        $this->orderDetails = $data['order_details'] ?? [];
     }
 
     public function addOrder(array $data)
@@ -84,6 +87,27 @@ class Orders extends Model
         return self::getDb()->errorInfo()[0];
     }
 
+    /**
+     * @throws Exception
+     */
+    public static function getByOrderId($orderId): Orders
+    {
+        $sql = "SELECT * FROM `orders` WHERE `id` = {$orderId}";
+        $orderData = self::getDb()->query($sql)->fetch(PDO::FETCH_ASSOC);
+        if($orderData == false){
+            throw new Exception("Order not found");
+        }
+        $order = new Orders($orderData);
+        $sql = "SELECT * FROM `OrderDetails` WHERE `order_id` = '{$orderId}'";
+        $orderDetailsData = self::getDb()->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+        if($orderDetailsData == false){
+            throw new Exception("Order details not found");
+        }
+        foreach ($orderDetailsData as $orderDetails) {
+            $order->orderDetails[] = new OrderDetails($orderDetails);
+        }
+        return $order;
+    }
     public function getId(): mixed
     {
         return $this->id;

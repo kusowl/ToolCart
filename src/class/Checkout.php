@@ -6,10 +6,10 @@ require_once 'Model.php';
 require_once 'Cart.php';
 require_once 'Orders.php';
 require_once 'Coupon.php';
-class Checkout
+class Checkout extends Model
 {
 
-    function createOrder($userId, $paymentType, $reciptOrderId = '', $success=false, ): bool
+    function createOrder($userId, $paymentType, $reciptOrderId = '', $success=false, ): mixed
     {
         $amount = (int)($_SESSION['original_price'] - ($_SESSION['savings'] ?? 0)) ?? 1;
         $addressId = $_SESSION['address_id'];
@@ -44,7 +44,10 @@ class Checkout
             unset($_SESSION['original_price']);
             unset($_SESSION['payment_method']);
             unset($_SESSION['address_id']);
-            return true;
+            return [
+                'success' => true,
+                'order_id' => self::getDb()->lastInsertId()
+            ];
         }
         return false;
     }

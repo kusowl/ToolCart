@@ -12,7 +12,9 @@ node_modules
 src/style.css
 
 # Server images
-src/assets/images/*
+src/assets/images/*.png
+src/assets/images/*.jpg
+src/assets/images/*.webp
 todo.MD
 /.idea/ToolCart.iml
 /.idea/vcs.xml

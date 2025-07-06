@@ -30,8 +30,10 @@ $(document).ready(function() {
                     console.log(response.order)
                     if(response.order.pay_method === 'razorpay')
                         initializeRazorpay(response.order);
-                    else
-                       alert('POD Order Success')
+                    else {
+                        alert('POD Order Success')
+                        window.location.href = 'order.php?order_id=' + response.order_id;
+                    }
                 } else {
                     console.log(response)
                     alert('Error creating order: ' + response.message);
@@ -98,7 +100,7 @@ $(document).ready(function() {
                 if (response.success) {
                     // Payment verified successfully redirect to the receipt page
                     alert('Payment successful! Order ID: ' + response.order_id);
-                    window.location.href = 'success.php?order_id=' + response.order_id;
+                    window.location.href = 'order.php?order_id=' + response.order_id;
                 } else {
                     alert('Payment verification failed: ' + response.message);
                     $('#submitBtn').prop('disabled', false);
