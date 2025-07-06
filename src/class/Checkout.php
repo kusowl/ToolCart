@@ -20,13 +20,16 @@ class Checkout
         $orderData = [
             'user_id' => $userId,
             'address_id' => (int)$addressId,
-            'coupon_id' => (int)Coupon::getByCode($coupon)->getId(),
             'coupon_amount' => $amount * 1000,
             'payment_type' => $paymentType,
             'payment_status' => $success,
             'date' => date('Y-m-d H:i:s'),
             'products' => $products
         ];
+        // Check if coupon is applied
+        if($coupon != ''){
+            $orderData['coupon_id']  = (int)Coupon::getByCode($coupon)->getId();
+        }
         if($paymentType == 'razorpay') {
             $orderData['razorpay_recipt' ] = $reciptOrderId;
         }

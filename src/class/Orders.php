@@ -1,6 +1,7 @@
 <?php
 include_once "Model.php";
 include_once "OrderDetails.php";
+include_once "Cart.php";
 class Orders extends Model
 {
     private $id;
@@ -10,8 +11,9 @@ class Orders extends Model
     private int $couponAmount;
     private string $paymentType;
     private string $date;
-    private OrderDetails $orderDetails;
     private string $razorpayRecipt;
+    private OrderDetails $orderDetails;
+    private Cart $cart;
 
     public function __construct(array $data = [])
     {
@@ -28,37 +30,51 @@ class Orders extends Model
 
     public function addOrder(array $data)
     {
-        $columns = [];
-        $params = [];
-        $products = [];
+        try {
+            // As there are multiple queries involved which depended on each other,
+            // i am using transaction for Atomicity
+            self::getDb()->beginTransaction();
+            $columns = [];
+            $params = [];
+            $products = [];
 
-        foreach ($data as $field => $value) {
-            if($field == 'products'){
-                $products = $data['products'] ?? [];
-            } elseif ($value !== '' && $value !== null) {
-                $columns[] = $field;
-                $params[":$field"] = $value;
+            foreach ($data as $field => $value) {
+                if ($field == 'products') {
+                    $products = $data['products'] ?? [];
+                } elseif ($value !== '' && $value !== null) {
+                    $columns[] = $field;
+                    $params[":$field"] = $value;
+                }
             }
+
+            $placeholders = implode(', ', array_keys($params));
+            $columnsStr = implode(', ', $columns);
+
+            $sql = "INSERT INTO orders ({$columnsStr}) VALUES ({$placeholders})";
+
+            $stmt = self::getDb()->prepare($sql);
+            $stmt->execute($params);
+            $this->id = self::getDb()->lastInsertId();
+            $cart = new Cart($data['user_id']);
+
+            // Save the product information
+            foreach ($products as $product) {
+                $orderData['order_id'] = $this->id;
+                $orderData['product_id'] = $product['product_id'];
+                $orderData['qty'] = $product['qty'];
+                $orderData['price'] = $product['product_price'];
+                $this->orderDetails->addOrderDetails($orderData);
+                // Removed products from cart
+                $cart->removeItem($product['product_id']);
+            }
+            self::getDb()->commit();
+        }catch (Exception $e){
+            self::getDb()->rollBack();
+            error_log($e->getMessage());
         }
-
-        $placeholders = implode(', ', array_keys($params));
-        $columnsStr = implode(', ', $columns);
-        $sql = "INSERT INTO orders ({$columnsStr}) VALUES ({$placeholders})";
-
-        $stmt = self::getDb()->prepare($sql);
-        $stmt->execute($params);
-        $this->id = self::getDb()->lastInsertId();
-
-        // Save the product information
-        foreach ($products as $product) {
-            $orderData['order_id'] = $this->id;
-            $orderData['product_id'] = $product['product_id'];
-            $orderData['qty'] = $product['qty'];
-            $orderData['price'] = $product['product_price'];
-            $this->orderDetails->addOrderDetails($orderData);
+        finally{
+            return self::getDb()->errorInfo()[0];
         }
-        
-        return self::getDb()->errorInfo()[0];
     }
 
     public function setStaus($orderId, $status)
