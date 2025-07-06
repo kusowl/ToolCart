@@ -4,9 +4,9 @@
 
             <div class="flex items-center space-x-8 mr-8">
                 <div class="shrink-0">
-                    <a href="<?= BASE_URL ?>" title="" class="font-bold text-2xl">
-                        <!-- <img class="block w-auto h-8 dark:hidden" src="https://flowbite.s3.amazonaws.com/blocks/e-commerce/logo-full.svg" alt="">
-                        <img class="hidden w-auto h-8 dark:block" src="https://flowbite.s3.amazonaws.com/blocks/e-commerce/logo-full-dark.svg" alt=""> -->
+                    <a href="<?= BASE_URL ?>" title="" class="font-bold text-2xl text-white flex gap-2 items-center">
+                        <!-- <img class="block w-auto h-8 dark:hidden" src="https://flowbite.s3.amazonaws.com/blocks/e-commerce/logo-full.svg" alt=""> -->
+                        <img class="w-auto h-6 " src="<?= BASE_URL.'assets/images/logo/logo-white.webp' ?>" alt="">
                         <?= SITE_NAME ?? "SiteName" ?>
 
                     </a>
