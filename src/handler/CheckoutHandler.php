@@ -75,7 +75,9 @@ if (str_contains($_SERVER['CONTENT_TYPE'] ?? '', 'application/json')) {
                 $order['razorpay_key'] = KEYID;
                 $response['success'] = true;
             } elseif ($payMethod == 'pod') { // Pay on Delivery
-                $response['success'] = $checkout->createOrder($userId, $payMethod);
+                $res = $checkout->createOrder($userId, $payMethod);
+                $response['success'] = $res['success'];
+                $response['order_id'] = $res['order_id'];
             }
             $response['order'] = $order;
 
@@ -107,11 +109,11 @@ if (str_contains($_SERVER['CONTENT_TYPE'] ?? '', 'application/json')) {
                     $error = 'Razorpay Error : ' . $e->getMessage();
                 } finally {
                     $checkout = new Checkout();
-                    $success = $checkout->createOrder($userId, $data['payment_method'], $data['razorpay_payment_id'], $success);
+                    $res = $checkout->createOrder($userId, $data['payment_method'], $data['razorpay_payment_id'], $success);
                     http_response_code(200);
                     echo json_encode([
-                        'success' => $success,
-                        'order_id' => $data['razorpay_order_id']
+                        'success' => $res['success'],
+                        'order_id' => $res['order_id']
                     ]);
                 }
             }

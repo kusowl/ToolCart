@@ -12,8 +12,8 @@ class OrderDetails extends Model
     public function __construct($data = [])
     {
         $this->id = $data['id'];
-        $this->orderId = $data['orderId'];
-        $this->productId = $data['productId'];
+        $this->orderId = $data['order_id'];
+        $this->productId = $data['product_id'];
         $this->qty = $data['qty'] ?? 0;
         $this->price = $data['price'] ?? 0;
     }
