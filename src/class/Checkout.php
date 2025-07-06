@@ -39,6 +39,7 @@ class Checkout
             unset($_SESSION['cart']);
             unset($_SESSION['cart_total']);
             unset($_SESSION['coupon_id']);
+            unset($_SESSION['coupon_code']);
             unset($_SESSION['savings']);
             unset($_SESSION['original_price']);
             unset($_SESSION['payment_method']);
