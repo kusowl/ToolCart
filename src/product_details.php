@@ -115,7 +115,8 @@
 
                     <form action=<?= BASE_URL ?>handler/CartHandler method="post">
                         <input type="hidden" name="productId" value="<?= $product->getId() ?>">
-                        <input type="hidden" name="add_to_cart" id="" value="1">
+                        <input type="hidden" name="action" id="" value="add_to_cart">
+
                         <button
                                 class="text-white mt-4 sm:mt-0 bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800 flex items-center justify-center"
                                 role="button">

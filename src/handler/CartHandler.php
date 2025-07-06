@@ -1,4 +1,5 @@
 <?php
+session_start();
 require_once __DIR__ . "../../config/site_config.php";
 require_once ROOT . "config/db_config.php";
 require_once ROOT . "class/Cart.php";
@@ -73,7 +74,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
 
         // No Request specified so just see it as add to cart
-        case 'post' :
+        case 'add_to_cart' :
         {
             $cart->addItem($productId);
             if (!empty($_SERVER['HTTP_REFERER'])) {
