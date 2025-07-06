@@ -20,7 +20,7 @@ class Checkout
         $orderData = [
             'user_id' => $userId,
             'address_id' => (int)$addressId,
-            'coupon_amount' => $amount * 1000,
+            'coupon_amount' => $_SESSION['savings'],
             'payment_type' => $paymentType,
             'payment_status' => $success,
             'date' => date('Y-m-d H:i:s'),
@@ -39,6 +39,8 @@ class Checkout
             unset($_SESSION['cart']);
             unset($_SESSION['cart_total']);
             unset($_SESSION['coupon_id']);
+            unset($_SESSION['savings']);
+            unset($_SESSION['original_price']);
             unset($_SESSION['payment_method']);
             unset($_SESSION['address_id']);
             return true;
