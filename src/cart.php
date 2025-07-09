@@ -5,7 +5,6 @@ $pageTitle = "Checkout : " . SITE_NAME;
 include_once ROOT . "partials/header.php";
 include_once "partials/navbar.html.php";
 include_once "handler/CartHandler.php";
-//TODO: Fix no price in cart page
 ?>
 <section class="bg-white py-8 mt-12 antialiased dark:bg-gray-900 md:py-16">
     <div class="mx-auto max-w-screen-xl px-4 2xl:px-0">

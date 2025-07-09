@@ -112,8 +112,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     $id = $_GET['id'] ?? '';
     if ($id != '') {
-        $product = new Product();
-        $productData = $product->findById($id);
+        $productData = Product ::findById($id);
         $formData['id'] = $id;
         $formData['title'] = $productData->getTitle();
         $formData['desc'] = $productData->getDescription();

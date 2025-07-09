@@ -20,6 +20,7 @@ class Checkout extends Model
         $orderData = [
             'user_id' => $userId,
             'address_id' => (int)$addressId,
+            'amount' => $amount,
             'coupon_amount' => $_SESSION['savings'],
             'payment_type' => $paymentType,
             'payment_status' => $success,

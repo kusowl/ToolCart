@@ -1,7 +1,4 @@
 <?php
-
-use Razorpay\Api\Order;
-
 include_once "Model.php";
 include_once "OrderDetails.php";
 include_once "Cart.php";
@@ -11,12 +8,18 @@ class Orders extends Model
     private  $userId;
     private  $addressId;
     private  $couponId;
+    private float $amount;
     private int $couponAmount;
     private string $paymentType;
-    private string $date;
+    private string $paymentStatus;
     private string $razorpayRecipt;
-    /** @var OrderDetails[] */
+    private string $deliveryStatus;
+    private string $date;
+    /**
+     * @var OrderDetails[]
+     */
     private array $orderDetails;
+    private Cart $cart;
 
     public function __construct(array $data = [])
     {
@@ -24,11 +27,14 @@ class Orders extends Model
         $this->userId = $data['user_id'] ?? null;
         $this->addressId = $data['address_id'] ?? null;
         $this->couponId = $data['coupon_id'] ?? null;
+        $this->amount = $data['amount'] ?? 0;
         $this->couponAmount = $data['coupon_amount'] ?? 0;
         $this->paymentType = $data['payment_type'] ?? '';
-        $this->date = $data['date'] ?? '';
+        $this->paymentStatus = $data['payment_status'] ?? '';
         $this->razorpayRecipt = $data['razorpay_recipt'] ?? '';
-        $this->orderDetails = $data['order_details'] ?? [];
+        $this->deliveryStatus = $data['delivery_status'] ?? '';
+        $this->date = $data['date'] ?? '';
+        $this->orderDetails = $data['orderDetails'] ?? [];
     }
 
     public function addOrder(array $data)
@@ -108,6 +114,33 @@ class Orders extends Model
         }
         return $order;
     }
+    /**
+     * @param int $limit
+     * @param int $offset
+     * @return Orders[]
+     */
+    public static function getAllOrders($userId = '', int $limit = QUERY_LIMIT, int $offset = 0): array
+    {
+        if($userId != ''){
+            $sql  = "SELECT * FROM orders WHERE `user_id` = '{$userId}' LIMIT {$limit} OFFSET {$offset}";
+        }else{
+            $sql  = "SELECT * FROM orders LIMIT {$limit} OFFSET {$offset}";
+        }
+        $stmt = self::getDb()->query($sql, PDO::FETCH_ASSOC);
+        $ordersRecord = $stmt->fetchAll();
+        $orders = [];
+        foreach ($ordersRecord as &$order) {
+            $sql  = "SELECT * FROM OrderDetails WHERE order_id = :order_id ";
+            $stmt = self::getDb()->prepare($sql);
+            $stmt->execute([
+                ':order_id' => $order['id']
+            ]);
+            $orderDetails = $stmt->fetchAll();
+            $order['orderDetails'] = array_map(function ($item) {return new OrderDetails($item);}, $orderDetails);
+           $orders[] = new Orders($order);
+        }
+        return $orders;
+    }
     public function getId(): mixed
     {
         return $this->id;
@@ -178,7 +211,7 @@ class Orders extends Model
         $this->date = $date;
     }
 
-    public function getOrderDetails(): OrderDetails
+    public function getOrderDetails()
     {
         return $this->orderDetails;
     }
@@ -188,6 +221,70 @@ class Orders extends Model
         $this->orderDetails = $orderDetails;
     }
 
+    public function getPaymentStatus(): string
+    {
+        return $this->paymentStatus;
+    }
 
+    public function setPaymentStatus(string $paymentStatus): void
+    {
+        $this->paymentStatus = $paymentStatus;
+    }
+
+    public function getRazorpayRecipt(): string
+    {
+        return $this->razorpayRecipt;
+    }
+
+    public function setRazorpayRecipt(string $razorpayRecipt): void
+    {
+        $this->razorpayRecipt = $razorpayRecipt;
+    }
+
+    public function getTotalAmount(): float
+    {
+        return $this->totalAmount;
+    }
+
+    public function setTotalAmount(float $totalAmount): void
+    {
+        $this->totalAmount = $totalAmount;
+    }
+
+    public function getCart(): Cart
+    {
+        return $this->cart;
+    }
+
+    public function setCart(Cart $cart): void
+    {
+        $this->cart = $cart;
+    }
+
+    public function getAmount(): float
+    {
+        return $this->amount;
+    }
+
+    public function setAmount(float $amount): void
+    {
+        $this->amount = $amount;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDeliveryStatus(): string
+    {
+        return $this->deliveryStatus;
+    }
+
+    /**
+     * @param string $deliveryStatus
+     */
+    public function setDeliveryStatus(string $deliveryStatus): void
+    {
+        $this->deliveryStatus = $deliveryStatus;
+    }
 
 }

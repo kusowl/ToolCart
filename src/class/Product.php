@@ -101,7 +101,7 @@ class Product extends Model
         $this->error = 0;
     }
 
-    public function findById(int $id)
+    public static function findById(int $id)
     {
         $sql = "SELECT product.id, product.product_image, product.product_title, product.category_id , product.product_desc, product.product_price, product.product_brand FROM product  WHERE product.id = :id";
         $stmt = self::getDb()->prepare($sql);

@@ -38,5 +38,59 @@ class OrderDetails extends Model
         return $stmt->errorInfo()[0];
     }
 
+    public function getTotalAmount(): float|int
+    {
+       return $this->qty * $this->price;
+    }
+
+    public function getPrice(): int
+    {
+        return $this->price;
+    }
+
+    public function setPrice(int $price): void
+    {
+        $this->price = $price;
+    }
+
+    public function getId(): mixed
+    {
+        return $this->id;
+    }
+
+    public function setId(mixed $id): void
+    {
+        $this->id = $id;
+    }
+
+    public function getOrderId(): mixed
+    {
+        return $this->orderId;
+    }
+
+    public function setOrderId(mixed $orderId): void
+    {
+        $this->orderId = $orderId;
+    }
+
+    public function getProductId(): mixed
+    {
+        return $this->productId;
+    }
+
+    public function setProductId(mixed $productId): void
+    {
+        $this->productId = $productId;
+    }
+
+    public function getQty(): int
+    {
+        return $this->qty;
+    }
+
+    public function setQty(int $qty): void
+    {
+        $this->qty = $qty;
+    }
 
 }
