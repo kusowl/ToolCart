@@ -9,7 +9,7 @@ require_once 'Coupon.php';
 class Checkout extends Model
 {
 
-    function createOrder($userId, $paymentType, $reciptOrderId = '', $success=false, ): mixed
+    function createOrder($userId, $paymentType, $reciptOrderId = '', $success=false ): array
     {
         $amount = (int)($_SESSION['original_price'] - ($_SESSION['savings'] ?? 0)) ?? 1;
         $addressId = $_SESSION['address_id'];
@@ -21,7 +21,6 @@ class Checkout extends Model
             'user_id' => $userId,
             'address_id' => (int)$addressId,
             'amount' => $amount,
-            'coupon_amount' => $_SESSION['savings'],
             'payment_type' => $paymentType,
             'payment_status' => $success,
             'date' => date('Y-m-d H:i:s'),
@@ -30,13 +29,15 @@ class Checkout extends Model
         // Check if coupon is applied
         if($coupon != ''){
             $orderData['coupon_id']  = (int)Coupon::getByCode($coupon)->getId();
+            $orderData['coupon_amount'] = $_SESSION['savings'];
         }
         if($paymentType == 'razorpay') {
             $orderData['razorpay_recipt' ] = $reciptOrderId;
         }
         // create order
         $orders = new Orders();
-        if ($orders->addOrder($orderData)) {
+        $res = $orders->addOrder($orderData);
+        if ($res['success']) {
             unset($_SESSION['cart']);
             unset($_SESSION['cart_total']);
             unset($_SESSION['coupon_id']);
@@ -47,9 +48,13 @@ class Checkout extends Model
             unset($_SESSION['address_id']);
             return [
                 'success' => true,
-                'order_id' => self::getDb()->lastInsertId()
+                'order_id' => $res['order_id']
+            ];
+        }else{
+            return [
+                'success' => false,
+                'message' => $res['error']
             ];
         }
-        return false;
     }
 }

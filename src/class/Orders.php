@@ -34,7 +34,7 @@ class Orders extends Model
         $this->razorpayRecipt = $data['razorpay_recipt'] ?? '';
         $this->deliveryStatus = $data['delivery_status'] ?? '';
         $this->date = $data['date'] ?? '';
-        $this->orderDetails = $data['orderDetails'] ?? [];
+        $this->orderDetails = $data['orderDetails'] ?? [new OrderDetails()];
     }
 
     public function addOrder(array $data)
@@ -55,7 +55,9 @@ class Orders extends Model
                     $params[":$field"] = $value;
                 }
             }
-
+            if(empty($products)) {
+                throw new Exception("Products array is empty");
+            }
             $placeholders = implode(', ', array_keys($params));
             $columnsStr = implode(', ', $columns);
 
@@ -72,17 +74,24 @@ class Orders extends Model
                 $orderData['product_id'] = $product['product_id'];
                 $orderData['qty'] = $product['qty'];
                 $orderData['price'] = $product['product_price'];
-                $this->orderDetails->addOrderDetails($orderData);
+                $this->orderDetails[0]->addOrderDetails($orderData);
                 // Removed products from cart
                 $cart->removeItem($product['product_id']);
             }
             self::getDb()->commit();
+            return [
+                'success' => true,
+                'order_id' => $this->id,
+            ];
         }catch (Exception $e){
             self::getDb()->rollBack();
             error_log($e->getMessage());
         }
         finally{
-            return self::getDb()->errorInfo()[0];
+            return[
+                'success' => false,
+                'error' => self::getDb()->errorInfo()[0]
+            ];
         }
     }
 

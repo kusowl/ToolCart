@@ -73,14 +73,18 @@ if (str_contains($_SERVER['CONTENT_TYPE'] ?? '', 'application/json')) {
                 $order['currency'] = CURRENCY;
                 $order['razorpay_key'] = KEYID;
                 $response['success'] = true;
+                http_response_code(200);
             } elseif ($payMethod == 'pod') { // Pay on Delivery
                 $res = $checkout->createOrder($userId, $payMethod);
                 $response['success'] = $res['success'];
-                $response['order_id'] = $res['order_id'];
+                if($res['success']){
+                    http_response_code(200);
+                    $response['order_id'] = $res['order_id'];
+                }else{
+                    http_response_code(400);
+                }
             }
             $response['order'] = $order;
-
-            http_response_code(200);
             echo json_encode($response);
             break;
         }
