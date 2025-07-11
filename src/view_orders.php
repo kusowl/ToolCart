@@ -20,47 +20,50 @@ include_once "handler/OrderHandler.php";
                             foreach ($ordersRecord as $record):
                                 ?>
                                 <div id="orderId<?= $record['order_id'] ?>"
-                                     class="rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800 md:p-6">
+                                     class="rounded-lg border border-gray-200 bg-white shadow-sm px-6 py-2 dark:border-gray-700 dark:bg-gray-800 ">
                                     <div class="space-y-4 md:flex-row md:items-center md:justify-between md:gap-6 md:space-y-0">
-                                        <div class="cto-section flex justify-between p-3 border-b border-b-gray-200">
-                                            <div class="order-id">
+                                        <div class="cto-section flex space-x-10 items-center p-3 border-b border-b-gray-200 text-gray-400 text-sm">
+                                            <div class="order-id px-5 py-2 bg-gray-200 rounded-full font-medium text-black text-md">
                                                 Order
-                                                <a href="">
+                                                <a href="" class="text-blue-500">
                                                     #<?= $record['order_id'] ?>
                                                 </a>
                                             </div>
                                             <div class="order-date">
-                                                Order Placed <?= date('D M Y', strtotime($record['date'])) ?>
+                                                Order Placed: <?= date('D M Y', strtotime($record['date'])) ?>
                                             </div>
                                             <div class="order-status">
-                                                Delivery Status <?= $record['delivery_status'] ?>
+                                                Delivery Status: <?= strtoupper($record['delivery_status']) ?>
                                             </div>
                                         </div>
-                                        <div class="products flex-col">
+                                        <div class="products flex-col space-y-4">
                                             <?php foreach ($record['product_details'] as $productDetail): ?>
-                                                <div class="product-section flex justify-between">
-                                                    <div class="product-image w-24 h-24">
+                                                <div class="product-section grid grid-cols-4 bg-gray-100 rounded-lg my-4 p-4 items-center space-x-10">
+                                                    <div class="product-image h-24 w-24 content-center rounded-lg bg-white p-3">
                                                         <img src="<?= $productDetail['product_image'] ?>"
-                                                             alt="image of the product">
+                                                             alt="image of the product" class="h-auto">
                                                     </div>
-                                                    <div class="product-name ">
-                                                        <p><?= $productDetail['product_name'] ?></p>
-                                                        <p><?= $productDetail['product_brand'] ?></p>
+                                                    <div class="product-name">
+                                                        <p class="text-md font-bold text-gray-700"><?= $productDetail['product_name'] ?></p>
+                                                        <p class="text-gray-400 text-sm">By: <?= $productDetail['product_brand'] ?></p>
                                                     </div>
-                                                    <div class="product-qty p-3 ">
-                                                        <p> QTY :<?= $productDetail['quantity'] ?></p>
-                                                        <p>Price :<?= $productDetail['price'] ?></p>
+                                                    <div class="product-qty p-3">
+                                                        <p class="text-gray-400 text-sm"> QTY: <?= $productDetail['quantity'] ?></p>
+                                                    </div>
+                                                    <div class="product-price p-3">
+                                                        <p class="text-gray-400 text-sm">Price: <span class="font-bold text-gray-500">Rs. <?= $productDetail['price'] ?></span></p>
                                                     </div>
                                                 </div>
                                             <?php endforeach; ?>
                                         </div>
-                                        <div class="order-cto-section flex justify-between p-3  border-t border-t-gray-200">
-                                            <div class="order-cancel">Cancel</div>
-                                            <div class="order-payment">Payment
-                                                Method <?= strtoupper($record['payment_method']) ?></div>
-                                            <div class="order-payment">Payment
-                                                Status <?= $record['payment_status'] ?></div>
-                                            <div class="order-amount">Amount <?= $record['amount'] ?></div>
+                                        <div class="order-cto-section flex space-x-10 items-center p-3  border-t border-t-gray-200">
+                                            <button class="order-cancel  text-gray-700 font-medium pe-10 hover:text-red-500 border-r-2 border-r-gray-200 "><span class="text-lg">×</span> <span class="text-sm">CANCEL ORDER</span></button>
+                                            <button class="download-receipt  text-gray-700 font-medium pe-10 hover:text-blue-500 border-r-2 border-r-gray-200 "><span class="text-xs font-bold">🡣</span> <span class="text-sm">RECEIPT</span></button>
+                                            <div class="order-payment text-gray-400 text-sm">Payment
+                                                Method: <?= strtoupper($record['payment_method']) ?></div>
+                                            <div class="order-payment text-gray-400 text-sm">Payment
+                                                Status: <?= $record['payment_status'] ?></div>
+                                            <div class="order-amount text-gray-400 text-sm">Amount: <span class="font-bold text-gray-500">Rs. <?= $record['amount'] ?></span></div>
                                         </div>
                                     </div>
                                 </div>
