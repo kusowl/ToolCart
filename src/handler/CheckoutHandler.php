@@ -27,26 +27,24 @@ $address = new Address($userId);
 if (str_contains($_SERVER['CONTENT_TYPE'] ?? '', 'application/json')) {
     // This is an AJAX request
 
-    if ($_SERVER['REQUEST_METHOD'] == 'GET') {
-        $jsonData = array_keys($_GET)[0];
-    } else {
-        $jsonData = file_get_contents('php://input');
-    }
+    $jsonData = file_get_contents('php://input');
     $data = json_decode($jsonData, true);
+
+    header('Content-Type: application/json');
 
     switch ($data['action']) {
         case 'deleteAddress' :
         {
             $result = $address->deleteAddress($data['address_id']);
             if ($result) {
-                http_response_code(200);
                 $messages = ['Success' => 'Address deleted'];
                 $message_type = 'success';
+                http_response_code(200);
                 echo json_encode($messages);
             } else {
-                http_response_code(400);
                 $messages = ['failed' => 'Address cannot be deleted'];
                 $message_type = 'error';
+                http_response_code(400);
                 echo json_encode($messages);
             }
             break;
@@ -55,6 +53,7 @@ if (str_contains($_SERVER['CONTENT_TYPE'] ?? '', 'application/json')) {
         {
 
             $res = $address->getAddress($userId, $data['id'], 1);
+            http_response_code(200);
             echo json_encode($res[0]->getAsArray());
             break;
         }
@@ -74,15 +73,19 @@ if (str_contains($_SERVER['CONTENT_TYPE'] ?? '', 'application/json')) {
                 $order['currency'] = CURRENCY;
                 $order['razorpay_key'] = KEYID;
                 $response['success'] = true;
+                http_response_code(200);
             } elseif ($payMethod == 'pod') { // Pay on Delivery
                 $res = $checkout->createOrder($userId, $payMethod);
                 $response['success'] = $res['success'];
-                $response['order_id'] = $res['order_id'];
+                if($res['success']){
+                    http_response_code(200);
+                    $response['order_id'] = $res['order_id'];
+                }else{
+                    http_response_code(400);
+                }
             }
             $response['order'] = $order;
-
             echo json_encode($response);
-            http_response_code(200);
             break;
         }
         case 'verifyOrder':

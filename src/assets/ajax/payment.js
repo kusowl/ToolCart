@@ -1,6 +1,6 @@
-$(document).ready(function() {
+$(document).ready(function () {
     // Handle form submission
-    $('#orderForm').submit(function(e) {
+    $('#orderForm').submit(function (e) {
         e.preventDefault();
 
         // Show loading
@@ -9,43 +9,52 @@ $(document).ready(function() {
 
         // Collect form data
         const formData = {
-            address_id: $('input[name="address_id"]:checked').map(function() {
+            address_id: $('input[name="address_id"]:checked').map(function () {
                 return $(this).val();
             }).get(),
-            payment_method: $('input[name="payment_method"]:checked').map(function() {
+            payment_method: $('input[name="payment_method"]:checked').map(function () {
                 return $(this).val();
             }).get(),
             action: 'placeOrder'
         };
         // Create order via AJAX
-        $.ajax({
-            url: 'src/handler/CheckoutHandler.php',
+        fetch('/ToolCart/handler/CheckoutHandler.php', {
             method: 'POST',
-            contentType : 'application/json',
-            data: JSON.stringify(formData),
-            dataType: 'json',
-            success: function(response) {
-                $('#loading').hide();
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify(formData)
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(response => {
+                // document.getElementById('loading').style.display = 'none';
+
                 if (response.success) {
-                    console.log(response.order)
-                    if(response.order.pay_method === 'razorpay')
+                    console.log(response.order);
+
+                    if (response.order.pay_method === 'razorpay') {
                         initializeRazorpay(response.order);
-                    else {
-                        alert('POD Order Success')
+                    } else {
+                        alert('POD Order Success');
                         window.location.href = 'order.php?order_id=' + response.order_id;
                     }
                 } else {
-                    console.log(response)
+                    console.log(response);
                     alert('Error creating order: ' + response.message);
-                    $('#submitBtn').prop('disabled', false);
+                    document.getElementById('submitBtn').disabled = false;
                 }
-            },
-            error: function(xhr, status, error) {
-                $('#loading').hide();
-                alert('Error: ' + error);
-                $('#submitBtn').prop('disabled', false);
-            }
-        });
+            })
+            .catch(error => {
+                // document.getElementById('loading').style.display = 'none';
+                alert('Error: ' + error.message);
+                document.getElementById('submitBtn').disabled = false;
+            });
     });
 
     function initializeRazorpay(orderData) {
@@ -57,7 +66,7 @@ $(document).ready(function() {
             name: "ToolCart",
             description: "Order Payment",
             // image: "https://your-website.com/logo.png",
-            handler: function(response) {
+            handler: function (response) {
                 console.log(response)
                 verifyPayment(response, orderData);
             },
@@ -65,7 +74,7 @@ $(document).ready(function() {
                 color: "#0074EA"
             },
             modal: {
-                ondismiss: function() {
+                ondismiss: function () {
                     // Payment cancelled
                     alert('Payment cancelled');
                     $('#submitBtn').prop('disabled', false);
@@ -79,38 +88,45 @@ $(document).ready(function() {
 
     function verifyPayment(paymentResponse, orderData) {
         // Show loading
-        $('#loading').show();
+        // $('#loading').show();
         const data = {
-                razorpay_order_id: paymentResponse.razorpay_order_id,
-                razorpay_payment_id: paymentResponse.razorpay_payment_id,
-                razorpay_signature: paymentResponse.razorpay_signature,
-                order_id: orderData.id,
-                payment_method : orderData.pay_method,
-                action : 'verifyOrder'
-            }
-        $.ajax({
-            url: 'src/handler/CheckoutHandler.php',
+            razorpay_order_id: paymentResponse.razorpay_order_id,
+            razorpay_payment_id: paymentResponse.razorpay_payment_id,
+            razorpay_signature: paymentResponse.razorpay_signature,
+            order_id: orderData.id,
+            payment_method: orderData.pay_method,
+            action: 'verifyOrder'
+        }
+        fetch('/ToolCart/handler/CheckoutHandler.php', {
             method: 'POST',
-            contentType : 'application/json',
-            data: JSON.stringify(data),
-            dataType: 'json',
-            success: function(response) {
-                $('#loading').hide();
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(response => {
+                // document.getElementById('loading').style.display = 'none';
 
                 if (response.success) {
-                    // Payment verified successfully redirect to the receipt page
                     alert('Payment successful! Order ID: ' + response.order_id);
                     window.location.href = 'order.php?order_id=' + response.order_id;
                 } else {
                     alert('Payment verification failed: ' + response.message);
-                    $('#submitBtn').prop('disabled', false);
+                    document.getElementById('submitBtn').disabled = false;
                 }
-            },
-            error: function(xhr, status, error) {
-                $('#loading').hide();
-                alert('Verification error: ' + error);
-                $('#submitBtn').prop('disabled', false);
-            }
-        });
+            })
+            .catch(error => {
+                // document.getElementById('loading').style.display = 'none';
+                alert('Verification error: ' + error.message);
+                document.getElementById('submitBtn').disabled = false;
+            });
+
     }
 });

@@ -1,7 +1,4 @@
 <?php
-
-use Razorpay\Api\Order;
-
 include_once "Model.php";
 include_once "OrderDetails.php";
 include_once "Cart.php";
@@ -11,12 +8,19 @@ class Orders extends Model
     private  $userId;
     private  $addressId;
     private  $couponId;
+    private float $amount;
     private int $couponAmount;
     private string $paymentType;
-    private string $date;
+    private string $paymentStatus;
     private string $razorpayRecipt;
-    /** @var OrderDetails[] */
+    private string $deliveryStatus;
+    private string $date;
+    private string $status;
+    /**
+     * @var OrderDetails[]
+     */
     private array $orderDetails;
+    private Cart $cart;
 
     public function __construct(array $data = [])
     {
@@ -24,11 +28,15 @@ class Orders extends Model
         $this->userId = $data['user_id'] ?? null;
         $this->addressId = $data['address_id'] ?? null;
         $this->couponId = $data['coupon_id'] ?? null;
+        $this->amount = $data['amount'] ?? 0;
         $this->couponAmount = $data['coupon_amount'] ?? 0;
         $this->paymentType = $data['payment_type'] ?? '';
-        $this->date = $data['date'] ?? '';
+        $this->paymentStatus = $data['payment_status'] ?? '';
         $this->razorpayRecipt = $data['razorpay_recipt'] ?? '';
-        $this->orderDetails = $data['order_details'] ?? [];
+        $this->deliveryStatus = $data['delivery_status'] ?? '';
+        $this->date = $data['date'] ?? '';
+        $this->status = $data['status'] ?? '';
+        $this->orderDetails = $data['orderDetails'] ?? [new OrderDetails()];
     }
 
     public function addOrder(array $data)
@@ -49,7 +57,9 @@ class Orders extends Model
                     $params[":$field"] = $value;
                 }
             }
-
+            if(empty($products)) {
+                throw new Exception("Products array is empty");
+            }
             $placeholders = implode(', ', array_keys($params));
             $columnsStr = implode(', ', $columns);
 
@@ -66,27 +76,45 @@ class Orders extends Model
                 $orderData['product_id'] = $product['product_id'];
                 $orderData['qty'] = $product['qty'];
                 $orderData['price'] = $product['product_price'];
-                $this->orderDetails->addOrderDetails($orderData);
+                $this->orderDetails[0]->addOrderDetails($orderData);
                 // Removed products from cart
                 $cart->removeItem($product['product_id']);
             }
             self::getDb()->commit();
+            return [
+                'success' => true,
+                'order_id' => $this->id,
+            ];
         }catch (Exception $e){
             self::getDb()->rollBack();
             error_log($e->getMessage());
         }
         finally{
-            return self::getDb()->errorInfo()[0];
+            return[
+                'success' => false,
+                'error' => self::getDb()->errorInfo()[0]
+            ];
         }
     }
 
-    public function setStaus($orderId, $status)
+    public function setPaymentStaus($orderId, $status)
     {
         $sql = "UPDATE `orders` SET `payment_status`='{$status}' WHERE `id` = {$orderId}";
         $stmt = self::getDb()->exec($sql);
         return self::getDb()->errorInfo()[0];
     }
+    public function setDeliveryStaus($orderId, $status){
+        $sql = "UPDATE `orders` SET `delivery_status`='{$status}' WHERE `id` = {$orderId}";
+        $stmt = self::getDb()->exec($sql);
+        return self::getDb()->errorInfo()[0];
+    }
 
+    public function setStatus($orderId, $status)
+    {
+        $sql = "UPDATE `orders` SET `status`='{$status}' WHERE `id` = {$orderId}";
+        $stmt = self::getDb()->exec($sql);
+        return self::getDb()->errorInfo()[0];
+    }
     /**
      * @throws Exception
      */
@@ -107,6 +135,33 @@ class Orders extends Model
             $order->orderDetails[] = new OrderDetails($orderDetails);
         }
         return $order;
+    }
+    /**
+     * @param int $limit
+     * @param int $offset
+     * @return Orders[]
+     */
+    public static function getAllOrders($userId = '', int $limit = QUERY_LIMIT, int $offset = 0): array
+    {
+        if($userId != ''){
+            $sql  = "SELECT * FROM orders WHERE `user_id` = '{$userId}' LIMIT {$limit} OFFSET {$offset}";
+        }else{
+            $sql  = "SELECT * FROM orders LIMIT {$limit} OFFSET {$offset}";
+        }
+        $stmt = self::getDb()->query($sql, PDO::FETCH_ASSOC);
+        $ordersRecord = $stmt->fetchAll();
+        $orders = [];
+        foreach ($ordersRecord as &$order) {
+            $sql  = "SELECT * FROM OrderDetails WHERE order_id = :order_id ";
+            $stmt = self::getDb()->prepare($sql);
+            $stmt->execute([
+                ':order_id' => $order['id']
+            ]);
+            $orderDetails = $stmt->fetchAll();
+            $order['orderDetails'] = array_map(function ($item) {return new OrderDetails($item);}, $orderDetails);
+           $orders[] = new Orders($order);
+        }
+        return $orders;
     }
     public function getId(): mixed
     {
@@ -178,7 +233,7 @@ class Orders extends Model
         $this->date = $date;
     }
 
-    public function getOrderDetails(): OrderDetails
+    public function getOrderDetails()
     {
         return $this->orderDetails;
     }
@@ -188,6 +243,75 @@ class Orders extends Model
         $this->orderDetails = $orderDetails;
     }
 
+    public function getPaymentStatus(): string
+    {
+        return $this->paymentStatus;
+    }
 
+    public function setPaymentStatus(string $paymentStatus): void
+    {
+        $this->paymentStatus = $paymentStatus;
+    }
+
+    public function getRazorpayRecipt(): string
+    {
+        return $this->razorpayRecipt;
+    }
+
+    public function setRazorpayRecipt(string $razorpayRecipt): void
+    {
+        $this->razorpayRecipt = $razorpayRecipt;
+    }
+
+    public function getTotalAmount(): float
+    {
+        return $this->totalAmount;
+    }
+
+    public function setTotalAmount(float $totalAmount): void
+    {
+        $this->totalAmount = $totalAmount;
+    }
+
+    public function getCart(): Cart
+    {
+        return $this->cart;
+    }
+
+    public function setCart(Cart $cart): void
+    {
+        $this->cart = $cart;
+    }
+
+    public function getAmount(): float
+    {
+        return $this->amount;
+    }
+
+    public function setAmount(float $amount): void
+    {
+        $this->amount = $amount;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDeliveryStatus(): string
+    {
+        return $this->deliveryStatus;
+    }
+
+    /**
+     * @param string $deliveryStatus
+     */
+    public function setDeliveryStatus(string $deliveryStatus): void
+    {
+        $this->deliveryStatus = $deliveryStatus;
+    }
+
+    public function getStatus()
+    {
+        return $this->status;
+    }
 
 }
