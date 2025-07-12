@@ -3,6 +3,7 @@
 @import "./navbar.css";
 @import "./hero.css";
 @import "./brand.css";
+@import "./admin_cards.css";
 
 @plugin "flowbite/plugin";
 @source "../../node_modules/flowbite";

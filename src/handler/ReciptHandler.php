@@ -14,7 +14,8 @@ try{
     $orders = Orders::getByOrderId($orderId);
     $address = (new Address())->getAddress($orders->getUserId(), $orders->getAddressId())[0];
 }catch(Exception $e){
+    error_log('Error in receipt handler | '.$e->getMessage());
     $_SESSION['messages'] = $e->getMessage();
     $_SESSION['message_type'] = 'error';
-    header('Location:home');
+//    header('Location:home');
 }

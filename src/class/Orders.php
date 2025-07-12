@@ -141,12 +141,12 @@ class Orders extends Model
      * @param int $offset
      * @return Orders[]
      */
-    public static function getAllOrders($userId = '', int $limit = QUERY_LIMIT, int $offset = 0): array
+    public static function getAllOrders($userId = '', int $limit = QUERY_LIMIT, int $offset = 0, $orderBy="id", $sort="DESC"): array
     {
         if($userId != ''){
-            $sql  = "SELECT * FROM orders WHERE `user_id` = '{$userId}' LIMIT {$limit} OFFSET {$offset}";
+            $sql  = "SELECT * FROM orders WHERE `user_id` = '{$userId}' ORDER BY {$orderBy} {$sort} LIMIT {$limit} OFFSET {$offset} }";
         }else{
-            $sql  = "SELECT * FROM orders LIMIT {$limit} OFFSET {$offset}";
+            $sql  = "SELECT * FROM orders ORDER BY {$orderBy} {$sort} LIMIT {$limit} OFFSET {$offset} ";
         }
         $stmt = self::getDb()->query($sql, PDO::FETCH_ASSOC);
         $ordersRecord = $stmt->fetchAll();
