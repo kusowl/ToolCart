@@ -20,16 +20,16 @@
                 </form>
             </div>
             <div class="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
-                <?php if($primaryAction !=  'Disabled' || $primaryAction ==  ''): ?>
-                <a href="<?= $primaryActionLink ?? '#' ?>"
-                   class="flex items-center justify-center text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800">
-                    <svg class="h-3.5 w-3.5 mr-2" fill="currentColor" viewbox="0 0 20 20"
-                         xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                        <path clip-rule="evenodd" fill-rule="evenodd"
-                              d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"/>
-                    </svg>
-                    Add <?= $primaryAction ?? 'Action' ?>
-                </a>
+                <?php if ($primaryAction != 'Disabled' || $primaryAction == ''): ?>
+                    <a href="<?= $primaryActionLink ?? '#' ?>"
+                       class="flex items-center justify-center text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800">
+                        <svg class="h-3.5 w-3.5 mr-2" fill="currentColor" viewbox="0 0 20 20"
+                             xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                            <path clip-rule="evenodd" fill-rule="evenodd"
+                                  d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"/>
+                        </svg>
+                        Add <?= $primaryAction ?? 'Action' ?>
+                    </a>
                 <?php endif; ?>
                 <div class="flex items-center space-x-3 w-full md:w-auto">
                     <button id="actionsDropdownButton" data-dropdown-toggle="actionsDropdown"
@@ -120,7 +120,17 @@
                             <?php if ($key === 'product_image'): ?>
                                 <td class="px-4 py-3"><img class="w-8" src=<?= BASE_URL . $item ?>></td>
                             <?php else: ?>
-                                <td class="px-4 py-3"><?= $item ?></td>
+                                <td class="px-4 py-3">
+                                    <?php if (strtolower($item) == 'success'): ?>
+                                        <span class="bg-green-200 rounded-full px-2 py-1 text-green-700 "><?= $item ?></span>
+                                    <?php elseif (strtolower($item) == 'pending'): ?>
+                                        <span class="bg-yellow-200 rounded-full px-2 py-1 text-yellow-600"><?= $item ?></span>
+                                    <?php elseif (strtolower($item) == 'failed' || strtolower($item) == 'cancelled'): ?>
+                                        <span class="bg-red-200 rounded-full px-2 py-1  text-red-600"><?= $item ?></span>
+                                    <?php else: ?>
+                                        <?= $item ?>
+                                    <?php endif; ?>
+                                </td>
                             <?php endif; ?>
                         <?php endforeach; ?>
                         <td class="px-4 py-3 flex items-center justify-end">
@@ -141,7 +151,7 @@
                                            class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Show</a>
                                     </li>
                                     <li>
-                                        <a href="<?= $primaryActionLink.'?id=' . $record['id'] ?>"
+                                        <a href="<?= $primaryActionLink . '?id=' . $record['id'] ?>"
                                            class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Edit</a>
                                     </li>
                                 </ul>

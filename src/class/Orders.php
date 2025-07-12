@@ -15,6 +15,7 @@ class Orders extends Model
     private string $razorpayRecipt;
     private string $deliveryStatus;
     private string $date;
+    private string $status;
     /**
      * @var OrderDetails[]
      */
@@ -34,6 +35,7 @@ class Orders extends Model
         $this->razorpayRecipt = $data['razorpay_recipt'] ?? '';
         $this->deliveryStatus = $data['delivery_status'] ?? '';
         $this->date = $data['date'] ?? '';
+        $this->status = $data['status'] ?? '';
         $this->orderDetails = $data['orderDetails'] ?? [new OrderDetails()];
     }
 
@@ -95,13 +97,24 @@ class Orders extends Model
         }
     }
 
-    public function setStaus($orderId, $status)
+    public function setPaymentStaus($orderId, $status)
     {
         $sql = "UPDATE `orders` SET `payment_status`='{$status}' WHERE `id` = {$orderId}";
         $stmt = self::getDb()->exec($sql);
         return self::getDb()->errorInfo()[0];
     }
+    public function setDeliveryStaus($orderId, $status){
+        $sql = "UPDATE `orders` SET `delivery_status`='{$status}' WHERE `id` = {$orderId}";
+        $stmt = self::getDb()->exec($sql);
+        return self::getDb()->errorInfo()[0];
+    }
 
+    public function setStatus($orderId, $status)
+    {
+        $sql = "UPDATE `orders` SET `status`='{$status}' WHERE `id` = {$orderId}";
+        $stmt = self::getDb()->exec($sql);
+        return self::getDb()->errorInfo()[0];
+    }
     /**
      * @throws Exception
      */
@@ -294,6 +307,11 @@ class Orders extends Model
     public function setDeliveryStatus(string $deliveryStatus): void
     {
         $this->deliveryStatus = $deliveryStatus;
+    }
+
+    public function getStatus()
+    {
+        return $this->status;
     }
 
 }

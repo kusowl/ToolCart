@@ -8,10 +8,21 @@ require_once ROOT.'class/Product.php';
 
 $userId = $_SESSION['user_id'] ?? '';
 if($userId == '') header('Location: login');
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $order = new Orders();
+    $result  = match ($_POST['action']) {
+        'cancelOrder' => $order->setStatus($_POST['order_id'], 'cancelled')
+    };
+}
+
+
+
 $orders = Orders::getAllOrders($userId);
 $ordersRecord = [];
 foreach ($orders as $order) {
     $record['order_id'] = $order->getId();
+    $record['order_status'] = $order->getStatus();
     $record['payment_method'] = $order->getPaymentType();
     $record['payment_status'] = $order->getPaymentStatus() == '' ?: 'Pending';
     $record['delivery_status'] = $order->getDeliveryStatus();
