@@ -39,13 +39,13 @@ include_once "handler/OrderHandler.php";
                                         <div class="products flex-col space-y-4">
                                             <?php foreach ($record['product_details'] as $productDetail): ?>
                                                 <div class="product-section grid grid-cols-4 bg-gray-100 rounded-lg my-4 p-4 items-center space-x-10">
-                                                    <div class="product-image h-24 w-24 content-center rounded-lg bg-white p-3">
+                                                    <a href="product_view?id=<?= $productDetail['product_id'] ?>" class="product-image h-24 w-24 content-center rounded-lg bg-white p-3">
                                                         <img src="<?= $productDetail['product_image'] ?>"
                                                              alt="image of the product" class="h-auto">
-                                                    </div>
-                                                    <div class="product-name">
-                                                        <p class="text-md font-bold text-gray-700"><?= $productDetail['product_name'] ?></p>
-                                                        <p class="text-gray-400 text-sm">By: <?= $productDetail['product_brand'] ?></p>
+                                                    </a>
+                                                    <div class="product-name flex flex-col space-y-1">
+                                                        <a href="product_view?id=<?= $productDetail['product_id'] ?>" class="text-md font-bold text-gray-700 hover:text-blue-600"><?= $productDetail['product_name'] ?></a>
+                                                        <a href="search_result?action=search&key=<?= $productDetail['product_brand'] ?>" class="text-gray-400 text-sm hover:text-blue-600">By: <?= $productDetail['product_brand'] ?></a>
                                                     </div>
                                                     <div class="product-qty p-3">
                                                         <p class="text-gray-400 text-sm"> QTY: <?= $productDetail['quantity'] ?></p>
