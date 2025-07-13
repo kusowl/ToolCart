@@ -88,8 +88,6 @@ class Orders extends Model
         }catch (Exception $e){
             self::getDb()->rollBack();
             error_log($e->getMessage());
-        }
-        finally{
             return[
                 'success' => false,
                 'error' => self::getDb()->errorInfo()[0]
@@ -144,7 +142,7 @@ class Orders extends Model
     public static function getAllOrders($userId = '', int $limit = QUERY_LIMIT, int $offset = 0, $orderBy="id", $sort="DESC"): array
     {
         if($userId != ''){
-            $sql  = "SELECT * FROM orders WHERE `user_id` = '{$userId}' ORDER BY {$orderBy} {$sort} LIMIT {$limit} OFFSET {$offset} }";
+            $sql  = "SELECT * FROM orders WHERE `user_id` = '{$userId}' ORDER BY {$orderBy} {$sort} LIMIT {$limit} OFFSET {$offset} ";
         }else{
             $sql  = "SELECT * FROM orders ORDER BY {$orderBy} {$sort} LIMIT {$limit} OFFSET {$offset} ";
         }
