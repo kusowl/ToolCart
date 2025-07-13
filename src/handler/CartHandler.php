@@ -110,6 +110,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             }
         }
     }
+
+    header('location: cart');
 } else {
     if (isset($_SESSION['user_id'])) {
         $cart = new Cart($_SESSION['user_id']);

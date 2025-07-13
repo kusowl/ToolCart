@@ -315,6 +315,8 @@ include_once "partials/popup.php";
         </div>
     </div>
 </section>
+<script src="<?=BASE_URL.'src/assets/ajax/payment.js'?>"></script>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <?php
 include_once ROOT . "partials/footer.php";
 ?>

@@ -6,13 +6,7 @@ include_once ROOT . "partials/header.php";
 include_once "partials/navbar.html.php";
 include_once "handler/CartHandler.php";
 
-$messages = $_SESSION["messages"] ?? '';
-$message_type = $_SESSION["message_type"] ?? '';
-if ($messages != '') {
-    include_once ROOT . "partials/popup.php";
-    unset($_SESSION["messages"]);
-    unset($_SESSION["message_type"]);
-}
+
 ?>
     <section class="bg-white py-8 mt-12 antialiased dark:bg-gray-900 md:py-16">
         <div class="mx-auto max-w-screen-xl px-4 2xl:px-0">
