@@ -84,6 +84,7 @@ if (str_contains($_SERVER['CONTENT_TYPE'] ?? '', 'application/json')) {
                     http_response_code(400);
                 }
             }
+            header('Content-Type: application/json');
             $response['order'] = $order;
             echo json_encode($response);
             break;
@@ -113,6 +114,7 @@ if (str_contains($_SERVER['CONTENT_TYPE'] ?? '', 'application/json')) {
                 } finally {
                     $checkout = new Checkout();
                     $res = $checkout->createOrder($userId, $data['payment_method'], $data['razorpay_payment_id'], $success);
+                    header('Content-Type: application/json');
                     http_response_code(200);
                     echo json_encode([
                         'success' => $res['success'],
@@ -123,7 +125,7 @@ if (str_contains($_SERVER['CONTENT_TYPE'] ?? '', 'application/json')) {
             break;
         }
         default:
-        {
+            header('Content-Type: application/json');{
             http_response_code(400);
             echo json_encode(['Error' => 'key does not exist']);
         }
