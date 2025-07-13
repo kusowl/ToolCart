@@ -24,8 +24,9 @@ foreach ($products as $productRec) {
 }
 
 $primaryAction = 'Product';
-$primaryActionLink = BASE_URL . "admin/add_product.php";
-$deleteLink = 'handler/ProductHandler.php';
+$primaryActionLink = BASE_URL . "admin/add_product";
+$secondaryLink = BASE_URL .'product_view';
+$deleteLink = 'handler/ProductHandler';
 
 $messages = $_SESSION["messages"] ?? '';
 $message_type = $_SESSION["message_type"] ?? '';
