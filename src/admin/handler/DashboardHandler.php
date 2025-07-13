@@ -6,10 +6,11 @@ include_once ROOT . "class/Orders.php";
 include_once ROOT . "class/Product.php";
 include_once ROOT . "class/User.php";
 
-$totalRevenue = number_format(Orders::getRevenue());
-$totalOrders = number_format(Orders::getOrderCount());
-$totalProducts = number_format(Product::getProductCount());
-$totalCustomers = number_format(User::getUserCount());
+$totalRevenue = Orders::getRevenue();
+$pendingAmount = Orders::getPendingRevenue();
+$totalOrders = Orders::getOrderCount();
+$totalProducts = Product::getProductCount();
+$totalCustomers = User::getUserCount();
 $table_heads = ['Order ID', 'User', 'Amount', 'Delivery Status', 'Payment Type', 'Payment Status', 'Date', 'Order Status'];
 $orders = Orders::getAllOrders(limit: $limit ?? QUERY_LIMIT);
 $table_records = [];

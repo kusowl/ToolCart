@@ -176,7 +176,18 @@ class Orders extends Model
 
     public static function getRevenue(int $limit = -1, int $offset = 0): int
     {
-        $sql = 'SELECT SUM(amount) AS revenue FROM `orders`';
+        $sql = "SELECT SUM(amount) AS revenue FROM `orders` where payment_status = 'success'";
+        if($limit != -1){
+            $sql .= ' LIMIT '.$limit.' OFFSET '.$offset;
+        }
+        $result = self::getDb()->query($sql);
+        return $result->fetchColumn();
+    }
+
+    public static function getPendingRevenue(int $limit = -1, int $offset = 0): int
+    {
+
+        $sql = "SELECT SUM(amount) AS revenue FROM `orders` where payment_status <> 'success'";
         if($limit != -1){
             $sql .= ' LIMIT '.$limit.' OFFSET '.$offset;
         }

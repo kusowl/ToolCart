@@ -10,8 +10,53 @@ include_once "handler/DashboardHandler.php";
 <!--Put html contents here-->
 
 <!--Cards of Total Revenue, Orders, Products and Users-->
+
+<!-- Revenue modal -->
+<div id="revenue-modal" tabindex="-1" aria-hidden="true"
+     class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+    <div class="relative p-4 w-full max-w-2xl max-h-full">
+        <!-- Modal content -->
+        <div class="relative bg-white rounded-lg shadow-sm dark:bg-gray-700">
+            <!-- Modal header -->
+            <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 border-gray-200">
+                <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                    Revenue
+                </h3>
+                <button type="button"
+                        class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                        data-modal-hide="revenue-modal">
+                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                         viewBox="0 0 14 14">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                    </svg>
+                    <span class="sr-only">Close modal</span>
+                </button>
+            </div>
+            <!-- Modal body -->
+            <div class="p-4 grid grid-cols-2 grid-rows-1 space-x-4 h-md">
+                <div class="paid border border-gray-200 rounded-lg p-4">
+                    <p class="text-sm  text-gray-500">Total</p>
+                    <p class="text-2xl font-bold text-blue-500"><?= ($totalRevenue ?? 0) + ($pendingAmount ?? 0) ?></p>
+                </div>
+                <div class="pending border border-gray-200 rounded-lg p-4">
+                    <p class="text-sm text-gray-500">Pending</p>
+                    <p class="text-2xl font-bold text-blue-500"><?= $pendingAmount ?? 0 ?></p>
+                </div>
+            </div>
+            <!-- Modal footer -->
+<!--            <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">-->
+<!--                <button data-modal-hide="revenue-modal" type="button"-->
+<!--                        class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">-->
+<!--                    Close-->
+<!--                </button>-->
+<!--            </div>-->
+        </div>
+    </div>
+</div>
+
 <section class="cards grid grid-cols-4 grid-rows-8">
-    <div class="revenue card bg-blue-500">
+    <div class="revenue card bg-blue-500 hover:bg-blue-600 cursor-zoom-in" data-modal-target="revenue-modal" data-modal-toggle="revenue-modal">
         <div class="svg bg-blue-300">
             <svg class="w-6 h-6 text-blue-50 group-hover:text-gray-500 dark:text-gray-400 dark:group-hover:text-gray-400"
                  aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 19">
@@ -20,9 +65,9 @@ include_once "handler/DashboardHandler.php";
             </svg>
         </div>
         <p class="text-sm text-gray-50 font-medium mt-2">Revenue</p>
-        <p class="text-4xl text-gray-50 font-bold"><?= $totalRevenue ?? 0 ?></p>
+        <p class="text-4xl text-gray-50 font-bold"><?= number_format($totalRevenue ?? 0) ?></p>
     </div>
-    <div class="orders card bg-green-500 ">
+    <a href="order_list" class="orders card bg-green-500 hover:bg-green-600">
         <div class="svg bg-green-300">
             <svg class="w-6 h-6 text-green-50 group-hover:text-gray-500 dark:text-gray-400 dark:group-hover:text-gray-400"
                  aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 19">
@@ -30,9 +75,9 @@ include_once "handler/DashboardHandler.php";
             </svg>
         </div>
         <p class="text-sm text-gray-50 font-medium mt-2">Orders</p>
-        <p class="text-4xl text-gray-50 font-bold"><?= $totalOrders ?? 0 ?></p>
-    </div>
-    <div class="products card bg-yellow-500">
+        <p class="text-4xl text-gray-50 font-bold"><?= number_format($totalOrders ?? 0) ?></p>
+    </a>
+    <a href="product_list" class="products card bg-yellow-500 hover:bg-yellow-600">
         <div class="svg bg-yellow-300">
             <svg class="w-6 h-6 text-yellow-50 group-hover:text-gray-500 dark:text-gray-400 dark:group-hover:text-gray-400"
                  aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 19">
@@ -40,9 +85,9 @@ include_once "handler/DashboardHandler.php";
             </svg>
         </div>
         <p class="text-sm text-gray-50 font-medium mt-2">Products</p>
-        <p class="text-4xl text-gray-50 font-bold"><?= $totalProducts ?? 0 ?></p>
-    </div>
-    <div class="users card bg-purple-500">
+        <p class="text-4xl text-gray-50 font-bold"><?= number_format($totalProducts ?? 0) ?></p>
+    </a>
+    <div class="users card bg-purple-500 hover:bg-purple-600">
         <div class="svg bg-purple-300">
             <svg class="w-6 h-6 text-purple-50 group-hover:text-gray-500 dark:text-gray-400 dark:group-hover:text-gray-400"
                  aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 19">
@@ -51,7 +96,7 @@ include_once "handler/DashboardHandler.php";
             </svg>
         </div>
         <p class="text-sm text-gray-50 font-medium mt-2">Customers</p>
-        <p class="text-4xl text-gray-50 font-bold"><?= $totalCustomers ?? 0 ?></p>
+        <p class="text-4xl text-gray-50 font-bold"><?= number_format($totalCustomers ?? 0) ?></p>
     </div>
     <div class="recent-orders col-span-4 row-span-2 border border-gray-200 rounded-lg mx-4 p-6">
         <p class="text-lg font-medium mb-2 pb-4 border-b border-b-gray-200">Recent Orders</p>
