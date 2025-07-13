@@ -64,12 +64,34 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
         case 'coupon':
         {
-            $code = $_POST['code'];
-            $originalPrice = $cart->getCartValue();
-            $savings = calculateSavings($code, $originalPrice);
+            $code = trim($_POST['code']);
+
+            // Set the page data, as page loads after submit
             $cartRecords = $cart->getAllItem();
+            $originalPrice = $cart->getCartValue();
             $cartItemCount = $cart->getCartItemTotal()['total_qty'];
-            $_SESSION['coupon_code'] = $code;
+
+            // Check if coupon is valid
+            $expiryDate = Coupon::getByCode($code)->getExpiryDate();
+            if( $expiryDate != '' && $expiryDate>= new DateTime()) {
+                $savings = calculateSavings($code, $originalPrice);
+                $_SESSION['coupon_code'] = $code;
+            }
+            else{
+                $_SESSION['messages'] = ['Error' => "Coupon Code Expired"];
+                $_SESSION['message_type'] = 'error';
+            }
+            break;
+        }
+
+        case 'removeCoupon':
+        {
+            unset($_SESSION['coupon_code']);
+            unset($_SESSION['coupon_id']);
+            // Set the page data, as page loads after submit
+            $cartRecords = $cart->getAllItem();
+            $originalPrice = $cart->getCartValue();
+            $cartItemCount = $cart->getCartItemTotal()['total_qty'];
             break;
         }
 

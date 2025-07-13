@@ -8,7 +8,7 @@ class Coupon extends Model
     private string $type;
     private int $value;
     private string $description;
-
+    private ?DateTime $expiryDate;
     public function __construct(array $data = [])
     {
         $this->id = $data['id'] ?? null;
@@ -16,6 +16,7 @@ class Coupon extends Model
         $this->type = $data['type'] ?? 'amount';
         $this->value = $data['value'] ?? 0;
         $this->description = $data['desc'] ?? '';
+        $this->expiryDate = $data['expiry_date'] == '' ? null : date_create($data['expiry_date']);
     }
 
     /**
@@ -25,15 +26,16 @@ class Coupon extends Model
      * @param string $desc
      * @return void
      */
-    public function addCoupon(string $code, string $type, int $value, string $desc)
+    public function addCoupon(string $code, string $type, int $value, string $desc, string $expiryDate)
     {
-        $sql = 'INSERT INTO `coupon`(`code`, `type`, `value`, `desc`) VALUES (:code, :type, :value, :desc)';
+        $sql = 'INSERT INTO `coupon`(`code`, `type`, `value`, `desc`, `expiry_date`) VALUES (:code, :type, :value, :desc, :expiry_date)';
         $stmt = self::getDb()->prepare($sql);
         $stmt->execute([
             ':code' => $code,
             ':type' => $type,
             ':value' => $value,
-            ':desc' => $desc
+            ':desc' => $desc,
+            ':expiry_date' => $expiryDate
         ]);
     }
 
@@ -43,7 +45,7 @@ class Coupon extends Model
      */
     public static function getByCode(string $code): Coupon
     {
-        $sql = 'SELECT `id`, `code`, `type`, `value`, `desc` FROM `coupon` WHERE code = :code LIMIT 1';
+        $sql = 'SELECT `id`, `code`, `type`, `value`,`expiry_date` , `desc` FROM `coupon` WHERE code = :code LIMIT 1';
         $stmt = self::getDb()->prepare($sql);
         $stmt->execute([
             ':code' => $code
@@ -58,7 +60,7 @@ class Coupon extends Model
      */
     public function getById($id): Coupon
     {
-        $sql = 'SELECT `id`, `code`, `type`, `value`, `desc` FROM `coupon` WHERE id = :id LIMIT 1';
+        $sql = 'SELECT `id`, `code`, `type`, `value`, `expiry_date`, `desc` FROM `coupon` WHERE id = :id LIMIT 1';
         $stmt = self::getDb()->prepare($sql);
         $stmt->execute([
             ':id' => $id
@@ -73,7 +75,7 @@ class Coupon extends Model
      */
     public function getAllCoupons(int $limit = QUERY_LIMIT, int $offset = 0): array|Coupon
     {
-        $sql = "SELECT `id`, `code`, `type`, `value`, `desc` FROM `coupon` LIMIT {$limit} OFFSET {$offset}";
+        $sql = "SELECT `id`, `code`, `type`, `value`, `expiry_date` , `desc` FROM `coupon` LIMIT {$limit} OFFSET {$offset}";
         $stmt = self::getDb()->query($sql);
         $coupons = [];
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
@@ -171,6 +173,16 @@ class Coupon extends Model
     {
         $this->id = $id;
         return $this;
+    }
+
+    public function getExpiryDate(): ?DateTime
+    {
+        return $this->expiryDate;
+    }
+
+    public function setExpiryDate(?DateTime $expiryDate): void
+    {
+        $this->expiryDate = $expiryDate;
     }
 
 }
