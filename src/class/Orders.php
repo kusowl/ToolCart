@@ -194,6 +194,27 @@ class Orders extends Model
         $result = self::getDb()->query($sql);
         return $result->fetchColumn();
     }
+
+    public function update($data = []): bool
+    {
+        $params = [];
+        $placeholders = [];
+        foreach ($data as $key => $value) {
+            $placeholders[] = "`{$key}`" . ' = :' . $key;
+            $params[":{$key}"] = $value;
+        }
+        $placeholders = implode(', ', $placeholders);
+        $sql = "UPDATE `orders` SET {$placeholders} WHERE id = :id";
+        $result = false;
+        try {
+            $stmt = self::getDb()->prepare($sql);
+            return $stmt->execute($params);
+        } catch (Exception $e) {
+            error_log($e->getMessage());
+            return false;
+        }
+    }
+
     public function getId(): mixed
     {
         return $this->id;
