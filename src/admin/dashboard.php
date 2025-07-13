@@ -116,12 +116,14 @@ include_once "handler/DashboardHandler.php";
                             <td class=" py-3"><img class="w-8" src=<?= BASE_URL . $item ?>></td>
                         <?php else: ?>
                             <td class=" py-3">
-                                <?php if (strtolower($item) == 'success'): ?>
+                                <?php if (strtolower($item) == 'success' || strtolower($item) == 'refund' || strtolower($item) == 'delivered'): ?>
                                     <span class="bg-green-200 rounded-full px-2 py-1 text-green-700 "><?= $item ?></span>
-                                <?php elseif (strtolower($item) == 'pending'): ?>
-                                    <span class="bg-yellow-200 rounded-full px-2 py-1 text-yellow-600"><?= $item ?></span>
+                                <?php elseif (strtolower($item) == 'pending' || strtolower($item) == 'onhold' || strtolower($item) == 'shipped'): ?>
+                                    <span class="bg-yellow-200 rounded-full px-2 py-1 text-yellow-600"><?= ucfirst($item )?></span>
                                 <?php elseif (strtolower($item) == 'failed' || strtolower($item) == 'cancelled'): ?>
                                     <span class="bg-red-200 rounded-full px-2 py-1  text-red-600"><?= $item ?></span>
+                                <?php elseif (strtolower($item) == 'in-transit' || strtolower($item) == 'refund_pending') :?>
+                                    <span class="bg-blue-200 rounded-full px-2 py-1  text-blue-600"><?= $item ?></span>
                                 <?php else: ?>
                                     <?= $item ?>
                                 <?php endif; ?>
