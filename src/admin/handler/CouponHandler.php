@@ -11,9 +11,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
     $type = $_POST['type'];
     $value = $_POST['value'];
     $desc = $_POST['desc'];
+    $expiryDate = $_POST['expiry_date'];
    switch ($_POST['action']){
        case 'Add':
-           $coupon->addCoupon($code, $type, $value, $desc);
+           $coupon->addCoupon($code, $type, $value, $desc, $expiryDate);
            break;
        case 'Update':{
            $data['id']  = $_GET['id'];
@@ -21,6 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
            $data['type'] = $type;
            $data['value'] = $value;
            $data['desc'] = $desc;
+           $data['expiry_date'] = $expiryDate;
            $coupon->update($data);
            break;
        }
@@ -51,5 +53,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET'){
         $formData['type'] = $couponData->getType();
         $formData['value'] = $couponData->getValue();
         $formData['desc'] = $couponData->getDescription();
+        $formData['expiry_date'] =  $couponData->getExpiryDate() == '' ? "-" : $couponData->getExpiryDate()->format('Y-m-d h:i:s');;
     }
 }

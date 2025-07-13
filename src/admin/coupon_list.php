@@ -8,7 +8,7 @@ include_once ROOT . "class/Coupon.php";
 include ROOT . "partials/header.php";
 include_once "admin_partials/admin_header.php";
 $coupon = new Coupon();
-$table_heads = ['Code', 'Type', 'Value','Description'];
+$table_heads = ['ID','Code', 'Type', 'Value','Expiry Date','Description'];
 $coupons = $coupon->getAllCoupons(99);
 $table_records = [];
 $records = [];
@@ -17,6 +17,7 @@ foreach ($coupons as $couponRec) {
     $records['code'] = $couponRec->getCode();
     $records['type'] = $couponRec->getType();
     $records['value'] = $couponRec->getValue();
+    $records['expiry_date'] = $couponRec->getExpiryDate() == '' ? "-" : $couponRec->getExpiryDate()->format('Y-m-d h:i:s');
     $records['desc'] = $couponRec->getDescription();
     $table_records[] = $records;
 }
