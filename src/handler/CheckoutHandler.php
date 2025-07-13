@@ -1,5 +1,5 @@
 <?php
-
+ob_start();
 session_start();
 require_once __DIR__ . "../../config/site_config.php";
 require_once __DIR__ . "../../config/razorpay_config.php";
@@ -13,7 +13,6 @@ require_once ROOT . 'class/Checkout.php';
 require_once ROOT . "class/Address.php";
 require_once ROOT . "class/Helper.php";
 require_once ROOT . "class/Coupon.php";
-//require_once ROOT . "pay.php";
 $checkout = new Checkout();
 if (!isset($_SESSION['user_id'])) {
     header(ROOT . 'login.php');
@@ -150,7 +149,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' and isset($_POST)) {
                 $_SESSION['message_type'] = 'error';
                 $formData = $_POST;
             }
-            break;
+            header("Location: /ToolCart/checkout");
+            exit;
         }
         case 'updateAddress':
         {
@@ -165,7 +165,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' and isset($_POST)) {
                 $_SESSION['message_type'] = 'error';
                 $formData = $_POST;
             }
-            break;
+            header("Location: /ToolCart/checkout");
+            exit;
         }
     }
 }

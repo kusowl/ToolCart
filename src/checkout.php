@@ -1,4 +1,5 @@
 <?php
+ob_start();
 session_start();
 include_once "config/site_config.php";
 $pageTitle = "Checkout : " . SITE_NAME;
