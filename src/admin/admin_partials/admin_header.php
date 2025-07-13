@@ -5,7 +5,7 @@
     </div>
 
     <!-- Main content area (navbar + content) -->
-    <div class="flex-1 flex flex-col">
+    <div class="flex-1 flex flex-col bg-gray-50">
         <!-- Navbar at the top -->
         <div>
             <?php include 'admin_partials/navbar.php'; ?>

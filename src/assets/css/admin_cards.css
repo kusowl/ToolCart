@@ -1,0 +1,9 @@
+@layer components{
+    .card{
+        @apply rounded-xl border border-gray-200 p-6 m-4 flex flex-col space-y-3
+    }
+
+    .card .svg{
+        @apply w-12 h-12  rounded-lg flex items-center justify-center
+    }
+}
