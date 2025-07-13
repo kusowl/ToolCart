@@ -1,6 +1,6 @@
 <div class="flex h-screen">
     <!-- Sidebar on the left -->
-    <div class="w-64 bg-gray-800 text-white">
+    <div class="w-64 bg-gray-800 text-white " id="sidebar">
         <?php include 'admin_partials/sidebar.php'; ?>
     </div>
 

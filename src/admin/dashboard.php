@@ -55,7 +55,7 @@ include_once "handler/DashboardHandler.php";
     </div>
 </div>
 
-<section class="cards grid grid-cols-4 grid-rows-8">
+<section class="cards grid grid-cols-4 grid-rows-3">
     <div class="revenue card bg-blue-500 hover:bg-blue-600 cursor-zoom-in" data-modal-target="revenue-modal" data-modal-toggle="revenue-modal">
         <div class="svg bg-blue-300">
             <svg class="w-6 h-6 text-blue-50 group-hover:text-gray-500 dark:text-gray-400 dark:group-hover:text-gray-400"

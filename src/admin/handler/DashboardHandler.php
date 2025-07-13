@@ -12,7 +12,7 @@ $totalOrders = Orders::getOrderCount();
 $totalProducts = Product::getProductCount();
 $totalCustomers = User::getUserCount();
 $table_heads = ['Order ID', 'User', 'Amount', 'Delivery Status', 'Payment Type', 'Payment Status', 'Date', 'Order Status'];
-$orders = Orders::getAllOrders(limit: $limit ?? QUERY_LIMIT);
+$orders = Orders::getAllOrders(limit: 7);
 $table_records = [];
 $records = [];
 foreach ($orders as $ordersRec) {

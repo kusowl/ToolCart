@@ -28,7 +28,7 @@ if(!empty($messages)):
                     </div>
                 </div>
             </div>
-        </div>r
+        </div>
     </div>
 </div>
 <?php

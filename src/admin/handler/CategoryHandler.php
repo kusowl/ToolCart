@@ -25,7 +25,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
             $_SESSION["messages"] = $messages;
             $_SESSION["message_type"] = $message_type;
-            header("Location: category_list");
             break;
         }
         case "Update":
@@ -44,7 +43,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
             $_SESSION["messages"] = $messages;
             $_SESSION["message_type"] = $message_type;
-            header("Location: category_list");
+            header("Location: /ToolCart/admin/category_list");
             break;
         }
         case "Delete":

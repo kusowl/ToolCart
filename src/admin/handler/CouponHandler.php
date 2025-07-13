@@ -24,6 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
            $data['desc'] = $desc;
            $data['expiry_date'] = $expiryDate;
            $coupon->update($data);
+           header("Location: /ToolCart/admin/coupon_list");
            break;
        }
        case 'Delete':{

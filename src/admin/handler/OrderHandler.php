@@ -54,4 +54,5 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
     } catch (Exception $e) {
         error_log($e->getMessage());
     }
+    header('location: order_list');
 }

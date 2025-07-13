@@ -49,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
             }
             $_SESSION["messages"] = $messages;
             $_SESSION["message_type"] = $message_type;
-            header("Location: ../add_product.php");
+            header("Location: /ToolCart/admin/product_list");
         }
         case "Update":{
             $image = $_FILES['product_image'];
@@ -90,6 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                 $product = new Product();
                 $product->update($data);
             }
+            header("Location: /ToolCart/admin/product_list");
             break;
         }
         case "Delete":{
