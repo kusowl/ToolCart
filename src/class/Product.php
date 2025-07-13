@@ -218,4 +218,14 @@ class Product extends Model
             return false;
         }
     }
+
+    public static function getProductCount($limit = -1, $offset = 0)
+    {
+        $sql = 'SELECT COUNT(id) AS count FROM `product`';
+        if($limit != -1){
+            $sql .= ' LIMIT ' . $limit.' OFFSET ' . $offset;
+        }
+        $result = self::getDb()->query($sql);
+        return $result->fetchColumn();
+    }
 }

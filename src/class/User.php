@@ -130,6 +130,21 @@ class User extends Model
         }
     }
 
+    public static function getUserCount($admin = false, $limit = -1, $offset = 0): int
+    {
+        $sql = "SELECT COUNT(id) FROM `user` where `user_type` = ";
+        if($admin){
+            $sql .= "'admin'";
+        }else{
+            $sql .= "'customer'";
+        }
+        if($limit != -1){
+            $sql .= " LIMIT " . $limit . " OFFSET " . $offset;
+        }
+        $result = self::getDb()->query($sql);
+        return $result->fetchColumn();
+    }
+
     /**
      * @return mixed
      */

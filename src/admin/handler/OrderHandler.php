@@ -2,7 +2,7 @@
 include_once ROOT . "class/Orders.php";
 include_once ROOT . "config/db_config.php";
 $table_heads = ['Order ID', 'User', 'Amount', 'Delivery Status', 'Payment Type', 'Payment Status','Date', 'Order Status'];
-$orders = Orders::getAllOrders(limit: 99);
+$orders = Orders::getAllOrders(limit: $limit ?? QUERY_LIMIT);
 $table_records = [];
 $records = [];
 foreach ($orders as $ordersRec) {

@@ -163,6 +163,26 @@ class Orders extends Model
         }
         return $orders;
     }
+
+    public static function getOrderCount(int $limit = -1, int $offset = 0): int
+    {
+        $sql = 'SELECT COUNT(id) as number FROM `orders`';
+        if($limit != -1){
+            $sql .= " LIMIT {$limit} OFFSET {$offset}";
+        }
+        $result = self::getDb()->query($sql);
+        return $result->fetchColumn();
+    }
+
+    public static function getRevenue(int $limit = -1, int $offset = 0): int
+    {
+        $sql = 'SELECT SUM(amount) AS revenue FROM `orders`';
+        if($limit != -1){
+            $sql .= ' LIMIT '.$limit.' OFFSET '.$offset;
+        }
+        $result = self::getDb()->query($sql);
+        return $result->fetchColumn();
+    }
     public function getId(): mixed
     {
         return $this->id;
