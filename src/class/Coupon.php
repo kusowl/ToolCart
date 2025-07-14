@@ -24,19 +24,26 @@ class Coupon extends Model
      * @param string $type
      * @param int $value
      * @param string $desc
-     * @return void
+     * @return boolean
      */
     public function addCoupon(string $code, string $type, int $value, string $desc, string $expiryDate)
     {
         $sql = 'INSERT INTO `coupon`(`code`, `type`, `value`, `desc`, `expiry_date`) VALUES (:code, :type, :value, :desc, :expiry_date)';
-        $stmt = self::getDb()->prepare($sql);
-        $stmt->execute([
-            ':code' => $code,
-            ':type' => $type,
-            ':value' => $value,
-            ':desc' => $desc,
-            ':expiry_date' => $expiryDate
-        ]);
+
+        try {
+            $stmt = self::getDb()->prepare($sql);
+            $stmt->execute([
+                ':code' => $code,
+                ':type' => $type,
+                ':value' => $value,
+                ':desc' => $desc,
+                ':expiry_date' => $expiryDate
+            ]);
+            return true;
+        }catch(PDOException $e){
+            error_log($e->getMessage());
+            return false;
+        }
     }
 
     /**

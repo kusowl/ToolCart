@@ -51,8 +51,17 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
             'delivery_status' => $deliveryStatus,
         ];
         $order->update($data);
+        $_SESSION['messages'] = [
+            'success' => "Order status updated successfully"
+        ];
+        $_SESSION['message_type'] = 'success';
     } catch (Exception $e) {
+        $_SESSION['messages'] = [
+            'error' => $e->getMessage()
+        ];
+        $_SESSION['message_type'] = 'error';
         error_log($e->getMessage());
     }
     header('location: order_list');
+    exit;
 }
