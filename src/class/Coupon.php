@@ -48,16 +48,20 @@ class Coupon extends Model
 
     /**
      * @param string $code
-     * @return Coupon
+     * @return Coupon|false
      */
-    public static function getByCode(string $code): Coupon
+    public static function getByCode(string $code): Coupon|false
     {
         $sql = 'SELECT `id`, `code`, `type`, `value`,`expiry_date` , `desc` FROM `coupon` WHERE code = :code LIMIT 1';
         $stmt = self::getDb()->prepare($sql);
         $stmt->execute([
             ':code' => $code
         ]);
-        return new Coupon($stmt->fetch(PDO::FETCH_ASSOC));
+        if($stmt->rowCount() > 0){
+            return new Coupon($stmt->fetch(PDO::FETCH_ASSOC));
+        }else{
+            return false;
+        }
 
     }
 

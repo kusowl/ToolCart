@@ -78,6 +78,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $validationResult = $image['name'] != '' ? Helper::validateFile($image, $fileTypes, MAX_FILE_SIZE) : 98;
         $rel_path = 'assets/images/';
         $path = ROOT . $rel_path;
+        $img_name  = '';
         switch ($validationResult) {
             case 98:
                 break;
@@ -107,7 +108,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($user->update($data)) {
                 $_SESSION['messages']['Account'] = "Updated successfully!";
                 $_SESSION["message_type"] = 'success';
-                $_SESSION['image'] = $rel_path . $img_name;
+                if($img_name != '') $_SESSION['image'] = $rel_path . $img_name;
             } else {
                 $_SESSION['messages']['Account'] = "Error occured while updating account!";
                 $_SESSION["message_type"] = 'error';
@@ -126,5 +127,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'email' => $email,
             'image' => $_SESSION['image']
         ];
+        if(User::getById($_SESSION['user_id'])->getType() == 'admin'){
+            header('Location: admin_profile');
+            exit;
+        }else{
+            header('Location: profile');
+            exit;
+        }
     }
 }

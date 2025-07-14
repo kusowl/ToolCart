@@ -72,14 +72,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $cartItemCount = $cart->getCartItemTotal()['total_qty'];
 
             // Check if coupon is valid
-            $expiryDate = Coupon::getByCode($code)->getExpiryDate();
-            if( $expiryDate != '' && $expiryDate>= new DateTime()) {
-                $savings = calculateSavings($code, $originalPrice);
-                $_SESSION['coupon_code'] = $code;
-            }
-            else{
-                $_SESSION['messages'] = ['Error' => "Coupon Code Expired"];
+            $coupon = Coupon::getByCode($code);
+            if ($coupon === false) {
+                // If coupon does not exist
+                $_SESSION['messages'] = ['Error' => "Coupon not found"];
                 $_SESSION['message_type'] = 'error';
+            } else {
+                $expiryDate = $coupon->getExpiryDate();
+                if ($expiryDate != '' && $expiryDate >= new DateTime()) {
+                    $savings = calculateSavings($code, $originalPrice);
+                    $_SESSION['coupon_code'] = $code;
+                } else {
+                    $_SESSION['messages'] = ['Error' => "Coupon Code Expired"];
+                    $_SESSION['message_type'] = 'error';
+                }
             }
             break;
         }
@@ -118,7 +124,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $cartRecords = $cart->getAllItem();
         $cartItemCount = $cart->getCartItemTotal()['total_qty'];
         $_SESSION['original_price'] = $originalPrice = $cart->getCartValue();
-        if(isset($_SESSION['coupon_code'])){
+        if (isset($_SESSION['coupon_code'])) {
             $code = $_SESSION['coupon_code'];
             $_SESSION['savings'] = $savings = calculateSavings($code, $originalPrice);
         }
@@ -128,9 +134,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 function calculateSavings($code, $originalPrice): float|int
 {
     $coupon = (new Coupon())->getByCode($code);
-    if ($coupon->getType() == 'amount'){
+    if ($coupon->getType() == 'amount') {
         $savings = $coupon->getValue();
-    }else{
+    } else {
         $savings = $originalPrice * ($coupon->getValue() / 100);
     }
     return $savings;
