@@ -50,6 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
             $_SESSION["messages"] = $messages;
             $_SESSION["message_type"] = $message_type;
             header("Location: /ToolCart/admin/product_list");
+            exit;
         }
         case "Update":{
             $image = $_FILES['product_image'];
@@ -88,9 +89,18 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                     'product_image' => isset($img_name) ? $rel_path.$img_name : ''
                 ];
                 $product = new Product();
-                $product->update($data);
+                if($product->update($data)){
+                    $messages['Update Record'] = "product updated successfully.";
+                    $message_type = "success";
+                }else{
+                    $messages['Error'] = "failed  updating product";
+                    $message_type = "error";
+                }
             }
+            $_SESSION["messages"] = $messages;
+            $_SESSION["message_type"] = $message_type;
             header("Location: /ToolCart/admin/product_list");
+            exit;
             break;
         }
         case "Delete":{
@@ -99,14 +109,15 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
             $result  = $product->delete();
             if ($result) {
                 $messages['Success'] = "Product Deleted.";
-                $message_type = "Error";
+                $message_type = "error";
             } else {
-                $messages['Error'] = "failed  sql query ";
-                $message_type = "Error";
+                $messages['Error'] = "Failed deleting product";
+                $message_type = "error";
             }
             $_SESSION["messages"] = $messages;
             $_SESSION["message_type"] = $message_type;
             header("Location: /ToolCart/admin/product_list");
+            exit;
         }
     }
 }
