@@ -80,15 +80,14 @@
                     </div>
                     <p
                             class="text-sm font-medium leading-none text-gray-500 dark:text-gray-400">
-                        (5.0)
+                        (0.0)
                     </p>
                     <a
                             href="#"
                             class="text-sm font-medium leading-none text-gray-900 underline hover:no-underline dark:text-white">
-                        345 Reviews
+                        0 Reviews
                     </a>
                 </div>
-
                 <div class="mt-6 sm:gap-4 sm:items-center sm:flex sm:mt-8">
                     <a
                             href="#"
