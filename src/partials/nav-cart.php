@@ -28,7 +28,7 @@ include_once ROOT."handler/CartHandler.php";
             foreach ($cartRecords as $record): ?>
             <div id="cartProductId<?=$record['product_id']?>" class="grid grid-cols-2">
                 <div class="bg-neutral-100 px-2 py-1 rounded-l-lg">
-                    <a href="#"
+                    <a href="<?= BASE_URL.'product_view?id='.$record['product_id'] ?>"
                        class=" text-sm font-semibold leading-none text-gray-900 dark:text-white hover:underline"><?= $record['product_title'] ?></a>
                     <p class="mt-0.5 truncate text-sm font-normal text-gray-500 dark:text-gray-400">
                         ₹ <?= $record['product_price'] ?></p>

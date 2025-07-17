@@ -35,10 +35,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     'success' => true,
                     'totalQty' => $cartItemCount
                 ];
+                http_response_code(200);
             } else {
                 $response = [
                     'error' => true
                 ];
+                http_response_code(400);
             }
             header('Content-Type: application/json');
             echo json_encode($response);
@@ -53,10 +55,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     'success' => true,
                     'totalQty' => $cartItemCount
                 ];
+                http_response_code(200);
             } else {
                 $response = [
                     'error' => true
                 ];
+                http_response_code(400);
             }
             header('Content-Type: application/json');
             echo json_encode($response);
@@ -104,7 +108,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // No Request specified so just see it as add to cart
         case 'add_to_cart' :
         {
-            $cart->addItem($productId);
+            if($cart->addItem($productId)){
+                $_SESSION['messages'] = ['Success' => "Item added to cart"];
+                $_SESSION['message_type'] = 'success';
+            }else{
+                $_SESSION['messages'] = ['Error' => "Item not added to cart"];
+                $_SESSION['message_type'] = 'error';
+            }
+
             if (!empty($_SERVER['HTTP_REFERER'])) {
                 header('Location: ' . $_SERVER['HTTP_REFERER']);
                 exit;

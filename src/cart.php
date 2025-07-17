@@ -29,7 +29,7 @@ include_once "handler/CartHandler.php";
                                 <div id="productId<?= $record['product_id'] ?>"
                                      class="rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800 md:p-6">
                                     <div class="space-y-4 md:flex md:items-center md:justify-between md:gap-6 md:space-y-0">
-                                        <a href="#" class="shrink-0 md:order-1">
+                                        <a href="<?= BASE_URL.'product_view?id='.$record['product_id'] ?>" class="shrink-0 md:order-1">
                                             <img class="h-20 w-20 dark:hidden"
                                                  src="<?= BASE_URL . $record['product_image'] ?>"
                                                  alt="imac image"/>
@@ -72,7 +72,7 @@ include_once "handler/CartHandler.php";
                                         </div>
 
                                         <div class="w-full min-w-0 flex-1 space-y-4 md:order-2 md:max-w-md">
-                                            <a href="#"
+                                            <a href="<?= BASE_URL.'product_view?id='.$record['product_id'] ?>"
                                                class="text-base font-medium text-gray-900 hover:underline dark:text-white"><?= $record['product_title'] ?></a>
 
                                             <div class="flex items-center gap-4">

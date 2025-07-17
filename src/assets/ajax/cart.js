@@ -106,4 +106,14 @@ $(document).ready(function () {
             location.reload();
         }
     )
+    $('.removeCartItemBtn').on(
+        'click',
+        function () {
+            let productId = $(this).data('product-id')
+            console.log(productId)
+            removeCartItem(productId)
+            $('#cartProductId' + productId).hide()
+            location.reload();
+        }
+    )
 })
