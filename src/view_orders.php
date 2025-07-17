@@ -70,7 +70,7 @@ include_once "handler/OrderHandler.php";
                                                 </div>
                                             <?php else: ?>
                                                 <!-- cancel order -->
-                                                <form method="post">
+                                                <form method="post" action="handler/OrderHandler.php">
                                                     <input type="hidden" name="action" value="cancelOrder">
                                                     <input type="hidden" name="order_id"
                                                            value="<?= $record['order_id'] ?>">

@@ -139,4 +139,3 @@ include_once "handler/DashboardHandler.php";
 <?php
 include_once "admin_partials/admin_footer.php";
 ?>
-?>

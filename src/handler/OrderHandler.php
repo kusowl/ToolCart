@@ -14,6 +14,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $result  = match ($_POST['action']) {
         'cancelOrder' => $order->setStatus($_POST['order_id'], 'cancelled')
     };
+    header('Location: /ToolCart/view_orders');
+    exit;
 }
 
 
